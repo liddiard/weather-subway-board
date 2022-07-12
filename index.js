@@ -35,6 +35,7 @@ const flattenResponseList = (departures) => [
   .flat()
   .sort((a, b) => a.time - b.time)
 
+// add a `minutesFromNow` entry to each departure object
 const addRelativeTimes = (departures) =>
   departures.map(d => ({
     ...d,
@@ -66,10 +67,6 @@ const getStationDepartures = async (stationId) => {
 const main = async () => {
   const departures = await getStationDepartures(STATION_ID)
   console.log(departures)
-  // const northbound = departures[NORTH]
-  // const southbound = departures[SOUTH]
-  // console.log('UPTOWN:', northbound.slice(0, NUM_TO_DISPLAY))
-  // console.log('DOWNTOWN:', southbound.slice(0, NUM_TO_DISPLAY))
 }
 
 main()
