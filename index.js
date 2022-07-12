@@ -49,19 +49,15 @@ const getStationDepartures = async (stationId) => {
   } catch (ex) {
     throw Error(`Unable to retrieve departures for station ID ${stationId}. Network Error: ${ex.message}`)
   }
-  try {
-    const { departures } = response.lines[0]
-    return [
-      convertResponseDates,
-      truncateDepartureLists,
-      flattenResponseList,
-      addRelativeTimes
-    ]
-    .reduce((acc, cur) => 
-      cur(acc), departures)
-  } catch (ex) {
-    throw Error(`Malformed departures response for station ID ${stationId}. Error: ${ex.message}. Response: ${JSON.stringify(response)}.`)
-  }
+  const { departures } = response.lines[0]
+  return [
+    convertResponseDates,
+    truncateDepartureLists,
+    flattenResponseList,
+    addRelativeTimes
+  ]
+  .reduce((acc, cur) => 
+    cur(acc), departures)
 }
 
 const main = async () => {
