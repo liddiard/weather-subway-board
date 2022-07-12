@@ -9,6 +9,10 @@ const { NORTH, SOUTH } = DIRECTIONS
 const { API_KEY } = process.env
 const client = createClient(API_KEY)
 
+if (!API_KEY) {
+  throw Error('Missing required environment variable `API_KEY`. Get one from: https://api.mta.info/#/AccessKey')
+}
+
 // convert times from seconds-based Unix timestamps to JS Date objects
 const convertResponseDates = (departures) => 
   Object.entries(departures)
