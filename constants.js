@@ -1,4 +1,10 @@
 module.exports = {
+  MATRIX: {
+    WIDTH: 64,
+    HEIGHT: 32,
+    GPIO_MAPPING: 'adafruit-hat'
+  },
+  BOARD_IMAGE_FILE: 'board.png',
   STATION_ID: 313, // Upper West Side, 72 St & Broadway
   DIRECTIONS: {
     NORTH: 'N',

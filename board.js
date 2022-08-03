@@ -1,5 +1,11 @@
 const fs = require('fs')
+const { promisify } = require('util')
+const { exec } = require("child_process")
 const { createCanvas, loadImage } = require('canvas')
+const constants = require('./constants')
+
+const run = promisify(exec)
+const { MATRIX, BOARD_IMAGE_FILE } = constants
 
 // in-memory cache of images on disk
 const imageCache = {
@@ -86,7 +92,8 @@ const drawRow = (ctx, data, offset) => {
 
 // set create `canvas` and `ctx` objects, draw background
 const setUpCanvas = () => {
-  const canvas = createCanvas(64, 32) // LED board dimensions
+  const { WIDTH, HEIGHT } = MATRIX
+  const canvas = createCanvas(WIDTH, HEIGHT) // LED board dimensions
   const ctx = canvas.getContext('2d')
 
   // black background
@@ -114,7 +121,7 @@ const drawBoard = async ([topRow, bottomRow]) => {
   
   // save image on disk
   const buffer = canvas.toBuffer('image/png')
-  fs.writeFileSync('board.png', buffer)
+  fs.writeFileSync(BOARD_IMAGE_FILE, buffer)
 }
 
 // drawBoard([
@@ -130,7 +137,12 @@ const drawBoard = async ([topRow, bottomRow]) => {
 //   }
 // ])
 
-const displayBoard = drawBoard
+const displayBoard = async (departures) => {
+  const { WIDTH, GPIO_MAPPING } = MATRIX
+  await drawBoard(departures)
+  await run('ls')
+  // await run(`./led-image-viewer --led-cols=${WIDTH} --led-gpio-mapping=${GPIO_MAPPING} ${BOARD_IMAGE_FILE}`)
+}
 
 module.exports = {
   displayBoard
