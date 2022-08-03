@@ -20,8 +20,7 @@ const main = async () => {
   for (let i = 0; i < departures.length; i += 2) {
     const isLast = i >= departures.length - 2
     displayBoard(departures.slice(i, i+2))
-    // on the last iteration of the loop, refresh departures async
-    if (isLast) {
+    if (isLast) { // on last iteration of the loop, refresh departures async
       updateDepartures()
     }
     await sleep(DISPLAY_CYCLE_SEC * 1000)

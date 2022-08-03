@@ -10,9 +10,9 @@ const constants = require('./constants')
 const run = promisify(exec)
 const { MATRIX, BOARD_IMAGE_FILE } = constants
 
-// in-memory cache of images on disk
+// in-memory cache of images from disk
 const imageCache = {
-  populated: false,
+  populated: false, // meta attribute indicating if cache has images
   trains: {
     1: null,
     2: null,
@@ -110,6 +110,7 @@ const setUpCanvas = () => {
   return { canvas, ctx }
 }
 
+// generates and writes a new board image file to disk
 // input: array of two Row objects:
 // {
 //   routeId: '1' | '2' | '3',
@@ -144,6 +145,8 @@ const drawBoard = async ([topRow, bottomRow]) => {
 //   }
 // ])
 
+// draws and displays a board on the LED matrix from provided 2-item
+// departures list
 const displayBoard = async (departures) => {
   const { WIDTH, GPIO_MAPPING } = MATRIX
   await drawBoard(departures)
