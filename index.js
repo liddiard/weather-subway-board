@@ -3,7 +3,7 @@ const { displayBoard } = require('./board')
 const constants = require('./constants')
 
 
-const { STATION_ID } = constants
+const { STATION_ID, DISPLAY_CYCLE_SEC } = constants
 
 let departures = []
 
@@ -23,7 +23,7 @@ const main = async () => {
     if (isLast) {
       updateDepartures()
     }
-    await sleep(5000)
+    await sleep(DISPLAY_CYCLE_SEC * 1000)
   }
   return await main()
 }
