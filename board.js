@@ -23,6 +23,7 @@ const imageCache = {
     S: null
   },
   numbers: {
+    nil: null,
     0: null,
     1: null,
     2: null,
@@ -35,7 +36,8 @@ const imageCache = {
     9: null
   },
   letters: {
-    m: null
+    m: null,
+    m_nil: null
   }
 }
 
@@ -68,11 +70,12 @@ const drawInteger = (ctx, number, offset) => {
   const letterSpacing = 12
   const { x, y } = offset
   const numArray = number.toString().split('')
+  const isNil = number === 0
   // iterate backwards through the array of single digits, starting with the
   // least significant digit on the right and work toward the left
   for (let i = numArray.length - 1; i >= 0; i--) {
+    const number = isNil ? 'nil' : numArray[i]
     // offset for this specific number
-    const number = numArray[i]
     const charOffset = (i - (numArray.length - 1)) * letterSpacing
     ctx.drawImage(imageCache.numbers[number], x + charOffset, y)
   }
@@ -90,7 +93,8 @@ const drawRow = (ctx, data, offset) => {
   // departure in minutes from now
   drawInteger(ctx, minutesFromNow, { x: x+43, y })
   // "m" to indicate "minutes"
-  ctx.drawImage(imageCache.letters.m, x+56, y+8)
+  const mImg = minutesFromNow === 0 ? 'm_nil' : 'm'
+  ctx.drawImage(imageCache.letters[mImg], x+56, y+8)
 }
 
 // set create `canvas` and `ctx` objects, draw background
