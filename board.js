@@ -71,11 +71,11 @@ const drawInteger = (ctx, number, offset) => {
 
 // draw departure info row with the given `data` and `offset`
 const drawRow = (ctx, data, offset) => {
-  const { train, direction, minutesFromNow } = data
+  const { routeId, direction, minutesFromNow } = data
   const { x, y } = offset
 
   // train line circle
-  ctx.drawImage(imageCache.trains[train], x, y)
+  ctx.drawImage(imageCache.trains[routeId], x, y)
   // up or down arrow
   ctx.drawImage(imageCache.directions[direction], x+16, y)
   // departure in minutes from now
@@ -98,7 +98,7 @@ const setUpCanvas = () => {
 
 // input: array of two Row objects:
 // {
-//   train: '1' | '2' | '3',
+//   routeId: '1' | '2' | '3',
 //   direction: 'N' | 'S',
 //   minutesFromNow: Number
 // }
@@ -117,17 +117,21 @@ const drawBoard = async ([topRow, bottomRow]) => {
   fs.writeFileSync('board.png', buffer)
 }
 
-drawBoard([
-  {
-    train: '1',
-    direction: 'N',
-    minutesFromNow: 12
-  },
-  {
-    train: '2',
-    direction: 'S',
-    minutesFromNow: 6
-  }
-])
+// drawBoard([
+//   {
+//     routeId: '1',
+//     direction: 'N',
+//     minutesFromNow: 12
+//   },
+//   {
+//     routeId: '2',
+//     direction: 'S',
+//     minutesFromNow: 6
+//   }
+// ])
 
-module.exports = drawBoard
+const displayBoard = drawBoard
+
+module.exports = {
+  displayBoard
+}

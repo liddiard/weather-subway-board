@@ -4,5 +4,7 @@ module.exports = {
     NORTH: 'N',
     SOUTH: 'S'
   },
-  NUM_TO_DISPLAY: 4 // Number of upcoming trains to display in each direction
+   // seconds to show each set of departures before cycling to the next
+  DISPLAY_CYCLE_SEC: 5,
+  NUM_TO_DISPLAY: 4 // number of upcoming trains to display in each direction
 }
