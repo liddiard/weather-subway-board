@@ -2,6 +2,7 @@ const { getStationDepartures } = require('./departures')
 const { displayBoard } = require('./board')
 const constants = require('./constants')
 
+
 const { STATION_ID } = constants
 
 let departures = []

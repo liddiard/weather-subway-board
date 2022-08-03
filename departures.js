@@ -1,4 +1,5 @@
 const { createClient } = require('mta-realtime-subway-departures')
+
 const constants = require('./constants')
 
 const { NUM_TO_DISPLAY, DIRECTIONS } = constants

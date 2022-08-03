@@ -1,8 +1,11 @@
 const fs = require('fs')
 const { promisify } = require('util')
 const { exec } = require("child_process")
+
 const { createCanvas, loadImage } = require('canvas')
+
 const constants = require('./constants')
+
 
 const run = promisify(exec)
 const { MATRIX, BOARD_IMAGE_FILE } = constants
