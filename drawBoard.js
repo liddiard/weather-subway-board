@@ -129,3 +129,5 @@ drawBoard([
     minutesFromNow: 6
   }
 ])
+
+module.exports = drawBoard
