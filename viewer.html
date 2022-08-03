@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <!-- Run with a simple HTTP server like `python3 -m http.server`, 
+       then vist http://localhost:8080/viewer.html 
+  -->
+  <head>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: black;
+      }
+      body {
+        margin: 2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      img {
+        width: 100%;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+      }
+    </style>
+    <script>
+      setTimeout(() => {
+        location.reload()
+      }, 5000)
+    </script>
+  </head>
+  <body>
+    <img src="./board.png" />
+  </body>
+</html>
