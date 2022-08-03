@@ -25,6 +25,17 @@ const convertResponseDates = (departures) =>
     }))
   }), {})
 
+// API occasionally returns departures that happened a minute or two ago;
+// filter them out
+const removePastDates = (departures) =>
+  Object.entries(departures)
+  .reduce((acc, [direction, departures]) => ({
+    ...acc,
+    [direction]: departures.filter(d =>
+      d.time > new Date()
+    )
+  }), {})
+
 // only retain the next `NUM_TO_DISPLAY` departures in each direction
 const truncateDepartureLists = (departures) => ({
     [NORTH]: departures[NORTH].slice(0, NUM_TO_DISPLAY),
@@ -57,6 +68,7 @@ const getStationDepartures = async (stationId) => {
   const { departures } = response.lines[0]
   return [
     convertResponseDates,
+    removePastDates,
     truncateDepartureLists,
     flattenResponseList,
     addRelativeTimes

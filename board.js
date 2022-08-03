@@ -127,7 +127,7 @@ const drawBoard = async ([topRow, bottomRow]) => {
   drawRow(ctx, topRow, { x: 0, y: 0 })
   drawRow(ctx, bottomRow, { x: 0, y: 18 })
   
-  // save image on disk
+  // save image to disk
   const buffer = canvas.toBuffer('image/png')
   fs.writeFileSync(BOARD_IMAGE_FILE, buffer)
 }
