@@ -2,7 +2,7 @@ const { createClient } = require('mta-realtime-subway-departures')
 
 const constants = require('./constants')
 
-const { NUM_TO_DISPLAY, DIRECTIONS } = constants
+const { DIRECTIONS } = constants
 const { NORTH, SOUTH } = DIRECTIONS
 
 
@@ -37,9 +37,9 @@ const removePastDates = (departures) =>
   }), {})
 
 // only retain the next `NUM_TO_DISPLAY` departures in each direction
-const truncateDepartureLists = (departures) => ({
-    [NORTH]: departures[NORTH].slice(0, NUM_TO_DISPLAY),
-    [SOUTH]: departures[SOUTH].slice(0, NUM_TO_DISPLAY)
+const truncateDepartureLists = (departures, { numToDisplay }) => ({
+    [NORTH]: departures[NORTH].slice(0, numToDisplay),
+    [SOUTH]: departures[SOUTH].slice(0, numToDisplay)
   })
 
 // convert the individual "N" and "S" arrays into a single array, with
@@ -58,7 +58,7 @@ const addRelativeTimes = (departures) =>
     minutesFromNow: Math.floor((d.time - new Date())/1000/60)
   }))
 
-const getStationDepartures = async (stationId) => {
+const getStationDepartures = async (stationId, config) => {
   let response;
   try {
     response = await client.departures(stationId)
@@ -74,7 +74,7 @@ const getStationDepartures = async (stationId) => {
     addRelativeTimes
   ]
   .reduce((acc, cur) => 
-    cur(acc), departures)
+    cur(acc, config), departures)
 }
 
 module.exports = {

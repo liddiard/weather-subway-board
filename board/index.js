@@ -5,10 +5,12 @@ const { exec } = require("child_process")
 const { createCanvas, loadImage } = require('canvas')
 
 const constants = require('./constants')
+const bothDirections = require('./bothDirections')
+const downtownVerticalTimeline = require('./downtownVerticalTimeline')
 
 
 const run = promisify(exec)
-const { MATRIX, BOARD_IMAGE_FILE } = constants
+const { MATRIX, BOARD_IMAGE_FILE, DISPLAY_TYPE } = constants
 
 // in-memory cache of images from disk
 const imageCache = {
@@ -61,42 +63,6 @@ const cacheImage = (type, file) =>
     imageCache[type][file] = image
   })
 
-// draw an integer (`number`), right-aligned, with the given offset
-// given the dimension constraints of the matrix, integers with a maximum of
-// two digits are recommended though larger numbers will work; they'll just
-// overlap with other elements on the screen
-const drawInteger = (ctx, number, offset) => {
-  // width of the character itself + spacing between characters
-  const letterSpacing = 12
-  const { x, y } = offset
-  const numArray = number.toString().split('')
-  const isNil = number === 0
-  // iterate backwards through the array of single digits, starting with the
-  // least significant digit on the right and work toward the left
-  for (let i = numArray.length - 1; i >= 0; i--) {
-    const number = isNil ? 'nil' : numArray[i]
-    // offset for this specific number
-    const charOffset = (i - (numArray.length - 1)) * letterSpacing
-    ctx.drawImage(imageCache.numbers[number], x + charOffset, y)
-  }
-}
-
-// draw departure info row with the given `data` and `offset`
-const drawRow = (ctx, data, offset) => {
-  const { routeId, direction, minutesFromNow } = data
-  const { x, y } = offset
-
-  // train line circle
-  ctx.drawImage(imageCache.trains[routeId], x, y)
-  // up or down arrow
-  ctx.drawImage(imageCache.directions[direction], x+16, y)
-  // departure in minutes from now
-  drawInteger(ctx, minutesFromNow, { x: x+43, y })
-  // "m" to indicate "minutes"
-  const mImg = minutesFromNow === 0 ? 'm_nil' : 'm'
-  ctx.drawImage(imageCache.letters[mImg], x+56, y+8)
-}
-
 // set create `canvas` and `ctx` objects, draw background
 const setUpCanvas = () => {
   const { WIDTH, HEIGHT } = MATRIX
@@ -117,15 +83,26 @@ const setUpCanvas = () => {
 //   direction: 'N' | 'S',
 //   minutesFromNow: Number
 // }
-const drawBoard = async ([topRow, bottomRow]) => {
+const drawBoard = async (displayType, [topRow, bottomRow]) => {
+  const { BOTH_DIRECTIONS, DOWNTOWN_VERTICAL_TIMELINE } = DISPLAY_TYPE
+  const { canvas, ctx } = setUpCanvas()
+
   if (!imageCache.populated) {
     await populateImageCache()
   }
-  const { canvas, ctx } = setUpCanvas()
 
-  // draw foreground departure info
-  drawRow(ctx, topRow, { x: 0, y: 0 })
-  drawRow(ctx, bottomRow, { x: 0, y: 18 })
+  switch (displayType) {
+    case BOTH_DIRECTIONS:
+      // draw foreground departure info
+      bothDirections.drawRow(ctx, topRow, { x: 0, y: 0 })
+      bothDirections.drawRow(ctx, bottomRow, { x: 0, y: 18 })
+      break;
+    case DOWNTOWN_VERTICAL_TIMELINE:
+       // TODO: gave up on the approach of supporting multiple display types
+       // in one codebase because it seemed to be getting to messy
+       // switching to multiple branches where each branch has one display type
+      downtownVerticalTimeline(ctx, )
+  }
   
   // save image on disk
   const buffer = canvas.toBuffer('image/png')
@@ -147,9 +124,9 @@ const drawBoard = async ([topRow, bottomRow]) => {
 
 // draws and displays a board on the LED matrix from provided 2-item
 // departures list
-const displayBoard = async (departures) => {
+const displayBoard = async (displayType, departures) => {
   const { WIDTH, GPIO_MAPPING } = MATRIX
-  await drawBoard(departures)
+  await drawBoard(displayType, departures)
   await run('ls')
   // await run(`./led-image-viewer --led-cols=${WIDTH} --led-gpio-mapping=${GPIO_MAPPING} ${BOARD_IMAGE_FILE}`)
 }

@@ -10,7 +10,8 @@ let departures = []
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const updateDepartures = async () => {
-  departures = await getStationDepartures(STATION_ID)
+  departures = await getStationDepartures(STATION_ID, { numToDisplay: 4 })
+  console.log(departures)
 }
 
 const main = async () => {
