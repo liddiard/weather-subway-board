@@ -187,7 +187,8 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
 const displayBoard = async (currentDepartures, allDepartures) => {
   const { WIDTH, GPIO_MAPPING } = MATRIX
   await drawBoard(currentDepartures, allDepartures)
-  // await run('ls')
+  // kill led image viewer from previous loop
+  await run(`pkill -ax led-image-viewer`)
   await run(`./led-image-viewer --led-cols=${WIDTH} --led-gpio-mapping=${GPIO_MAPPING} ${BOARD_IMAGE_FILE}`)
 }
 
