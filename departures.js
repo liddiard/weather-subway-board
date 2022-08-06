@@ -3,7 +3,6 @@ const { createClient } = require('mta-realtime-subway-departures')
 const constants = require('./constants')
 
 const { NUM_TO_DISPLAY, DIRECTIONS } = constants
-const { NORTH, SOUTH } = DIRECTIONS
 
 
 // https://api.mta.info/#/AccessKey
@@ -16,40 +15,21 @@ if (!API_KEY) {
 
 // convert times from seconds-based Unix timestamps to JS Date objects
 const convertResponseDates = (departures) => 
-  Object.entries(departures)
-  .reduce((acc, [direction, departures]) => ({
-    ...acc,
-    [direction]: departures.map(d => ({
-      ...d, 
-      time: new Date(d.time * 1000)
-    }))
-  }), {})
+  departures.map(d => ({
+    ...d, 
+    time: new Date(d.time * 1000)
+  }))
 
 // API occasionally returns departures that happened a minute or two ago;
 // filter them out
 const removePastDates = (departures) =>
-  Object.entries(departures)
-  .reduce((acc, [direction, departures]) => ({
-    ...acc,
-    [direction]: departures.filter(d =>
-      d.time > new Date()
-    )
-  }), {})
+  departures.filter(d =>
+    d.time > new Date()
+  )
 
-// only retain the next `NUM_TO_DISPLAY` departures in each direction
-const truncateDepartureLists = (departures) => ({
-    [NORTH]: departures[NORTH].slice(0, NUM_TO_DISPLAY),
-    [SOUTH]: departures[SOUTH].slice(0, NUM_TO_DISPLAY)
-  })
-
-// convert the individual "N" and "S" arrays into a single array, with
-// departure objects annotated by direction, and sorted by departure time
-const flattenResponseList = (departures) => [
-    departures[NORTH].map(d => ({ ...d, direction: NORTH })),
-    departures[SOUTH].map(d => ({ ...d, direction: SOUTH }))
-  ]
-  .flat()
-  .sort((a, b) => a.time - b.time)
+// sorted by departure time, closest to station first
+const sortResponseList = (departures) =>
+  departures.sort((a, b) => a.time - b.time)
 
 // add a `minutesFromNow` entry to each departure object
 const addRelativeTimes = (departures) =>
@@ -58,19 +38,18 @@ const addRelativeTimes = (departures) =>
     minutesFromNow: Math.floor((d.time - new Date())/1000/60)
   }))
 
-const getStationDepartures = async (stationId) => {
+const getStationDepartures = async (stationId, direction) => {
   let response;
   try {
     response = await client.departures(stationId)
   } catch (ex) {
     throw Error(`Unable to retrieve departures for station ID ${stationId}. Network Error: ${ex.message}`)
   }
-  const { departures } = response.lines[0]
+  const departures = response.lines[0].departures[direction]
   return [
     convertResponseDates,
     removePastDates,
-    truncateDepartureLists,
-    flattenResponseList,
+    sortResponseList,
     addRelativeTimes
   ]
   .reduce((acc, cur) => 

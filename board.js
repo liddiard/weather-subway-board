@@ -8,7 +8,7 @@ const constants = require('./constants')
 
 
 const run = promisify(exec)
-const { MATRIX, BOARD_IMAGE_FILE } = constants
+const { MATRIX, BOARD_IMAGE_FILE, TRAINS, COLORS } = constants
 
 // in-memory cache of images from disk
 const imageCache = {
@@ -38,6 +38,9 @@ const imageCache = {
   letters: {
     m: null,
     m_nil: null
+  },
+  rulers: {
+    vertical: null
   }
 }
 
@@ -81,20 +84,55 @@ const drawInteger = (ctx, number, offset) => {
   }
 }
 
+const drawPixel = (ctx, color, offset) => {
+  const { r, g, b } = color
+  const { x, y } = offset
+  ctx.fillStyle = `rgb(${r},${g},${b})`;
+  ctx.fillRect(x, y, 1, 1);
+}
+
 // draw departure info row with the given `data` and `offset`
 const drawRow = (ctx, data, offset) => {
-  const { routeId, direction, minutesFromNow } = data
+  const { routeId, minutesFromNow } = data
   const { x, y } = offset
 
   // train line circle
   ctx.drawImage(imageCache.trains[routeId], x, y)
-  // up or down arrow
-  ctx.drawImage(imageCache.directions[direction], x+16, y)
   // departure in minutes from now
-  drawInteger(ctx, minutesFromNow, { x: x+43, y })
+  drawInteger(ctx, minutesFromNow, { x: x+29, y })
   // "m" to indicate "minutes"
   const mImg = minutesFromNow === 0 ? 'm_nil' : 'm'
-  ctx.drawImage(imageCache.letters[mImg], x+56, y+8)
+  ctx.drawImage(imageCache.letters[mImg], x+42, y+8)
+}
+
+const drawTimelineRow = (ctx, minute, trains) => {
+  const { WHITE, BLUE } = COLORS
+  trains.forEach((train, i) => {
+    const _isLocal = isLocal(train)
+    const color = _isLocal ? BLUE : WHITE
+    drawPixel(ctx, color, { 
+      x: _isLocal ? 61 : 63,
+      y: (MATRIX.HEIGHT - 1) - minute
+    })
+  })
+}
+
+const isLocal = (routeId) =>
+  TRAINS.LOCAL.has(routeId)
+
+const drawTimeline = (ctx, departures) => {
+  ctx.drawImage(imageCache.rulers.vertical, 55, 0)
+
+  const binnedDepartures = Array.from({ length: MATRIX.HEIGHT }, () => new Set())
+  departures
+  .filter(departure => departure.minutesFromNow < MATRIX.HEIGHT)
+  .forEach(departure => {
+    binnedDepartures[departure.minutesFromNow].add(departure.routeId)
+  })
+
+  binnedDepartures.forEach((trains, minute) => {
+    drawTimelineRow(ctx, minute, trains)
+  })
 }
 
 // set create `canvas` and `ctx` objects, draw background
@@ -114,10 +152,9 @@ const setUpCanvas = () => {
 // input: array of two Row objects:
 // {
 //   routeId: '1' | '2' | '3',
-//   direction: 'N' | 'S',
 //   minutesFromNow: Number
 // }
-const drawBoard = async ([topRow, bottomRow]) => {
+const drawBoard = async ([topRow, bottomRow], departures) => {
   if (!imageCache.populated) {
     await populateImageCache()
   }
@@ -126,6 +163,7 @@ const drawBoard = async ([topRow, bottomRow]) => {
   // draw foreground departure info
   drawRow(ctx, topRow, { x: 0, y: 0 })
   drawRow(ctx, bottomRow, { x: 0, y: 18 })
+  drawTimeline(ctx, departures)
   
   // save image to disk
   const buffer = canvas.toBuffer('image/png')
@@ -135,23 +173,22 @@ const drawBoard = async ([topRow, bottomRow]) => {
 // drawBoard([
 //   {
 //     routeId: '1',
-//     direction: 'N',
 //     minutesFromNow: 12
 //   },
 //   {
 //     routeId: '2',
-//     direction: 'S',
 //     minutesFromNow: 6
 //   }
 // ])
 
-// draws and displays a board on the LED matrix from provided 2-item
-// departures list
-const displayBoard = async (departures) => {
+// draws and displays a board on the LED matrix with a 2-item array
+// `currentDepartures` shown in large green numbers, and `allDepartures` shown
+// as dots on a timeline
+const displayBoard = async (currentDepartures, allDepartures) => {
   const { WIDTH, GPIO_MAPPING } = MATRIX
-  await drawBoard(departures)
-  await run('ls')
-  // await run(`./led-image-viewer --led-cols=${WIDTH} --led-gpio-mapping=${GPIO_MAPPING} ${BOARD_IMAGE_FILE}`)
+  await drawBoard(currentDepartures, allDepartures)
+  // await run('ls')
+  await run(`./led-image-viewer --led-cols=${WIDTH} --led-gpio-mapping=${GPIO_MAPPING} ${BOARD_IMAGE_FILE}`)
 }
 
 module.exports = {
