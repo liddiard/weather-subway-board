@@ -161,7 +161,7 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
   const { canvas, ctx } = setUpCanvas()
 
   // draw foreground departure info
-  drawRow(ctx, topRow, { x: 1, y: 0 })
+  drawRow(ctx, topRow, { x: 1, y: 1 })
   drawRow(ctx, bottomRow, { x: 1, y: 17 })
   drawTimeline(ctx, departures)
   
