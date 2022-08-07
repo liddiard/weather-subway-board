@@ -162,8 +162,8 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
   const { canvas, ctx } = setUpCanvas()
 
   // draw foreground departure info
-  drawRow(ctx, topRow, { x: 0, y: 0 })
-  drawRow(ctx, bottomRow, { x: 0, y: 18 })
+  drawRow(ctx, topRow, { x: 0, y: 1 })
+  drawRow(ctx, bottomRow, { x: 0, y: 17 })
   drawTimeline(ctx, departures)
   
   // save image to disk
