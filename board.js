@@ -1,69 +1,19 @@
 const fs = require('fs')
-const { promisify } = require('util')
-const { exec } = require("child_process")
 
-const { createCanvas, loadImage } = require('canvas')
+const { createCanvas } = require('canvas')
 
 const constants = require('./constants')
+const { getImages } = require('./image')
 
 
-const run = promisify(exec)
 const { MATRIX, BOARD_IMAGE_FILE, TRAINS, COLORS } = constants
 
-// in-memory cache of images from disk
-const imageCache = {
-  populated: false, // meta attribute indicating if cache has images
-  trains: {
-    1: null,
-    2: null,
-    3: null,
-  },
-  directions: {
-    N: null,
-    S: null
-  },
-  numbers: {
-    nil: null,
-    0: null,
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null,
-    7: null,
-    8: null,
-    9: null
-  },
-  letters: {
-    m: null,
-    m_nil: null
-  },
-  rulers: {
-    vertical: null,
-    vertical_labeled: null
-  }
-}
+let images
 
-// fill the entire image cache with files from disk
-const populateImageCache = async () => {
-  await Promise.all(Object.keys(imageCache).map(cacheImages))
-  imageCache.populated = true
-}
+const isLocal = (routeId) =>
+  TRAINS.LOCAL.has(routeId)
 
-// fill a first-level object of the image cache with key `type` with files
-// from disk
-const cacheImages = (type) =>
-  Promise.all(
-    Object.keys(imageCache[type])
-    .map(file => cacheImage(type, file)))
 
-// load a single image into cache
-const cacheImage = (type, file) =>
-  loadImage(`graphics/${type}/${file}.png`)
-  .then(image => {
-    imageCache[type][file] = image
-  })
 
 // draw an integer (`number`), right-aligned, with the given offset
 // given the dimension constraints of the matrix, integers with a maximum of
@@ -81,10 +31,11 @@ const drawInteger = (ctx, number, offset) => {
     const number = isNil ? 'nil' : numArray[i]
     // offset for this specific number
     const charOffset = (i - (numArray.length - 1)) * letterSpacing
-    ctx.drawImage(imageCache.numbers[number], x + charOffset, y)
+    ctx.drawImage(images.numbers[number], x + charOffset, y)
   }
 }
 
+// draw a single pixel with the given color and coordinates (`offset`)
 const drawPixel = (ctx, color, offset) => {
   const { r, g, b } = color
   const { x, y } = offset
@@ -98,14 +49,15 @@ const drawRow = (ctx, data, offset) => {
   const { x, y } = offset
 
   // train line circle
-  ctx.drawImage(imageCache.trains[routeId], x, y)
+  ctx.drawImage(images.trains[routeId], x, y)
   // departure in minutes from now
   drawInteger(ctx, minutesFromNow, { x: x+27, y })
   // "m" to indicate "minutes"
   const mImg = minutesFromNow === 0 ? 'm_nil' : 'm'
-  ctx.drawImage(imageCache.letters[mImg], x+40, y+8)
+  ctx.drawImage(images.letters[mImg], x+40, y+8)
 }
 
+// draw the trains on a given row of the departure timeline, if applicable
 const drawTimelineRow = (ctx, minute, trains) => {
   const { WHITE, BLUE } = COLORS
   trains.forEach((train, i) => {
@@ -118,12 +70,14 @@ const drawTimelineRow = (ctx, minute, trains) => {
   })
 }
 
-const isLocal = (routeId) =>
-  TRAINS.LOCAL.has(routeId)
-
+// draw a vertical timeline of trains approaching the station, with a labeled
+// timeline and two columns: local on the left in blue, and express on the
+// right in white
 const drawTimeline = (ctx, departures) => {
-  ctx.drawImage(imageCache.rulers.vertical_labeled, 50, 0)
+  ctx.drawImage(images.rulers.vertical_labeled, 50, 0)
 
+  // create an array of trains `Set`s expected to arrive in a given minute,
+  // where the array index is the minute
   const binnedDepartures = Array.from({ length: MATRIX.HEIGHT }, () => new Set())
   departures
   .filter(departure => departure.minutesFromNow < MATRIX.HEIGHT)
@@ -150,14 +104,16 @@ const setUpCanvas = () => {
 }
 
 // generates and writes a new board image file to disk
-// input: array of two Row objects:
+// first argument, array of two departure objects:
 // {
 //   routeId: '1' | '2' | '3',
 //   minutesFromNow: Number
 // }
+// a.k.a. `currentDepartures` shown in large green numbers, and full array of
+// `allDepartures` (second argument) shown as dots on a timeline
 const drawBoard = async ([topRow, bottomRow], departures) => {
-  if (!imageCache.populated) {
-    await populateImageCache()
+  if (!images) {
+    images = await getImages()
   }
   const { canvas, ctx } = setUpCanvas()
 
@@ -171,24 +127,6 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
   fs.writeFileSync(BOARD_IMAGE_FILE, buffer)
 }
 
-// drawBoard([
-//   {
-//     routeId: '1',
-//     minutesFromNow: 12
-//   },
-//   {
-//     routeId: '2',
-//     minutesFromNow: 6
-//   }
-// ])
-
-// draws and displays a board on the LED matrix with a 2-item array
-// `currentDepartures` shown in large green numbers, and `allDepartures` shown
-// as dots on a timeline
-const displayBoard = async (currentDepartures, allDepartures) => {
-  await drawBoard(currentDepartures, allDepartures)
-}
-
 module.exports = {
-  displayBoard
+  drawBoard
 }
