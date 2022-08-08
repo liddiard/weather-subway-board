@@ -64,7 +64,7 @@ const drawTimelineRow = (ctx, minute, trains) => {
     const _isLocal = isLocal(train)
     const color = _isLocal ? RED : WHITE
     drawPixel(ctx, color, { 
-      x: _isLocal ? 61 : 63,
+      x: _isLocal ? 60 : 62,
       y: (MATRIX.HEIGHT - 1) - minute
     })
   })
@@ -74,7 +74,7 @@ const drawTimelineRow = (ctx, minute, trains) => {
 // timeline and two columns: local on the left in blue, and express on the
 // right in white
 const drawTimeline = (ctx, departures) => {
-  ctx.drawImage(images.rulers.vertical_labeled, 50, 0)
+  ctx.drawImage(images.rulers.vertical_labeled, 52, 0)
 
   // create an array of trains `Set`s expected to arrive in a given minute,
   // where the array index is the minute
@@ -118,8 +118,8 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
   const { canvas, ctx } = setUpCanvas()
 
   // draw foreground departure info
-  drawRow(ctx, topRow, { x: 0, y: 1 })
-  drawRow(ctx, bottomRow, { x: 0, y: 17 })
+  drawRow(ctx, topRow, { x: 1, y: 1 })
+  drawRow(ctx, bottomRow, { x: 1, y: 17 })
   drawTimeline(ctx, departures)
   
   // save image to disk
