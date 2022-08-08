@@ -59,10 +59,10 @@ const drawRow = (ctx, data, offset) => {
 
 // draw the trains on a given row of the departure timeline, if applicable
 const drawTimelineRow = (ctx, minute, trains) => {
-  const { WHITE, BLUE } = COLORS
+  const { WHITE, RED } = COLORS
   trains.forEach((train, i) => {
     const _isLocal = isLocal(train)
-    const color = _isLocal ? BLUE : WHITE
+    const color = _isLocal ? RED : WHITE
     drawPixel(ctx, color, { 
       x: _isLocal ? 61 : 63,
       y: (MATRIX.HEIGHT - 1) - minute
