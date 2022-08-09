@@ -40,7 +40,7 @@ npm run display
 ### Web-based board viewer (for development)
 
 ```shell
-python3 -m http.server
+npm run web-viewer
 ```
 
 View the board at http://localhost:8000/viewer.html

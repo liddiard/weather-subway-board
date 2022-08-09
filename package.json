@@ -7,7 +7,8 @@
     "preinstall": "./scripts/install_canvas_dependencies.sh",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "display": "sudo python3 image-viewer.py"
+    "display": "sudo python3 image-viewer.py",
+    "web-viewer": "python3 -m http.server"
   },
   "engines": {
     "node": "16",
