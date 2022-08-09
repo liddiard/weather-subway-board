@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "preinstall": "./scripts/install_canvas_dependencies.sh",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "display": "sudo python3 image-viewer.py"
   },
   "engines": {
     "node": "16",
