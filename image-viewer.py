@@ -1,6 +1,5 @@
-#!/usr/bin/env python
 import time
-import sys
+from datetime import datetime
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image
