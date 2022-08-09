@@ -8,7 +8,7 @@ TODO: about
 - [64x32 LED matrix, 5mm pitch](https://smile.amazon.com/gp/product/B07SDMWX9R/) – could likely get cheaper from Aliexpress, but longer shipping time
 - [Adafruit RGB Matrix Bonnet](https://www.adafruit.com/product/3211)
 - [Power supply, 5V 8A](https://smile.amazon.com/dp/B078RZBL8X/)
-- [Mounting tape (optional)](https://smile.amazon.com/gp/product/B00347A8GC/) – attach Pi & bonnet to matrix
+- [Mounting tape (optional)](https://smile.amazon.com/gp/product/B00347A8GC/) – attach Pi to matrix
 - [Cable concealer (optional)](https://smile.amazon.com/gp/product/B07D8WVJWF/) – for power supply
 
 ## Installation
@@ -31,7 +31,7 @@ Tested running:
 ```shell
 API_KEY=<Your API key> npm start
 ```
-### Display board (Linux only)
+### Display board on LED matrix (Linux only)
 
 ```shell
 npm run display
