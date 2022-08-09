@@ -44,7 +44,7 @@ const drawPixel = (ctx, color, offset) => {
 }
 
 // draw departure info row with the given `data` and `offset`
-const drawRow = (ctx, data, offset) => {
+const drawDepartureRow = (ctx, data, offset) => {
   const { routeId, minutesFromNow } = data
   const { x, y } = offset
 
@@ -118,8 +118,8 @@ const drawBoard = async ([topRow, bottomRow], departures) => {
   const { canvas, ctx } = setUpCanvas()
 
   // draw foreground departure info
-  drawRow(ctx, topRow, { x: 1, y: 1 })
-  drawRow(ctx, bottomRow, { x: 1, y: 17 })
+  drawDepartureRow(ctx, topRow, { x: 1, y: 1 })
+  drawDepartureRow(ctx, bottomRow, { x: 1, y: 17 })
   drawTimeline(ctx, departures)
   
   // save image to disk
