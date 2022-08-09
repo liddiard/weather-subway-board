@@ -9,11 +9,10 @@ image_file = "board.png"
 
 # configure matrix
 options = RGBMatrixOptions()
-options.rows = 32
 options.cols = 64
-options.chain_length = 1
-options.parallel = 1
 options.hardware_mapping = 'adafruit-hat'
+# fix error "Can't set realtime thread priority=99: Operation not permitted."
+# https://github.com/hzeller/rpi-rgb-led-matrix/issues/1170#issuecomment-706715753
 options.drop_privileges = False
 matrix = RGBMatrix(options=options)
 
