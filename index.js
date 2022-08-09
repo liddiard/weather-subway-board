@@ -12,7 +12,11 @@ let departures = []
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const updateDepartures = async () => {
-  departures = await getStationDepartures(STATION_ID, NORTH)
+  try {
+    departures = await getStationDepartures(STATION_ID, NORTH)
+  } catch (ex) {
+    console.error(`Unable to fetch latest departures. ${ex}`)
+  }
 }
 
 const main = async () => {
@@ -23,7 +27,7 @@ const main = async () => {
     const isLast = i >= NUM_TO_DISPLAY - 2
     drawBoard(departures.slice(i, i+2), departures)
     .catch(ex => 
-      console.log(`drawBoard failed with error: ${ex}.\nResponse: ${departures}`))
+      console.error(`drawBoard failed with error: ${ex}.\nResponse: ${departures}`))
     
     if (isLast) { // on last iteration of the loop, refresh departures async
       updateDepartures()
