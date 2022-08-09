@@ -1,6 +1,6 @@
 # NYC subway train departures board
 
-TODO: about
+![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](https://i.imgur.com/wxVTYVq.jpg)
 
 ## Materials used
 
