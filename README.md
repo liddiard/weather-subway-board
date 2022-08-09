@@ -16,7 +16,8 @@ Tested running:
 
 ### Generate board image
 
-Get an API key from https://api.mta.info/#/AccessKey. You have to create an account, but it's free.
+1. Create an account at https://api.mta.info/#/signup
+2. Get an API key from https://api.mta.info/#/AccessKey (link only goes to the right place if logged in)
 
 ```shell
 API_KEY=<Your API key> npm start
