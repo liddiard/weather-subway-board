@@ -1,8 +1,9 @@
 import time
 from datetime import datetime
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+import PIL
 from PIL import Image
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 
 image_file = "board.png"
@@ -14,6 +15,7 @@ options.hardware_mapping = 'adafruit-hat'
 # fix error "Can't set realtime thread priority=99: Operation not permitted."
 # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1170#issuecomment-706715753
 options.drop_privileges = False
+# options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
 
 
