@@ -1,6 +1,6 @@
-const { getStationDepartures } = require('./departures')
-const { drawBoard } = require('./board')
-const constants = require('./constants')
+const { getStationDepartures } = require('./src/departures')
+const { drawBoard } = require('./src/board')
+const constants = require('./src/constants')
 
 
 const { STATION_ID, DISPLAY_CYCLE_SEC, NUM_TO_DISPLAY, DIRECTIONS } = constants

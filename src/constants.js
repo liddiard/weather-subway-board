@@ -5,6 +5,8 @@ module.exports = {
     GPIO_MAPPING: 'adafruit-hat'
   },
   BOARD_IMAGE_FILE: 'board.png',
+  // Station to display departures from
+  // http://web.mta.info/developers/data/nyct/subway/Stations.csv
   STATION_ID: 313, // Upper West Side, 72 St & Broadway
   DIRECTIONS: {
     NORTH: 'N',
