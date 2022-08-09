@@ -2,6 +2,15 @@
 
 TODO: about
 
+## Materials used
+
+- [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)
+- [64x32 LED matrix, 5mm pitch](https://smile.amazon.com/gp/product/B07SDMWX9R/) – could likely get cheaper from Aliexpress, but much longer shipping time
+- [Adafruit RGB Matrix Bonnet](https://www.adafruit.com/product/3211)
+- [Power supply, 5V 8A](https://smile.amazon.com/dp/B078RZBL8X/)
+- [Mounting tape (optional)](https://smile.amazon.com/gp/product/B00347A8GC/) – attach Pi + bonnet to matrix
+- [Cable concealer (optional)](https://smile.amazon.com/gp/product/B07D8WVJWF/) – for power supply
+
 ## Installation
 
 Tested running:
