@@ -27,7 +27,7 @@ const main = async () => {
     const isLast = i >= NUM_TO_DISPLAY - 2
     drawBoard(departures.slice(i, i+2), departures)
     .catch(ex => 
-      console.error(`drawBoard failed with error: ${ex}.\nResponse: ${departures}`))
+      console.error(`drawBoard failed with error: ${ex}.\nResponse: ${JSON.stringify(departures, null, 2)}`))
     
     if (isLast) { // on last iteration of the loop, refresh departures async
       updateDepartures()
