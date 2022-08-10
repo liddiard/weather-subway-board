@@ -67,7 +67,9 @@ View the board at http://localhost:8000/viewer.html
 
 The vertical position of train dots is based on their number of minutes from the station, as shown by the tick marks and the "30", "20", "10, "0" labels. Each row of pixels represents one minute.
 
-You'll need to create your own train circle "sprite" images for your line.
+---
+
+You'll need to create your own train circle "sprite" images for your station's lines (unless they happen to be the 123 🙂).
  
 The board only shows trains going in one direction because most of the time I only go downtown from my stop. Not needing to display the train direction freed up some space on the matrix for the timeline view in my implementation.
 
