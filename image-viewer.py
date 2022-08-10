@@ -23,10 +23,11 @@ while True:
     canvas = matrix.CreateFrameCanvas()
     try:
         image = Image.open(image_file)
-    # occasionally the image file will fail to display because it's being
-    # written by node.js at the same time we are trying to write it here
-    # a better approach would probably be using inotify or OS equivalent but
-    # the issue happens so rarely that I don't think it's worth doing now
+    # Occasionally the image file will fail to display because it's being
+    # written by the Node.js process at the same time we are trying to read it
+    # here. A better approach would probably be to use `inotify` or OS
+    # equivalent to run this code when the file is updated, but the error
+    # happens so rarely that I'm not motivated to try another approach now.
     # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1204#issuecomment-733804488
     except PIL.UnidentifiedImageError:
         print(f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] Failed to open {image_file} - bad file.")
