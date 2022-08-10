@@ -2,7 +2,9 @@
 
 ![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](https://i.imgur.com/wxVTYVq.jpg)
 
-## Materials used
+## Hardware
+
+### Components used
 
 - [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)
 - [64x32 LED matrix, 5mm pitch](https://smile.amazon.com/gp/product/B07SDMWX9R/) – could likely get cheaper from Aliexpress, but longer shipping time
@@ -10,6 +12,10 @@
 - [Power supply, 5V 8A](https://smile.amazon.com/dp/B078RZBL8X/)
 - [Mounting tape (optional)](https://smile.amazon.com/gp/product/B00347A8GC/) – attach Pi to matrix
 - [Cable concealer (optional)](https://smile.amazon.com/gp/product/B07D8WVJWF/) – for power supply
+
+### Build process
+
+TODO
 
 ## Installation
 
@@ -44,6 +50,12 @@ npm run web-viewer
 ```
 
 View the board at http://localhost:8000/viewer.html
+
+## Explanation of board display
+
+TODO
+
+![LED matrix board pixellated web viewer](graphics/board_web_example.gif)
 
 ## Project structure
 
