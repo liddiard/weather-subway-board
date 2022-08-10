@@ -73,7 +73,7 @@ You'll need to create your own train circle "sprite" images for your station's l
  
 The board only shows trains going in one direction because most of the time I only go downtown from my stop. Not needing to display the train direction freed up some space on the matrix for the timeline view in my implementation.
 
-There's an earlier branch of this code, `no-timeline`, which displays both directions along with an arrow direction indicator but doesn't have a timeline view. The code is older and I'm not using it, so it's less finished/polished.
+There's an earlier branch of this code, [`no-timeline`](https://github.com/liddiard/nyc-subway-board/tree/no-timeline), which displays both directions along with an arrow direction indicator but doesn't have a timeline view. The code is older and I'm not using it, so it's less finished/polished.
 
 ## Project structure
 
