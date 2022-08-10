@@ -51,7 +51,9 @@ npm run web-viewer
 
 View the board at http://localhost:8000/viewer.html
 
-## Explanation of board display
+## Explanation of board layout
+
+Images like these can be displayed with the web-based board viewer described above.
 
 ![Explanation of LED matrix board](graphics/board_web_example_explanation.png)
 ![LED matrix board pixellated web viewer](graphics/board_web_example.gif)
