@@ -6,7 +6,6 @@ const constants = require('./src/constants')
 const { STATION_ID, DISPLAY_CYCLE_SEC, NUM_TO_DISPLAY, DIRECTIONS } = constants
 const { NORTH } = DIRECTIONS
 
-
 let departures = []
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
