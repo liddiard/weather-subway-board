@@ -13,3 +13,4 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 else
     echo "Unsupported operating system: $(uname)"
     exit 1
+fi
