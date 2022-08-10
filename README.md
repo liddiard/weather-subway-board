@@ -56,7 +56,7 @@ View the board at http://localhost:8000/viewer.html
 ![Explanation of LED matrix board](graphics/board_web_example_explanation.png)
 ![LED matrix board pixellated web viewer](graphics/board_web_example.gif)
 
-\* In the right-side "timeline" train view, trains are shown approaching the station (bottom, orange line). The left column of red dots show local trains, while the right column with white dots shows express trains. The y-axis position of train dots is based on their number of minutes from the station, as shown by the tick marks and "30", "20", "10, "0" labels. Each pixel row represents one minute.
+\* In the right-side "timeline" train view, trains are shown approaching the station (bottom, orange line). The left column of red dots shows local trains, while the right column of white dots shows express trains. The y-axis position of train dots is based on their number of minutes from the station, as shown by the tick marks and "30", "20", "10, "0" labels. Each pixel row represents one minute.
 
 ## Project structure
 
