@@ -18,7 +18,6 @@ options.drop_privileges = False
 # options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
 
-
 while True:
     canvas = matrix.CreateFrameCanvas()
     try:

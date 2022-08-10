@@ -14,7 +14,6 @@ const isLocal = (routeId) =>
   TRAINS.LOCAL.has(routeId)
 
 
-
 // draw an integer (`number`), right-aligned, with the given offset
 // given the dimension constraints of the matrix, integers with a maximum of
 // two digits are recommended though larger numbers will work; they'll just
