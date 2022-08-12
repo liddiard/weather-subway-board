@@ -9,7 +9,7 @@ from pywizlight import wizlight
 
 
 image_file = "board.png"
-bulb_ip = "192.168.0.10" # stove light
+bulb_ip = "192.168.0.10" # stove light bulb
 
 # configure matrix
 options = RGBMatrixOptions()
@@ -26,7 +26,6 @@ bulb = wizlight(bulb_ip)
 
 # check if smart bulb is on
 async def bulb_is_on():
-    bulb = wizlight(bulb_ip)
     state = await bulb.updateState()
     return state.get_state()
 
