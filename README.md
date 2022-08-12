@@ -1,6 +1,8 @@
 # NYC subway train departures board
 
-![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](https://i.imgur.com/wxVTYVq.jpg)
+Display upcoming departures of New York City subway trains from a specific station on an LED matrix, powered by the MTA realtime data feeds.
+
+![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](graphics/board_example_web_explanation.png)
 
 ## Hardware
 
@@ -57,8 +59,8 @@ View the board at http://localhost:8000/viewer.html
 
 (Images like this can be displayed with the web-based board viewer mentioned above):
 
-![Explanation of LED matrix board](graphics/board_web_example_explanation.png)
-![LED matrix board pixellated web viewer](graphics/board_web_example.gif)
+![Explanation of LED matrix board](graphics/board_example_web_explanation.png)
+![LED matrix board pixellated web viewer](graphics/board_example_web.gif)
 
 **\*Timeline view:** Trains are shown approaching the station (at bottom, orange line).
 
