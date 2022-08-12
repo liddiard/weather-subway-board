@@ -9,7 +9,7 @@ from pywizlight import wizlight
 
 
 image_file = "board.png"
-bulb_ip = "192.168.0.10"
+bulb_ip = "192.168.0.10" # stove light
 
 # configure matrix
 options = RGBMatrixOptions()
@@ -21,17 +21,23 @@ options.drop_privileges = False
 # options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
 
+# initialize smart bulb
+bulb = wizlight(bulb_ip)
+
+# check if smart bulb is on
+async def bulb_is_on():
+    bulb = wizlight(bulb_ip)
+    state = await bulb.updateState()
+    return state.get_state()
 
 async def main():
-    bulb = wizlight(bulb_ip)
     while True:
-        bulb = wizlight(bulb_ip)
-        state = await bulb.updateState()
-        is_on = state.get_state()
-
-        if not is_on:
+        # If smart bulb is off, then don't display anything on the matrix.
+        # If you're not me (original code author), you should probably remove
+        # this condition because it's specific to my particular smarthome setup
+        if not await bulb_is_on():
             matrix.Clear()
-            time.sleep(30)
+            time.sleep(10)
             continue
 
         canvas = matrix.CreateFrameCanvas()
