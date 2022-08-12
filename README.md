@@ -2,7 +2,7 @@
 
 Display upcoming departures of New York City subway trains from a specific station on an LED matrix, powered by the MTA realtime data feeds.
 
-![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](graphics/board_example_web_explanation.png)
+![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](graphics/board_example_matrix.gif)
 
 ## Hardware
 
