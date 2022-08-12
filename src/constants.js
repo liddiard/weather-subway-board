@@ -14,7 +14,7 @@ module.exports = {
   },
   TRAINS: {
     LOCAL: new Set(['1']),
-    EXPRESS: new Set(['2', '3']),
+    EXPRESS: new Set(['2', '3', '5']),
   },
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },

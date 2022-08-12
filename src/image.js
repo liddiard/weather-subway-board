@@ -7,6 +7,7 @@ const imageCache = {
     1: null,
     2: null,
     3: null,
+    5: null,
   },
   directions: {
     N: null,
