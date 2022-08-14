@@ -81,16 +81,17 @@ There's an earlier branch of this code, [`no-timeline`](https://github.com/liddi
 
 ## Project structure
 
-[`index.js`](index.js): Main entry point for Node.js app that calls MTA API for train departures, generates a board image using the JavaScript `canvas` API, and writes it to disk. It runs in a loop, cycling the board image through upcoming departures shown in large text. It requests updated departure information at the end of each cycle.
-
 ### [`src/`](src/)
 
+- [`index.js`](index.js): Main entry point for Node.js app that calls the MTA API for train departures, generates a board image using the JavaScript `canvas` API, and writes it to disk. It runs in a loop, cycling the board image through upcoming departures shown in large text. It requests updated departure information at the end of each cycle.
 - [departures.js](src/departures.js): Fetches upcoming departure information from the MTA API and transforms the response to desired format
 - [board.js](src/board.js): HTML `canvas` board drawing happens here
 - [image.js](src/image.js): Utilities for caching the smaller "sprite" images that are combined to form the overall board `canvas` image
 - [constants.js](src/constants.js): Constants. `STATION_ID` is the subway station from which the departures are shown.
 
-`board.png`: Not in version control, image of the board to display. Generated the by Node.js app. View it on the web viewer or the LED matrix as detailed above under [Running](#Running).
+---
+
+`board.png`: Image of the board to display. Generated the by Node.js app and not in version control. View it on the web viewer or the LED matrix as detailed above under [Running](#Running).
 
 [`image-viewer.py`](image-viewer.py): Script that recurringly reads the board image file from disk and displays it on the LED matrix using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be particularly fast since it only shows a new frame every 5 seconds.
 
