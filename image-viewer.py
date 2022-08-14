@@ -14,10 +14,17 @@ bulb_ip = "192.168.0.10" # stove light bulb
 # configure matrix
 options = RGBMatrixOptions()
 options.cols = 64
-options.hardware_mapping = 'adafruit-hat'
+# "*-pwm" requires connecting bonnet pins GPIO4 and GPIO18 as described under 
+# step 6 of docs:
+# https://cdn-learn.adafruit.com/downloads/pdf/adafruit-rgb-matrix-bonnet-for-raspberry-pi.pdf
+# and disable Pi's sound as described in:
+# https://github.com/hzeller/rpi-rgb-led-matrix#bad-interaction-with-sound
+# beneficial because it eliminates matrix flicker
+options.hardware_mapping = 'adafruit-hat-pwm'
 # fix error "Can't set realtime thread priority=99: Operation not permitted."
 # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1170#issuecomment-706715753
 options.drop_privileges = False
+# show matrix refresh rate in console for debugging
 # options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
 
