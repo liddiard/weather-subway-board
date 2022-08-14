@@ -44,6 +44,10 @@ const drawPixel = (ctx, color, offset) => {
 
 // draw departure info row with the given `data` and `offset`
 const drawDepartureRow = (ctx, data, offset) => {
+  if (!data) {
+    return
+  }
+  
   const { routeId, minutesFromNow } = data
   const { x, y } = offset
 
