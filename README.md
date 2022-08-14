@@ -98,6 +98,6 @@ There's an earlier branch of this code, [`no-timeline`](https://github.com/liddi
 
 [`scripts/`](scripts/) One-time bash scripts used for dependency installation:
 
-- `install_canvas_dependencies.sh` automatically runs before `npm install` to install the required `canvas` dependencies. `npm install` will fail without doing this first. 
+- `install_canvas_dependencies.sh` automatically runs before `npm install` to install the required `canvas` package dependencies. `npm install` will fail without doing this first. 
 - `build_rpi-rgb-led-matrix.sh` builds the binaries for `rpi-rgb-led-matrix` on Linux OSs with `apt-get` only. This library displays the board image file on the LED matrix.
 
