@@ -19,7 +19,9 @@ Display upcoming departures of New York City subway trains from a specific stati
 
 The hardware build is pretty straightforward and mostly involves plugging things in to the right places, unless you want to add an on/off button to the matrix. For Pis without a header, you will need to solder one on. Consider a Raspberry Pi Zero W (or the Zero 2 W) for a smaller form factor. The software commands will take a while to start up vs. newer/faster models, but once they get going I haven't faced any issues.
 
-I followed [this tutorial](https://howchoo.com/pi/raspberry-pi-led-matrix-panel) and watched the associated [YouTube video](https://www.youtube.com/watch?v=EPZawKPC73k) for pretty much all the guidance I needed. The video is for a different _software_ display, but it mostly covers the hardware setup which is the same.
+I followed [this tutorial](https://howchoo.com/pi/raspberry-pi-led-matrix-panel) and watched the associated [YouTube video](https://www.youtube.com/watch?v=EPZawKPC73k) most of the guidance I needed. (The video displays something different in software, but the hardware setup is the same.)
+
+I did make the mod described in the [Adafruit RGB Matrix Bonnet documentation](http://https://cdn-learn.adafruit.com/downloads/pdf/adafruit-rgb-matrix-bonnet-for-raspberry-pi.pdf) under Step 6 to eliminate matrix flicker by soldering a short wire to the bonnet between pins GPIO4 and GPIO18. After making this hardware mod, you need to disable sound on the Pi by following [these steps](https://github.com/hzeller/rpi-rgb-led-matrix#bad-interaction-with-sound). I didn't bother digging into why this was only an issue with the hardware mod; it doesn't really matter because this project does not involve audio.
 
 ## Installation
 
