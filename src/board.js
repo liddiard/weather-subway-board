@@ -6,7 +6,7 @@ const constants = require('./constants')
 const { getImages } = require('./image')
 
 
-const { MATRIX, BOARD_IMAGE_FILE, TRAINS, COLORS } = constants
+const { MATRIX, BOARD_IMAGE_FILE, TRAINS, COLORS, CHAR_WIDTH } = constants
 
 let images
 
@@ -19,18 +19,19 @@ const isLocal = (routeId) =>
 // two digits are recommended though larger numbers will work; they'll just
 // overlap with other elements on the screen
 const drawInteger = (ctx, number, offset) => {
-  // width of the character itself + spacing between characters
-  const letterSpacing = 12
+  // spacing between characters
+  const letterSpacing = 2
   const { x, y } = offset
   const numArray = number.toString().split('')
   const isNil = number === 0
+  let cursorPosition = 0
   // iterate backwards through the array of single digits, starting with the
   // least significant digit on the right and work toward the left
-  for (let i = numArray.length - 1; i >= 0; i--) {
-    const number = isNil ? 'nil' : numArray[i]
-    // offset for this specific number
-    const charOffset = (i - (numArray.length - 1)) * letterSpacing
-    ctx.drawImage(images.numbers[number], x + charOffset, y)
+  for (const number of numArray.reverse()) {
+    const sprite = isNil ? 'nil' : number
+    // move the cursor to the left ("backwards") for the width of this digit
+    cursorPosition -= (CHAR_WIDTH[number] + letterSpacing)
+    ctx.drawImage(images.numbers[sprite], x + cursorPosition, y)
   }
 }
 
@@ -54,7 +55,7 @@ const drawDepartureRow = (ctx, data, offset) => {
   // train line circle
   ctx.drawImage(images.trains[routeId], x, y)
   // departure in minutes from now
-  drawInteger(ctx, minutesFromNow, { x: x+27, y })
+  drawInteger(ctx, minutesFromNow, { x: x+40, y })
   // "m" to indicate "minutes"
   const mImg = minutesFromNow === 0 ? 'm_nil' : 'm'
   ctx.drawImage(images.letters[mImg], x+40, y+8)

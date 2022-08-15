@@ -22,5 +22,18 @@ module.exports = {
   },
    // seconds to show each set of departures before cycling to the next
   DISPLAY_CYCLE_SEC: 5,
-  NUM_TO_DISPLAY: 8 // number of upcoming trains to display in each direction
+  NUM_TO_DISPLAY: 20, // number of upcoming trains to display in each direction
+  // map from digit (character) to its width
+  CHAR_WIDTH: {
+    0: 10,
+    1: 7,
+    2: 10,
+    3: 10,
+    4: 11,
+    5: 10,
+    6: 11,
+    7: 10,
+    8: 11,
+    9: 11,
+  }
 }
