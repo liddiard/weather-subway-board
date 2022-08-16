@@ -1,8 +1,7 @@
 module.exports = {
   MATRIX: {
     WIDTH: 64,
-    HEIGHT: 32,
-    GPIO_MAPPING: 'adafruit-hat'
+    HEIGHT: 32
   },
   BOARD_IMAGE_FILE: 'board.png',
   // Station to display departures from
