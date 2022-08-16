@@ -25,13 +25,13 @@ module.exports = {
   // map from digit (character) to its width
   CHAR_WIDTH: {
     0: 10,
-    1: 7,
+    1: 6,
     2: 10,
     3: 10,
     4: 11,
     5: 10,
     6: 11,
-    7: 10,
+    7: 9,
     8: 11,
     9: 11,
   }
