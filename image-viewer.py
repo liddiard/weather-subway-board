@@ -33,7 +33,11 @@ bulb = wizlight(bulb_ip)
 
 # check if smart bulb is on
 async def bulb_is_on():
-    state = await bulb.updateState()
+    try:
+        state = await bulb.updateState()
+    except asyncio.TimeoutError as ex:
+        print(f"Unable to get bulb status; defaulting to OFF. {ex}")
+        return False
     return state.get_state()
 
 async def main():
