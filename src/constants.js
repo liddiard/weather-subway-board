@@ -1,4 +1,4 @@
-module.exports = {
+const constants = {
   MATRIX: {
     WIDTH: 64,
     HEIGHT: 32
@@ -25,6 +25,9 @@ module.exports = {
     RED: { r: 255, g: 0, b: 0 },
     GREEN: { r: 0, g: 255, b: 0 },
     BLUE: { r: 0, g: 0, b: 255 },
+    CYAN: { r: 0, g: 255, b: 255 },
+    MAGENTA: { r: 255, g: 0, b: 255 },
+    YELLOW: { r: 255, g: 255, b: 0 },
     ORANGE: { r: 255, g: 128, b: 0 }
   },
   CHAR_HEIGHT: 5,
@@ -43,3 +46,11 @@ module.exports = {
     '%': 4
   }
 }
+
+const { MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED } = constants.COLORS
+constants.GRADIENTS = {
+  TEMPERATURE: [MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED],
+  HUMIDITY: [RED, YELLOW, GREEN, CYAN, BLUE]
+}
+
+module.exports = constants
