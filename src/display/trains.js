@@ -1,19 +1,11 @@
 const constants = require('../constants')
-const { getImages } = require('./utils')
+const { getImages, drawPixel } = require('./utils')
 
 
 const { MATRIX, TRAINS, COLORS } = constants
 
 const isLocal = (routeId) =>
   TRAINS.LOCAL.has(routeId)
-
-// draw a single pixel with the given color and coordinates (`offset`)
-const drawPixel = (ctx, color, offset) => {
-  const { r, g, b } = color
-  const { x, y } = offset
-  ctx.fillStyle = `rgb(${r},${g},${b})`
-  ctx.fillRect(x, y, 1, 1)
-}
 
 // draw the trains on a given row of the departure timeline, if applicable
 const drawTrainRow = (ctx, minute, trains) => {
@@ -34,7 +26,7 @@ const drawTrainRow = (ctx, minute, trains) => {
 const drawTrains = async (ctx, departures) => {
   const images = await getImages()
 
-  ctx.drawImage(images.rulers.vertical_labeled, 52, 0)
+  ctx.drawImage(images.rulers.vertical, 59, 0)
 
   // create an array of trains `Set`s expected to arrive in a given minute,
   // where the array index is the minute

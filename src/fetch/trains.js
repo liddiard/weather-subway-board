@@ -34,7 +34,7 @@ const addRelativeTimes = (departures) =>
     minutesFromNow: Math.floor((d.time - new Date())/1000/60)
   }))
 
-const getStationDepartures = async (stationId, direction) => {
+const getTrains = async (stationId, direction) => {
   let response
   try {
     response = await client.departures(stationId)
@@ -53,5 +53,5 @@ const getStationDepartures = async (stationId, direction) => {
 }
 
 module.exports = {
-  getStationDepartures
+  getTrains
 }

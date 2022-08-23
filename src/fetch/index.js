@@ -1,4 +1,4 @@
-const departures = require('./departures')
+const departures = require('./trains')
 const weather = require('./weather')
 const forecast = require('./forecast')
 

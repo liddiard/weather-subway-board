@@ -22,8 +22,12 @@ module.exports = {
   DISPLAY_UPDATE_SEC: 30,
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },
-    RED: { r: 255, g: 0, b: 0 }
+    RED: { r: 255, g: 0, b: 0 },
+    GREEN: { r: 0, g: 255, b: 0 },
+    BLUE: { r: 0, g: 0, b: 255 },
+    ORANGE: { r: 255, g: 128, b: 0 }
   },
+  CHAR_HEIGHT: 5,
   // map from digit (character) to its width
   CHAR_WIDTH: {
     0: 3,
@@ -36,5 +40,6 @@ module.exports = {
     7: 3,
     8: 3,
     9: 3,
+    '%': 4
   }
 }

@@ -3,8 +3,9 @@ const fs = require('fs')
 const { createCanvas } = require('canvas')
 
 const { drawTrains } = require('./trains')
+const { drawWeather } = require('./weather')
+const { drawForecast } = require('./forecast')
 const constants = require('../constants')
-const { getImages } = require('./utils')
 
 
 const { MATRIX, BOARD_IMAGE_FILE } = constants
@@ -34,8 +35,9 @@ const setUpCanvas = () => {
 const drawBoard = async (departures, weather, forecast) => {
   const { canvas, ctx } = setUpCanvas()
 
-  // draw foreground departure info
   await drawTrains(ctx, departures)
+  await drawWeather(ctx, weather)
+  await drawForecast(ctx, forecast)
   
   // save image to disk
   const buffer = canvas.toBuffer('image/png')

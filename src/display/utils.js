@@ -1,9 +1,9 @@
-const { loadImage } = require('canvas')
+const { loadImage, createCanvas } = require('canvas')
 
 const constants = require('../constants')
 
 
-const { CHAR_WIDTH } = constants
+const { CHAR_WIDTH, CHAR_HEIGHT } = constants
 
 // in-memory cache of images from disk
 const imageCache = {
@@ -15,7 +15,8 @@ const imageCache = {
     S: null,
     SW: null,
     W: null,
-    NW: null
+    NW: null,
+    'Ø': null
   },
   font: {
     0: null,
@@ -28,13 +29,27 @@ const imageCache = {
     7: null,
     8: null,
     9: null,
-    percent: null
+    '-': null,
+    '%': null
   },
   rulers: {
-    vertical: null,
-    vertical_labeled: null
+    vertical: null
   },
-  weather: {}
+  weather: {
+    cloud: null,
+    cloud_with_lightning: null,
+    cloud_with_lightning_and_rain: null,
+    downpour: null,
+    fog: null,
+    fog_with_rain: null,
+    heavy_rain: null,
+    not_available: null,
+    rain: null,
+    sun: null,
+    sun_behind_cloud: null,
+    sun_with_cloud: null,
+    sun_with_scattered_cloud: null,
+  }
 }
 
 // fill the entire image cache with files from disk
@@ -64,28 +79,63 @@ const cacheImage = (type, file) =>
     imageCache[type][file] = image
   })
 
+// adapted from https://stackoverflow.com/a/4231508
+const tintImage = (image, color) => {
+  const { r, g, b } = color
+
+  // create offscreen buffer
+  const buffer = createCanvas(image.width, image.height)
+  const bx = buffer.getContext('2d')
+
+  // fill offscreen buffer with tint color
+  bx.fillStyle = `rgb(${r},${g},${b})`
+  bx.fillRect(0, 0, buffer.width, buffer.height)
+
+  // destination-atop creates an image with alpha channel identical to provided
+  // foreground `image` with the color of the background
+  bx.globalCompositeOperation = 'destination-atop'
+  bx.drawImage(image, 0, 0)
+
+  return buffer
+}
+
 // draw an integer (`number`), right-aligned, with the given offset
 // given the dimension constraints of the matrix, integers with a maximum of
 // two digits are recommended though larger numbers will work; they'll just
 // overlap with other elements on the screen
-const drawInteger = (ctx, number, offset) => {
+const drawText = (ctx, text, offset, color) => {
   // spacing between characters
-  const letterSpacing = 2
+  const letterSpacing = 1
   const { x, y } = offset
-  const numArray = number.toString().split('')
-  const isNil = number === 0
+  const charArray = text.split('')
   let cursorPosition = 0
   // iterate backwards through the array of single digits, starting with the
   // least significant digit on the right and work toward the left
-  for (const number of numArray.reverse()) {
-    const sprite = isNil ? 'nil' : number
-    // move the cursor to the left ("backwards") for the width of this digit
-    cursorPosition -= (CHAR_WIDTH[number] + letterSpacing)
-    ctx.drawImage(imageCache.font[sprite], x + cursorPosition, y)
+  for (const char of charArray) {
+    let image = imageCache.font[char]
+    if (!image) {
+      throw Error(`Unsupported character '${char}' in string "${text}"`)
+    }
+    if (color) {
+      image = tintImage(image, color)
+    }
+    ctx.drawImage(image, x + cursorPosition, y)
+    cursorPosition += (CHAR_WIDTH[char] + letterSpacing)
   }
+  return offset.x + (cursorPosition - letterSpacing)
+}
+
+// draw a single pixel with the given color and coordinates (`offset`)
+const drawPixel = (ctx, color, offset) => {
+  const { r, g, b } = color
+  const { x, y } = offset
+  ctx.fillStyle = `rgb(${r},${g},${b})`
+  ctx.fillRect(x, y, 1, 1)
 }
 
 module.exports = {
   getImages,
-  drawInteger
+  drawText,
+  tintImage,
+  drawPixel
 }

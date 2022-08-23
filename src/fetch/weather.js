@@ -56,8 +56,8 @@ const parseWeather = (response) => {
     [key]: isObject(val) ? val.value : val
   }), {})
   const { windSpeed, windGust, windDirection } = flattened
-  flattened.windDirection = degreeToIntermediateDirection(windDirection)
-  flattened.isGusting = typeof windGust === 'number' && windGust / windSpeed > 1.1
+  flattened.windDirection = windSpeed > 0 ? degreeToIntermediateDirection(windDirection) : 'Ø'
+  // flattened.isGusting = typeof windGust === 'number' && windGust / windSpeed > 1.1
   return flattened
 }
 
