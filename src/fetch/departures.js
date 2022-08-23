@@ -1,9 +1,5 @@
 const { createClient } = require('mta-realtime-subway-departures')
 
-const constants = require('./constants')
-
-const { NUM_TO_DISPLAY, DIRECTIONS } = constants
-
 
 // https://api.mta.info/#/AccessKey
 const { API_KEY } = process.env
@@ -39,7 +35,7 @@ const addRelativeTimes = (departures) =>
   }))
 
 const getStationDepartures = async (stationId, direction) => {
-  let response;
+  let response
   try {
     response = await client.departures(stationId)
   } catch (ex) {
