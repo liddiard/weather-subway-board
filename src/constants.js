@@ -19,8 +19,8 @@ module.exports = {
     WHITE: { r: 255, g: 255, b: 255 },
     RED: { r: 255, g: 0, b: 0 }
   },
-   // seconds to show each set of departures before cycling to the next
-  DISPLAY_CYCLE_SEC: 5,
+  // how often to update the data on the display
+  DISPLAY_REFRESH_SEC: 30,
   NUM_TO_DISPLAY: 8, // number of upcoming trains to display in each direction
   // map from digit (character) to its width
   CHAR_WIDTH: {
