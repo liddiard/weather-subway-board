@@ -18,12 +18,13 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const main = async () => {
   const [departures, weather, forecast] = await Promise.all([
     getStationDepartures(SUBWAY_STATION_ID, SOUTH),
-    // getWeather(WEATHER_STATION_ID),
-    // getForecast(FORECAST_STATION_ID, FORECAST_COORDS)
+    getWeather(WEATHER_STATION_ID),
+    getForecast(FORECAST_STATION_ID, FORECAST_COORDS)
   ])
   .catch(ex =>
     console.error(`Fetching API data failed with error: ${ex}`)
   )
+  console.log(forecast)
   drawBoard(departures, weather, forecast)
   .catch(ex => 
     console.error(`drawBoard failed with error: ${ex.stack}.\nResponse: ${JSON.stringify(departures, null, 2)}`))

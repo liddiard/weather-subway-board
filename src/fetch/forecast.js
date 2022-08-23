@@ -7,7 +7,7 @@ const fetchForecast = async (stationId, coordinates) => {
         periods
       } 
     } 
-  } = await axios.get(`https://api.weather.gov/gridpoints/${stationId}}/${coordinates.join()}}/forecast/hourly?units=si`)
+  } = await axios.get(`https://api.weather.gov/gridpoints/${stationId}/${coordinates.join()}/forecast/hourly?units=si`)
   return periods
 }
 
