@@ -19,12 +19,15 @@ const updateDepartures = async () => {
 }
 
 const main = async () => {
-  updateDepartures()
+  await Promise.all([
+    updateDepartures(),
+    
+  ])
   drawBoard(departures)
   .catch(ex => 
     console.error(`drawBoard failed with error: ${ex}.\nResponse: ${JSON.stringify(departures, null, 2)}`))
-    await sleep(DISPLAY_REFRESH_SEC * 1000)
-  }
+
+  await sleep(DISPLAY_REFRESH_SEC * 1000)
   return await main()
 }
 
