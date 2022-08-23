@@ -4,7 +4,7 @@ const constants = require('./constants')
 
 
 const { STATION_ID, DISPLAY_CYCLE_SEC, NUM_TO_DISPLAY, DIRECTIONS } = constants
-const { NORTH } = DIRECTIONS
+const { SOUTH } = DIRECTIONS
 
 let departures = []
 
@@ -12,7 +12,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const updateDepartures = async () => {
   try {
-    departures = await getStationDepartures(STATION_ID, NORTH)
+    departures = await getStationDepartures(STATION_ID, SOUTH)
   } catch (ex) {
     console.error(`Unable to fetch latest departures. ${ex}`)
   }
