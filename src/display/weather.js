@@ -70,14 +70,20 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
   const { weather } = layout.images
   let image
   switch (textDescription) {
+    case 'Clear':
+      image = weather.sun
+      break
     case 'Mostly Clear':
       image = weather.sun_with_scattered_cloud
       break
     case 'Mostly Cloudy':
       image = weather.sun_behind_cloud
       break
+    case 'Cloudy':
+      image = weather.cloud
+      break
     default:
-      console.log(`No weather icon for: '${textDescription}'`)
+      console.warn(`No weather icon for: '${textDescription}'`)
       image = weather.not_available
       break
   }
