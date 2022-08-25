@@ -1,36 +1,8 @@
-const interpolate = require('color-interpolate')
-
 const { getImages } = require('./utils')
-const { drawText, tintImage } = require('./utils')
+const { drawText, tintImage, getInterpolatedColor } = require('./utils')
 const constants  = require('../constants')
 
 const { COLORS, GRADIENTS } = constants
-
-const getInterpolatedColor = (value, gradient, bounds) => {
-  const { min, max } = bounds
-
-  if (value < min) {
-    return gradient[0]
-  } else if (value > max) {
-    return gradient[gradient.length - 1]
-  }
-
-  const range = max - min
-  const percent = (value - min) / range
-  const colormap = interpolate(gradient)
-  const color = colormap(percent)
-
-  // https://stackoverflow.com/a/10971090
-  const colorArr = color.substring(4, color.length-1)
-  .replace(/ /g, '')
-  .split(',')
-
-  return {
-    r: colorArr[0],
-    g: colorArr[1],
-    b: colorArr[2]
-  }
-}
 
 
 const drawTemperature = (ctx, layout, temperature) => {
@@ -74,7 +46,10 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
       image = weather.sun
       break
     case 'Mostly Clear':
-      image = weather.sun_with_scattered_cloud
+      image = weather.sun_with_scattered_clouds
+      break
+    case 'Partly Cloudy':
+      image = weather.sun_with_two_clouds
       break
     case 'Mostly Cloudy':
       image = weather.sun_behind_cloud

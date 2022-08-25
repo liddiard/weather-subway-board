@@ -7,9 +7,13 @@ const constants = {
   // Station to display departures from
   // http://web.mta.info/developers/data/nyct/subway/Stations.csv
   SUBWAY_STATION_ID: 313, // Upper West Side, 72 St & Broadway
+  // approximate coordinates of the station
+  LOCATION_COORDINATES: [40.77, -73.98],
   WEATHER_STATION_ID: 'KNYC', // Central Park
   FORECAST_STATION_ID: 'OKX', // New York area
-  FORECAST_COORDS: [33, 37], // latitude and longitude, Upper West Side
+  // National Weather Service forecast gridpoints for the station above
+  // https://www.weather.gov/documentation/services-web-api#/default/gridpoint
+  FORECAST_GRIDPOINT: [33, 37],
   TRAINS: {
     LOCAL: new Set(['1']),
     EXPRESS: new Set(['2', '3', '5']),
@@ -50,7 +54,8 @@ const constants = {
 const { MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED } = constants.COLORS
 constants.GRADIENTS = {
   TEMPERATURE: [MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED],
-  HUMIDITY: [RED, YELLOW, GREEN, CYAN, BLUE]
+  HUMIDITY: [RED, YELLOW, GREEN, CYAN, BLUE],
+  SUN: [MAGENTA, YELLOW],
 }
 
 module.exports = constants

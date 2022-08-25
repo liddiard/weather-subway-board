@@ -1,4 +1,5 @@
 const { loadImage, createCanvas } = require('canvas')
+const interpolate = require('color-interpolate')
 
 const constants = require('../constants')
 
@@ -48,7 +49,8 @@ const imageCache = {
     sun: null,
     sun_behind_cloud: null,
     sun_with_cloud: null,
-    sun_with_scattered_cloud: null,
+    sun_with_two_clouds: null,
+    sun_with_scattered_clouds: null,
   }
 }
 
@@ -133,9 +135,36 @@ const drawPixel = (ctx, color, offset) => {
   ctx.fillRect(x, y, 1, 1)
 }
 
+const getInterpolatedColor = (value, gradient, bounds) => {
+  const { min, max } = bounds
+
+  if (value < min) {
+    return gradient[0]
+  } else if (value > max) {
+    return gradient[gradient.length - 1]
+  }
+
+  const range = max - min
+  const percent = (value - min) / range
+  const colormap = interpolate(gradient)
+  const color = colormap(percent)
+
+  // https://stackoverflow.com/a/10971090
+  const colorArr = color.substring(4, color.length-1)
+  .replace(/ /g, '')
+  .split(',')
+
+  return {
+    r: colorArr[0],
+    g: colorArr[1],
+    b: colorArr[2]
+  }
+}
+
 module.exports = {
   getImages,
   drawText,
   tintImage,
-  drawPixel
+  drawPixel,
+  getInterpolatedColor
 }

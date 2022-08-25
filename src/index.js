@@ -7,7 +7,7 @@ const {
   SUBWAY_STATION_ID,
   WEATHER_STATION_ID,
   FORECAST_STATION_ID,
-  FORECAST_COORDS,
+  FORECAST_GRIDPOINT,
   DISPLAY_UPDATE_SEC,
   DIRECTIONS
 } = constants
@@ -19,7 +19,7 @@ const main = async () => {
   const [departures, weather, forecast] = await Promise.all([
     getTrains(SUBWAY_STATION_ID, SOUTH),
     getWeather(WEATHER_STATION_ID),
-    getForecast(FORECAST_STATION_ID, FORECAST_COORDS)
+    getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT)
   ])
   .catch(ex =>
     console.error(`Fetching API data failed with error: ${ex}`)

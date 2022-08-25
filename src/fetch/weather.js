@@ -25,7 +25,7 @@ const fetchWeather = async (stationId) => {
 
 // https://study.com/learn/lesson/cardinal-intermediate-directions-map-compass.html
 const degreeToIntermediateDirection = (degree) => {
-  if (degree >= 377.5 || degree < 22.5) {
+  if (degree >= 337.5 || degree < 22.5) {
     return 'N'
   } else if (degree < 67.5) {
     return 'NE'

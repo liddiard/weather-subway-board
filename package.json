@@ -20,6 +20,7 @@
     "axios": "^0.27.2",
     "canvas": "^2.9.3",
     "color-interpolate": "^1.0.5",
-    "mta-realtime-subway-departures": "^1.2.1"
+    "mta-realtime-subway-departures": "^1.2.1",
+    "suncalc": "^1.9.0"
   }
 }
