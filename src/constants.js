@@ -32,7 +32,8 @@ const constants = {
     CYAN: { r: 0, g: 255, b: 255 },
     MAGENTA: { r: 255, g: 0, b: 255 },
     YELLOW: { r: 255, g: 255, b: 0 },
-    ORANGE: { r: 255, g: 128, b: 0 }
+    ORANGE: { r: 255, g: 128, b: 0 },
+    DARK_GRAY: { r: 64, g: 64, b: 64 }
   },
   CHAR_HEIGHT: 5,
   // map from digit (character) to its width
@@ -48,6 +49,12 @@ const constants = {
     8: 3,
     9: 3,
     '%': 4
+  },
+  // forecast graph size and position
+  FORECAST_GRAPH: {
+    WIDTH: 58,
+    TOP: 7,
+    BOTTOM: 26
   }
 }
 
