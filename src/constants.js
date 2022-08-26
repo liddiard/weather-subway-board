@@ -56,7 +56,7 @@ const constants = {
   FORECAST_GRAPH: {
     WIDTH: 58,
     TOP: 7,
-    BOTTOM: 26
+    BOTTOM: 25
   }
 }
 

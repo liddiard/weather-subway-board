@@ -37,7 +37,7 @@ const drawDaySeparator = (ctx, period, i) => {
   }
   const { r, g, b } = COLORS.DARK_GRAY
   ctx.fillStyle = `rgb(${r},${g},${b})`
-  ctx.fillRect(i, TOP, 1, BOTTOM - TOP)
+  ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
 }
 
 // const getTemperatureExtremes = (periods) => {
