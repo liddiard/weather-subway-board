@@ -57,6 +57,9 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
     case 'Cloudy':
       image = weather.cloud
       break
+    case 'Light Rain':
+      image = weather.rain
+      break
     default:
       console.warn(`No weather icon for: '${textDescription}'`)
       image = weather.not_available

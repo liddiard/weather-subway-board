@@ -35,7 +35,7 @@ const parseTemperature = (temperature) =>
 
 // https://regex101.com/r/Ya1frl/2
 const extractTempDewPointFromMetar = (metar) => {
-  const { temperature, dewPoint } = metar.match(/(?<temperature>M?\d+)\/(?<dewPoint>M?\d+)/).groups
+  const { temperature, dewPoint } = metar.match(/\s(?<temperature>M?\d+)\/(?<dewPoint>M?\d+)\s/).groups
   return {
     temperature: parseTemperature(temperature),
     dewPoint: parseTemperature(dewPoint)
