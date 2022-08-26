@@ -120,7 +120,7 @@ const getMidpointOfTemperatureSwing = (interval) => {
 }
 
 const hasConflict = (temperatureGraph, { x, y }) => {
-  if (x < 0 || y < 0 || x >= MATRIX.WIDTH || y >= MATRIX.HEIGHT) {
+  if (x > MATRIX.WIDTH || y > MATRIX.HEIGHT) {
     return true
   }
   return temperatureGraph[x] === y
