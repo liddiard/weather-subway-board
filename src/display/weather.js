@@ -2,7 +2,7 @@ const { images } = require('./image')
 const { drawText, tintImage, getInterpolatedColor } = require('./utils')
 const constants  = require('../constants')
 
-const { COLORS, GRADIENTS } = constants
+const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
 
 
 const drawTemperature = (ctx, layout, temperature) => {
@@ -40,39 +40,13 @@ const drawHumidity = (ctx, layout, humidity) => {
 
 const drawWeatherImage = (ctx, layout, textDescription) => {
   const { weather } = layout.images
-  let image
-  switch (textDescription) {
-    case 'Clear':
-      image = weather.sun
-      break
-    case 'Mostly Clear':
-      image = weather.sun_with_scattered_clouds
-      break
-    case 'Partly Cloudy':
-      image = weather.sun_with_two_clouds
-      break
-    case 'Mostly Cloudy':
-      image = weather.sun_behind_cloud
-      break
-    case 'Cloudy':
-      image = weather.cloud
-      break
-    case 'Light Rain':
-      image = weather.rain
-      break
-    case 'Light Rain and Fog/Mist':
-      image = weather.fog_with_rain
-      break
-    case 'Heavy Rain and Fog':
-      image = weather.fog_with_heavy_rain
-      break
-    default:
-      console.warn(`No weather icon for: '${textDescription}'`)
-      image = weather.not_available
-      break
+  let filename = WEATHER_DESCRIPTION_TO_IMAGE[textDescription]
+  if (!filename) {
+    console.warn(`No weather icon for: '${textDescription}'`)
+    filename = 'not_available'
   }
   
-  ctx.drawImage(image,
+  ctx.drawImage(weather[filename],
     layout.cursorPosition,
     1
   )

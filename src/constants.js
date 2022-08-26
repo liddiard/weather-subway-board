@@ -59,6 +59,17 @@ const constants = {
     WIDTH: 58,
     TOP: 7,
     BOTTOM: 25
+  },
+  WEATHER_DESCRIPTION_TO_IMAGE: {
+    'Clear': 'sun',
+    'Mostly Clear': 'sun_with_scattered_clouds',
+    'Partly Cloudy': 'sun_with_two_clouds',
+    'Mostly Cloudy': 'sun_behind_cloud',
+    'Cloudy': 'cloud',
+    'Fog/Mist': 'fog',
+    'Light Rain': 'rain',
+    'Light Rain and Fog/Mist': 'fog_with_rain',
+    'Heavy Rain and Fog': 'fog_with_heavy_rain'
   }
 }
 
