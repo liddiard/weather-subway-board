@@ -1,5 +1,6 @@
 const constants = require('../constants')
-const { getImages, drawPixel } = require('./utils')
+const { images } = require('./image')
+const { drawPixel } = require('./utils')
 
 
 const { MATRIX, TRAINS, COLORS } = constants
@@ -23,9 +24,7 @@ const drawTrainRow = (ctx, minute, trains) => {
 // draw a vertical timeline of trains approaching the station, with a labeled
 // timeline and two columns: local on the left in blue, and express on the
 // right in white
-const drawTrains = async (ctx, departures) => {
-  const images = await getImages()
-
+const drawTrains = (ctx, departures) => {
   ctx.drawImage(images.rulers.vertical, 59, 0)
 
   // create an array of trains `Set`s expected to arrive in a given minute,

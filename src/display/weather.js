@@ -1,4 +1,4 @@
-const { getImages } = require('./utils')
+const { images } = require('./image')
 const { drawText, tintImage, getInterpolatedColor } = require('./utils')
 const constants  = require('../constants')
 
@@ -88,7 +88,7 @@ const drawWind = (ctx, layout, { windSpeed, windDirection, windGust }) => {
   )
 }
 
-const drawWeather = async (ctx, weather) => {
+const drawWeather = (ctx, weather) => {
   const {
     temperature,
     textDescription,
@@ -101,7 +101,7 @@ const drawWeather = async (ctx, weather) => {
   const layout = {
     cursorPosition: 1,
     spacing: 3,
-    images: await getImages()
+    images
   }
 
   // temperature

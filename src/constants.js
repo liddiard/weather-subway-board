@@ -50,6 +50,8 @@ const constants = {
     9: 3,
     '%': 4
   },
+  // space between characters
+  LETTER_SPACING: 1,
   // forecast graph size and position
   FORECAST_GRAPH: {
     WIDTH: 58,
