@@ -1,27 +1,50 @@
 const axios = require('axios')
+const constants = require('../constants')
+
+const { VRB } = constants
 
 const fetchWeather = async (stationId) => {
   const { 
     data: { 
       properties: { 
-        textDescription,
-        temperature,
-        windDirection,
-        windSpeed,
-        windGust,
-        relativeHumidity 
+        rawMessage,
+        textDescription
       } 
     } 
   } = await axios.get(`https://api.weather.gov/stations/${stationId}/observations/latest`)
   return {
-    textDescription,
-    temperature,
-    windDirection,
-    windSpeed,
-    windGust,
-    relativeHumidity
+    rawMessage,
+    textDescription
   }
 }
+
+// https://regex101.com/r/U3QQId/4
+const extractWindFromMetar = (metar) => {
+  const { angle, speed, gust } = metar.match(/(?<angle>\d{3}|VRB)(?<speed>\d+)G?(?<gust>\d+)?KT/).groups
+  return {
+    angle: angle === VRB ? angle : parseInt(angle),
+    speed: parseInt(speed),
+    gust: gust ? parseInt(gust) : null
+  }
+}
+
+const parseTemperature = (temperature) =>
+  temperature.startsWith('M') ?
+    parseInt(temperature.substring(1)) * -1 :
+    parseInt(temperature)
+
+// https://regex101.com/r/Ya1frl/2
+const extractTempDewPointFromMetar = (metar) => {
+  const { temperature, dewPoint } = metar.match(/(?<temperature>M?\d+)\/(?<dewPoint>M?\d+)/).groups
+  return {
+    temperature: parseTemperature(temperature),
+    dewPoint: parseTemperature(dewPoint)
+  }
+}
+
+// https://bmcnoldy.rsmas.miami.edu/Humidity.html
+const calculateRelativeHumidity = (t, dp) =>
+  100*(Math.exp((17.625*dp)/(243.04+dp))/Math.exp((17.625*t)/(243.04+t)))
 
 // https://study.com/learn/lesson/cardinal-intermediate-directions-map-compass.html
 const degreeToIntermediateDirection = (degree) => {
@@ -46,19 +69,25 @@ const degreeToIntermediateDirection = (degree) => {
   }
 }
 
-const isObject = (value) =>
-  typeof value === 'object' && value !== null
-
 const parseWeather = (response) => {
-  const flattened = Object.entries(response)
-  .reduce((acc, [key, val]) => ({
-    ...acc,
-    [key]: isObject(val) ? val.value : val
-  }), {})
-  const { windSpeed, windGust, windDirection } = flattened
-  flattened.windDirection = windSpeed > 0 ? degreeToIntermediateDirection(windDirection) : 'Ø'
-  // flattened.isGusting = typeof windGust === 'number' && windGust / windSpeed > 1.1
-  return flattened
+  const { textDescription } = response
+  const metar = response.rawMessage
+
+  const wind = extractWindFromMetar(metar)
+  wind.direction = wind.angle === VRB || wind.speed === 0 ?
+    'Ø' :
+    degreeToIntermediateDirection(wind.angle)
+
+  const { temperature, dewPoint } = extractTempDewPointFromMetar(metar)
+  const relativeHumidity = calculateRelativeHumidity(temperature, dewPoint)
+
+  return {
+    textDescription,
+    wind,
+    temperature,
+    dewPoint,
+    relativeHumidity
+  }
 }
 
 const getWeather = async (stationId) => {

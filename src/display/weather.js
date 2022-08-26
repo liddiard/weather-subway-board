@@ -71,11 +71,11 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
   return layout.cursorPosition + 5 + layout.spacing
 }
 
-const drawWind = (ctx, layout, { windSpeed, windDirection, windGust }) => {
+const drawWind = (ctx, layout, { speed, direction, gust }) => {
   ctx.drawImage(
     tintImage(
-      layout.images.directions[windDirection],
-      windGust ? COLORS.ORANGE : COLORS.GREEN
+      layout.images.directions[direction],
+      gust ? COLORS.ORANGE : COLORS.GREEN
     ),
     layout.cursorPosition,
     1
@@ -83,7 +83,7 @@ const drawWind = (ctx, layout, { windSpeed, windDirection, windGust }) => {
   layout.cursorPosition += 5 // "direction" icon width
   return drawText(
     ctx,
-    Math.round(windSpeed).toString(),
+    Math.round(speed).toString(),
     { x: layout.cursorPosition + 1, y: 1 }
   )
 }
@@ -93,9 +93,7 @@ const drawWeather = (ctx, weather) => {
     temperature,
     textDescription,
     relativeHumidity,
-    windDirection,
-    windSpeed,
-    windGust
+    wind
   } = weather
 
   const layout = {
@@ -114,7 +112,7 @@ const drawWeather = (ctx, weather) => {
   layout.cursorPosition = drawHumidity(ctx, layout, relativeHumidity)
 
   // wind
-  drawWind(ctx, layout, { windSpeed, windDirection, windGust })
+  drawWind(ctx, layout, wind)
 }
 
 module.exports = {
