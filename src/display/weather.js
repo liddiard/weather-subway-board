@@ -60,6 +60,12 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
     case 'Light Rain':
       image = weather.rain
       break
+    case 'Light Rain and Fog/Mist':
+      image = weather.fog_with_rain
+      break
+    case 'Heavy Rain and Fog':
+      image = weather.fog_with_heavy_rain
+      break
     default:
       console.warn(`No weather icon for: '${textDescription}'`)
       image = weather.not_available
