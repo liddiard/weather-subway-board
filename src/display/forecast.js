@@ -5,7 +5,7 @@ const { drawText, drawPixel, getInterpolatedColor, getTextWidth } = require('./u
 const constants  = require('../constants')
 
 
-const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT } = constants
+const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT, MATRIX } = constants
 const { TOP, BOTTOM, WIDTH } = FORECAST_GRAPH
 const { DARK_GRAY, BLACK } = COLORS
 
@@ -119,7 +119,7 @@ const colorsEqual = (a, b) =>
   a.r === b.r && a.g === b.g && a.b === b.b
 
 const hasConflict = (ctx, { x, y }) => {
-  if (x < 0 || y < 0) {
+  if (x < 0 || y < 0 || x >= MATRIX.WIDTH || y >= MATRIX.HEIGHT) {
     return false
   }
   const { data: [r, g, b] } = ctx.getImageData(x, y, 1, 1)
@@ -127,6 +127,7 @@ const hasConflict = (ctx, { x, y }) => {
   return !colorsEqual(color, DARK_GRAY) && !colorsEqual(color, BLACK)
 }
 
+// causes segfaults and unpredictable behaviour on raspberry pi
 const isAbuttingBoundingBox = (ctx, boundingBox, offset, margin) => {
   for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
     if (hasConflict(ctx, { x: i, y: offset.y + boundingBox.height + margin })) {
@@ -150,7 +151,7 @@ const isAbuttingBoundingBox = (ctx, boundingBox, offset, margin) => {
 const getLeftCursorPosition = (initialX, text) =>
   Math.max(0, initialX - Math.floor(getTextWidth(text) / 2))
 
-const getVerticalPosition = (ctx, x, text) => {
+ const getVerticalPosition = (ctx, x, text) => {
   const boundingBox = {
     width: getTextWidth(text),
     height: CHAR_HEIGHT
