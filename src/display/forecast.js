@@ -5,8 +5,9 @@ const { drawText, drawPixel, getInterpolatedColor, getTextWidth } = require('./u
 const constants  = require('../constants')
 
 
-const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH } = constants
+const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT } = constants
 const { TOP, BOTTOM, WIDTH } = FORECAST_GRAPH
+const { DARK_GRAY, BLACK } = COLORS
 
 const getGraphPointColor = ({ startTime }) => {
   // Periods are 60 minutes long. Add 30 minutes to the start time to get the
@@ -114,21 +115,79 @@ const getMidpointOfTemperatureSwing = (interval) => {
   return xCoord - Math.floor(flatLength / 2)
 }
 
+const colorsEqual = (a, b) =>
+  a.r === b.r && a.g === b.g && a.b === b.b
+
+const hasConflict = (ctx, { x, y }) => {
+  if (x < 0 || y < 0) {
+    return false
+  }
+  const { data: [r, g, b] } = ctx.getImageData(x, y, 1, 1)
+  const color = { r, g, b }
+  return !colorsEqual(color, DARK_GRAY) && !colorsEqual(color, BLACK)
+}
+
+const isAbuttingBoundingBox = (ctx, boundingBox, offset, margin) => {
+  for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
+    if (hasConflict(ctx, { x: i, y: offset.y + boundingBox.height + margin })) {
+      return true
+    }
+    if (hasConflict(ctx, { x: i, y: offset.y - margin  })) {
+      return true
+    }
+  }
+  for (let i = offset.y; i < offset.y + boundingBox.height; i++) {
+    if (hasConflict(ctx, { x: offset.x + boundingBox.width + margin, y: i })) {
+      return true
+    }
+    if (hasConflict(ctx, { x: offset.x - margin, y: i })) {
+      return true
+    }
+  }
+  return false
+}
+
 const getLeftCursorPosition = (initialX, text) =>
-  initialX - Math.floor(getTextWidth(text) / 2)
+  Math.max(0, initialX - Math.floor(getTextWidth(text) / 2))
+
+const getVerticalPosition = (ctx, x, text) => {
+  const boundingBox = {
+    width: getTextWidth(text),
+    height: CHAR_HEIGHT
+  }
+  const offset = {
+    x,
+    y: TOP
+  }
+  const margin = 1
+  while (!isAbuttingBoundingBox(ctx, boundingBox, offset, margin)) {
+    offset.y++
+  }
+  return offset.y
+}
+
+const isWithinRightBound = (cursorPosition, text) =>
+  cursorPosition + getTextWidth(text) <= WIDTH
+
 
 const drawTemperatureChanges = (ctx, periods) => {
   const monotonicIntervals = getMonotonicIntervals(periods)
   for (const interval of monotonicIntervals) {
     const extreme = interval[interval.length - 1]
-    const { temperature, isIncreasing } = extreme
+    const temperatureString = extreme.temperature.toString()
     const x = getMidpointOfTemperatureSwing(interval)
-    const temperatureString = temperature.toString()
+    const leftCursorPosition = getLeftCursorPosition(x, temperatureString)
+    if (!isWithinRightBound(leftCursorPosition, temperatureString)) {
+      continue
+    }
     drawText(
       ctx,
       temperatureString,
-      { x: getLeftCursorPosition(x, temperatureString), y: 10 },
-      isIncreasing ? COLORS.RED : COLORS.BLUE
+      { 
+        x: leftCursorPosition,
+        y: getVerticalPosition(ctx, leftCursorPosition, temperatureString)
+      },
+      extreme.isIncreasing ? COLORS.RED : COLORS.BLUE
     )
   }
 }

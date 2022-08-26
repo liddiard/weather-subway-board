@@ -26,6 +26,7 @@ const constants = {
   DISPLAY_UPDATE_SEC: 30,
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },
+    BLACK: { r: 0, g: 0, b: 0 },
     RED: { r: 255, g: 0, b: 0 },
     GREEN: { r: 0, g: 255, b: 0 },
     BLUE: { r: 0, g: 0, b: 255 },
