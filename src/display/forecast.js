@@ -21,14 +21,18 @@ const drawGraphLines = (ctx, periods) => {
   const minTemperature = Math.min(
     ...periods.map(f => f.temperature)
   )
+  const filledPixels = []
   for (let i = 0; i < periods.length; i++) {
     const period = periods[i]
     const { temperature } = period
     const degreesAboveMin = temperature - minTemperature
     const color = getGraphPointColor(period)
+    const yCoord = BOTTOM - degreesAboveMin
     drawDaySeparator(ctx, period, i)
-    drawPixel(ctx, color, { x: i, y: BOTTOM - degreesAboveMin })
+    drawPixel(ctx, color, { x: i, y: yCoord })
+    filledPixels.push(yCoord)
   }
+  return filledPixels
 }
 
 const drawDaySeparator = (ctx, period, i) => {
@@ -115,33 +119,28 @@ const getMidpointOfTemperatureSwing = (interval) => {
   return xCoord - Math.floor(flatLength / 2)
 }
 
-const colorsEqual = (a, b) =>
-  a.r === b.r && a.g === b.g && a.b === b.b
-
-const hasConflict = (ctx, { x, y }) => {
+const hasConflict = (temperatureGraph, { x, y }) => {
   if (x < 0 || y < 0 || x >= MATRIX.WIDTH || y >= MATRIX.HEIGHT) {
-    return false
+    return true
   }
-  const { data: [r, g, b] } = ctx.getImageData(x, y, 1, 1)
-  const color = { r, g, b }
-  return !colorsEqual(color, DARK_GRAY) && !colorsEqual(color, BLACK)
+  return temperatureGraph[x] === y
 }
 
 // causes segfaults and unpredictable behaviour on raspberry pi
-const isAbuttingBoundingBox = (ctx, boundingBox, offset, margin) => {
+const isAbuttingBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
   for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
-    if (hasConflict(ctx, { x: i, y: offset.y + boundingBox.height + margin })) {
+    if (hasConflict(temperatureGraph, { x: i, y: offset.y + boundingBox.height })) {
       return true
     }
-    if (hasConflict(ctx, { x: i, y: offset.y - margin  })) {
+    if (hasConflict(temperatureGraph, { x: i, y: offset.y - margin  })) {
       return true
     }
   }
   for (let i = offset.y; i < offset.y + boundingBox.height; i++) {
-    if (hasConflict(ctx, { x: offset.x + boundingBox.width + margin, y: i })) {
+    if (hasConflict(temperatureGraph, { x: offset.x + boundingBox.width, y: i })) {
       return true
     }
-    if (hasConflict(ctx, { x: offset.x - margin, y: i })) {
+    if (hasConflict(temperatureGraph, { x: offset.x - margin, y: i })) {
       return true
     }
   }
@@ -151,7 +150,7 @@ const isAbuttingBoundingBox = (ctx, boundingBox, offset, margin) => {
 const getLeftCursorPosition = (initialX, text) =>
   Math.max(0, initialX - Math.floor(getTextWidth(text) / 2))
 
- const getVerticalPosition = (ctx, x, text) => {
+ const getVerticalPosition = (temperatureGraph, x, text) => {
   const boundingBox = {
     width: getTextWidth(text),
     height: CHAR_HEIGHT
@@ -161,7 +160,7 @@ const getLeftCursorPosition = (initialX, text) =>
     y: TOP
   }
   const margin = 1
-  while (!isAbuttingBoundingBox(ctx, boundingBox, offset, margin)) {
+  while (!isAbuttingBoundingBox(temperatureGraph, boundingBox, { x: offset.x, y: offset.y + 1 }, margin)) {
     offset.y++
   }
   return offset.y
@@ -171,7 +170,7 @@ const isWithinRightBound = (cursorPosition, text) =>
   cursorPosition + getTextWidth(text) <= WIDTH
 
 
-const drawTemperatureChanges = (ctx, periods) => {
+const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   const monotonicIntervals = getMonotonicIntervals(periods)
   for (const interval of monotonicIntervals) {
     const extreme = interval[interval.length - 1]
@@ -186,7 +185,7 @@ const drawTemperatureChanges = (ctx, periods) => {
       temperatureString,
       { 
         x: leftCursorPosition,
-        y: getVerticalPosition(ctx, leftCursorPosition, temperatureString)
+        y: getVerticalPosition(temperatureGraph, leftCursorPosition, temperatureString)
       },
       extreme.isIncreasing ? COLORS.RED : COLORS.BLUE
     )
@@ -194,8 +193,8 @@ const drawTemperatureChanges = (ctx, periods) => {
 }
 
 const drawForecast = (ctx, daily, hourly) => {
-  drawGraphLines(ctx, hourly.slice(0, WIDTH))
-  drawTemperatureChanges(ctx, hourly.slice(0, WIDTH))
+  const temperatureGraph = drawGraphLines(ctx, hourly.slice(0, WIDTH))
+  drawTemperatureChanges(ctx, hourly.slice(0, WIDTH), temperatureGraph)
 }
 
 module.exports = {
