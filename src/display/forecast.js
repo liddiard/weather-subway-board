@@ -161,7 +161,7 @@ const getVerticalPosition = (ctx, x, text) => {
   }
   const margin = 1
   while (!isAbuttingBoundingBox(ctx, boundingBox, offset, margin)) {
-    offset.y--
+    offset.y++
   }
   return offset.y
 }
