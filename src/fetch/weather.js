@@ -18,9 +18,13 @@ const fetchWeather = async (stationId) => {
   }
 }
 
-// https://regex101.com/r/U3QQId/4
+// https://regex101.com/r/U3QQId/
 const extractWindFromMetar = (metar) => {
-  const { angle, speed, gust } = metar.match(/(?<angle>\d{3}|VRB)(?<speed>\d+)G?(?<gust>\d+)?KT/).groups
+  const match = metar.match(/(?<angle>\d{3}|VRB)(?<speed>\d+)G?(?<gust>\d+)?KT/)
+  if (!match) {
+    return { angle: 0, speed: 0, gust: 0 }
+  }
+  const { angle, speed, gust } = match.groups
   return {
     angle: angle === VRB ? angle : parseInt(angle),
     speed: parseInt(speed),
@@ -33,9 +37,13 @@ const parseTemperature = (temperature) =>
     parseInt(temperature.substring(1)) * -1 :
     parseInt(temperature)
 
-// https://regex101.com/r/Ya1frl/2
+// https://regex101.com/r/Ya1frl/
 const extractTempDewPointFromMetar = (metar) => {
-  const { temperature, dewPoint } = metar.match(/\s(?<temperature>M?\d+)\/(?<dewPoint>M?\d+)\s/).groups
+  const match = metar.match(/\s(?<temperature>M?\d+)\/(?<dewPoint>M?\d+)\s/)
+  if (!match) {
+    return { temperature: 0, dewPoint: 0 }
+  }
+  const { temperature, dewPoint } = match.groups
   return {
     temperature: parseTemperature(temperature),
     dewPoint: parseTemperature(dewPoint)
