@@ -74,8 +74,15 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
     ctx,
     Math.round(speed).toString(),
     { x: layout.cursorPosition + 1, y: 1 }
-  )
+  ) + layout.spacing
 }
+
+const drawTime = (ctx, layout) =>
+  drawText(
+    ctx,
+    new Date().toLocaleTimeString([], { timeStyle: 'short', hour12: false }).replace(':', ''),
+    { x: layout.cursorPosition, y: 1 }
+  ) + layout.spacing
 
 const drawWeather = (ctx, weather) => {
   const {
@@ -87,9 +94,11 @@ const drawWeather = (ctx, weather) => {
 
   const layout = {
     cursorPosition: 1,
-    spacing: 3,
+    spacing: 2,
     images
   }
+
+  layout.cursorPosition = drawTime(ctx, layout)
 
   // temperature
   layout.cursorPosition = drawTemperature(ctx, layout, temperature)
@@ -101,7 +110,7 @@ const drawWeather = (ctx, weather) => {
   layout.cursorPosition = drawHumidity(ctx, layout, relativeHumidity)
 
   // wind
-  drawWind(ctx, layout, wind)
+  layout.cursorPosition = drawWind(ctx, layout, wind)
 }
 
 module.exports = {
