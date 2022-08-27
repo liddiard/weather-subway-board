@@ -11,11 +11,16 @@ const drawTemperature = (ctx, layout, temperature) => {
     GRADIENTS.TEMPERATURE,
     { min: -10, max: 40 }
   )
-  return drawText(
+  layout.cursorPosition = drawText(
     ctx,
     Math.round(temperature).toString(),
     { x: layout.cursorPosition, y: 1 },
     color
+  )
+  return drawText(
+    ctx,
+    '°',
+    { x: layout.cursorPosition + 1, y: 1 }
   ) + layout.spacing
 }
 

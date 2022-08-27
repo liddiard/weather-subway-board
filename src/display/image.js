@@ -26,7 +26,8 @@ const images = {
     8: null,
     9: null,
     '-': null,
-    '%': null
+    '%': null,
+    '°': null
   },
   rulers: {
     vertical: null

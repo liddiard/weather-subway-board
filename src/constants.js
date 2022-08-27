@@ -50,7 +50,9 @@ const constants = {
     7: 3,
     8: 3,
     9: 3,
-    '%': 4
+    '%': 4,
+    '-': 2,
+    '°': 1
   },
   // space between characters
   LETTER_SPACING: 1,
