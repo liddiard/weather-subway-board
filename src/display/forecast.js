@@ -1,13 +1,11 @@
 const suncalc = require('suncalc')
 
-const { images } = require('./image')
 const { drawText, drawPixel, getInterpolatedColor, getTextWidth } = require('./utils')
 const constants  = require('../constants')
 
 
 const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT, MATRIX } = constants
 const { TOP, BOTTOM, WIDTH } = FORECAST_GRAPH
-const { DARK_GRAY, BLACK } = COLORS
 
 const getGraphPointColor = ({ startTime }) => {
   // Periods are 60 minutes long. Add 30 minutes to the start time to get the
@@ -44,31 +42,6 @@ const drawDaySeparator = (ctx, period, i) => {
   ctx.fillStyle = `rgb(${r},${g},${b})`
   ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
 }
-
-// const getTemperatureExtremes = (periods) => {
-//   const temps = periods.map(p => p.temperature)
-//   const hi = Math.max(...temps)
-//   const lo = Math.min(...temps)
-//   return {
-//     hi: periods.find(p => p.temperature === hi),
-//     lo: periods.find(p => p.temperature === lo),
-//   }
-// }
-
-// const drawTemperatureExtremes = (ctx, dailyForecast, hourlyForecast) => {
-//   let days = [
-//     [hourlyForecast[0]]
-//   ];
-//   for (const period of hourlyForecast.slice(1)) {
-//     if (period.startTime.getDate() === days[days.length - 1][0].startTime.getDate()) {
-//       days[days.length - 1].push(period)
-//     } else {
-//       days.push([period])
-//     }
-//   }
-//   const temperatureExtremes = days.map(getTemperatureExtremes)
-//   console.log(temperatureExtremes)
-// }
 
 const getInitialTrendIsIncreasing = (periods) => {
   const initialTemp = periods[0].temperature
