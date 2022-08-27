@@ -3,6 +3,7 @@ const { loadImage } = require('canvas')
 // in-memory cache of images from disk
 const images = {
   directions: {
+    bg: null,
     N: null,
     NE: null,
     E: null,

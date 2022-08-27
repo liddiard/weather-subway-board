@@ -55,9 +55,15 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
 }
 
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
+  const { directions } = layout.images
+  ctx.drawImage(
+    directions.bg,
+    layout.cursorPosition,
+    1
+  )
   ctx.drawImage(
     tintImage(
-      layout.images.directions[direction],
+      directions[direction],
       gust ? COLORS.ORANGE : COLORS.GREEN
     ),
     layout.cursorPosition,
