@@ -129,18 +129,18 @@ const hasConflict = (temperatureGraph, { x, y }) => {
 // causes segfaults and unpredictable behaviour on raspberry pi
 const isAbuttingBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
   for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
-    if (hasConflict(temperatureGraph, { x: i, y: offset.y + boundingBox.height })) {
-      return true
-    }
-    if (hasConflict(temperatureGraph, { x: i, y: offset.y - margin  })) {
+    if (
+      hasConflict(temperatureGraph, { x: i, y: offset.y + boundingBox.height }) ||
+      hasConflict(temperatureGraph, { x: i, y: offset.y - margin  })
+    ) {
       return true
     }
   }
   for (let i = offset.y; i < offset.y + boundingBox.height; i++) {
-    if (hasConflict(temperatureGraph, { x: offset.x + boundingBox.width, y: i })) {
-      return true
-    }
-    if (hasConflict(temperatureGraph, { x: offset.x - margin, y: i })) {
+    if (
+      hasConflict(temperatureGraph, { x: offset.x + boundingBox.width, y: i }) ||
+      hasConflict(temperatureGraph, { x: offset.x - margin, y: i })
+    ) {
       return true
     }
   }

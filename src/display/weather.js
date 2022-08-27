@@ -80,7 +80,9 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
 const drawTime = (ctx, layout) =>
   drawText(
     ctx,
-    new Date().toLocaleTimeString([], { timeStyle: 'short', hour12: false }).replace(':', ''),
+    new Date().toLocaleTimeString([], {
+      timeStyle: 'short', hour12: false 
+    }).replace(':', ''),
     { x: layout.cursorPosition, y: 1 }
   ) + layout.spacing
 
