@@ -165,9 +165,25 @@ const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   }
 }
 
+const drawForecastIcons = (ctx, periods) => {
+  for (let i = 0; i < periods.length; i += 6) {
+    const weather = {
+      clear: null,
+      clouds: null,
+      fog: null,
+      rain: null,
+      wind: null,
+      thunderstorms: null
+    }
+
+  }
+}
+
 const drawForecast = (ctx, daily, hourly) => {
-  const temperatureGraph = drawGraphLines(ctx, hourly.slice(0, WIDTH))
-  drawTemperatureChanges(ctx, hourly.slice(0, WIDTH), temperatureGraph)
+  const periods = hourly.slice(0, WIDTH)
+  const temperatureGraph = drawGraphLines(ctx, periods)
+  drawTemperatureChanges(ctx, periods, temperatureGraph)
+  drawForecastIcons(ctx, periods)
 }
 
 module.exports = {

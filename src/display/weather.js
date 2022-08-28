@@ -14,7 +14,7 @@ const drawTemperature = (ctx, layout, temperature) => {
   return drawText(
     ctx,
     Math.round(temperature).toString(),
-    { x: layout.cursorPosition, y: 1 },
+    { x: layout.cursorPosition, y: layout.top },
     color
   ) + layout.spacing
 }
@@ -28,13 +28,13 @@ const drawHumidity = (ctx, layout, humidity) => {
   layout.cursorPosition = drawText(
     ctx,
     Math.round(humidity).toString(),
-    { x: layout.cursorPosition, y: 1 },
+    { x: layout.cursorPosition, y: layout.top },
     color
   )
   return drawText(
     ctx,
     '%',
-    { x: layout.cursorPosition + 1, y: 1 }
+    { x: layout.cursorPosition + 1, y: layout.top }
   ) + layout.spacing
 }
 
@@ -48,10 +48,10 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
   
   ctx.drawImage(weather[filename],
     layout.cursorPosition,
-    1
+    layout.top
   )
 
-  return layout.cursorPosition + 5 + layout.spacing
+  return layout.cursorPosition + layout.imageWidth + layout.spacing
 }
 
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
@@ -59,7 +59,7 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   ctx.drawImage(
     directions.bg,
     layout.cursorPosition,
-    1
+    layout.top
   )
   ctx.drawImage(
     tintImage(
@@ -67,13 +67,13 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
       gust ? COLORS.ORANGE : COLORS.GREEN
     ),
     layout.cursorPosition,
-    1
+    layout.top
   )
-  layout.cursorPosition += 5 // "direction" icon width
+  layout.cursorPosition += layout.imageWidth
   return drawText(
     ctx,
     Math.round(speed).toString(),
-    { x: layout.cursorPosition + 1, y: 1 }
+    { x: layout.cursorPosition + 1, y: layout.top }
   ) + layout.spacing
 }
 
@@ -81,9 +81,14 @@ const drawTime = (ctx, layout) =>
   drawText(
     ctx,
     new Date().toLocaleTimeString([], {
-      timeStyle: 'short', hour12: false 
+      timeStyle: 'short',
+      // Note: Due to a bug in ECMAScript, `hour12: false` displays the first
+      // hour of the day as "24" instaed of "0". This should be fixed in the
+      // future, but for now using `hourCycle: 'h23'` as a workaround.
+      // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
+      hourCycle: 'h23'
     }).replace(':', ''),
-    { x: layout.cursorPosition, y: 1 }
+    { x: layout.cursorPosition, y: layout.top }
   ) + layout.spacing
 
 const drawWeather = (ctx, weather) => {
@@ -96,8 +101,10 @@ const drawWeather = (ctx, weather) => {
 
   const layout = {
     cursorPosition: 1,
+    top: 0,
     spacing: 2,
-    images
+    images,
+    imageWidth: 5
   }
 
   layout.cursorPosition = drawTime(ctx, layout)
