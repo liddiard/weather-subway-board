@@ -100,7 +100,7 @@ const drawWeather = (ctx, weather) => {
   } = weather
 
   const layout = {
-    cursorPosition: 1,
+    cursorPosition: 0,
     top: 0,
     spacing: 2,
     images,
