@@ -145,19 +145,17 @@ const isWithinRightBound = (cursorPosition, text) =>
 
 const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   const monotonicIntervals = getMonotonicIntervals(periods)
-  let cursorPosition = -Infinity
+  let prevCursorPosition = -Infinity
   for (const interval of monotonicIntervals) {
     const extreme = interval[interval.length - 1]
     const temperatureString = extreme.temperature.toString()
     const x = getMidpointOfTemperatureSwing(interval)
-    const prevCursorPosition = cursorPosition
-    const potentialNextCursorPosition = getLeftCursorPosition(x, temperatureString)
+    const cursorPosition = getLeftCursorPosition(x, temperatureString)
     if (!isWithinRightBound(cursorPosition, temperatureString) ||
-        potentialNextCursorPosition - prevCursorPosition < 8) {
+        cursorPosition - prevCursorPosition < 1) {
       continue
     }
-    cursorPosition = potentialNextCursorPosition
-    drawText(
+    prevCursorPosition = drawText(
       ctx,
       temperatureString,
       { 
