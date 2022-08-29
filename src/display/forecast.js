@@ -34,13 +34,20 @@ const drawGraphLines = (ctx, periods) => {
 }
 
 const drawDaySeparator = (ctx, period, i) => {
-  const isNoon = period.startTime.getHours() === 12
-  if (!isNoon) {
-    return
+  const currentHour = period.startTime.getHours()
+  const isNoon = currentHour === 12
+  const isMidnight = currentHour === 0
+  let color
+  if (isNoon) {
+    color = COLORS.DARK_YELLOW
+  } else if (isMidnight) {
+    color = COLORS.DARK_MAGENTA
   }
-  const { r, g, b } = COLORS.DARK_YELLOW
-  ctx.fillStyle = `rgb(${r},${g},${b})`
-  ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
+  if (color) {
+    const { r, g, b } = color
+    ctx.fillStyle = `rgb(${r},${g},${b})`
+    ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
+  }
 }
 
 const getInitialTrendIsIncreasing = (periods) => {
