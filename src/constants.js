@@ -35,8 +35,8 @@ const constants = {
     MAGENTA: { r: 255, g: 0, b: 255 },
     YELLOW: { r: 255, g: 255, b: 0 },
     ORANGE: { r: 255, g: 128, b: 0 },
-    DARK_YELLOW: { r: 32, g: 32, b: 0 },
-    DARK_MAGENTA: { r: 32, g: 0, b: 32 }
+    DARK_ORANGE: { r: 32, g: 16, b: 0 },
+    DARK_PURPLE: { r: 16, g: 0, b: 32 }
   },
   CHAR_HEIGHT: 5,
   // map from digit (character) to its width

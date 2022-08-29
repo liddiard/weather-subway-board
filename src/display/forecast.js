@@ -39,9 +39,9 @@ const drawDaySeparator = (ctx, period, i) => {
   const isMidnight = currentHour === 0
   let color
   if (isNoon) {
-    color = COLORS.DARK_YELLOW
+    color = COLORS.DARK_ORANGE
   } else if (isMidnight) {
-    color = COLORS.DARK_MAGENTA
+    color = COLORS.DARK_PURPLE
   }
   if (color) {
     const { r, g, b } = color
@@ -174,8 +174,8 @@ const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   }
 }
 
-const drawForecastIcons = (ctx, periods) => {
-  for (let i = 0; i < periods.length; i += 6) {
+const summarizeWeatherPeriods = (periods, numToAggregate) => {
+  for (let i = 0; i < periods.length; i += numToAggregate) {
     const weather = {
       clear: null,
       clouds: null,
@@ -184,8 +184,12 @@ const drawForecastIcons = (ctx, periods) => {
       wind: null,
       thunderstorms: null
     }
-
   }
+}
+
+const drawForecastIcons = (ctx, periods) => {
+  const numToAggregate = 6
+  const aggregatedPeriods = summarizeWeatherPeriods(periods, numToAggregate)
 }
 
 const drawForecast = (ctx, daily, hourly) => {
