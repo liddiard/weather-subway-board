@@ -34,11 +34,11 @@ const drawGraphLines = (ctx, periods) => {
 }
 
 const drawDaySeparator = (ctx, period, i) => {
-  const isMidnight = period.startTime.getHours() === 0
-  if (!isMidnight) {
+  const isNoon = period.startTime.getHours() === 12
+  if (!isNoon) {
     return
   }
-  const { r, g, b } = COLORS.DARK_GRAY
+  const { r, g, b } = COLORS.DARK_YELLOW
   ctx.fillStyle = `rgb(${r},${g},${b})`
   ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
 }
