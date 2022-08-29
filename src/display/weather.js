@@ -56,6 +56,11 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
 
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
   const { directions } = layout.images
+  const color = getInterpolatedColor(
+    gust || speed,
+    GRADIENTS.WIND,
+    { min: 5, max: 30 }
+  )
   ctx.drawImage(
     directions.bg,
     layout.cursorPosition,
@@ -73,7 +78,8 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   return drawText(
     ctx,
     Math.round(speed).toString(),
-    { x: layout.cursorPosition + 1, y: layout.top }
+    { x: layout.cursorPosition + 1, y: layout.top },
+    color
   ) + layout.spacing
 }
 
