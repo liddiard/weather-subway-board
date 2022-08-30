@@ -174,22 +174,31 @@ const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   }
 }
 
-const summarizeWeatherPeriods = (periods, numToAggregate) => {
-  for (let i = 0; i < periods.length; i += numToAggregate) {
-    const weather = {
-      clear: null,
-      clouds: null,
-      fog: null,
-      rain: null,
-      wind: null,
-      thunderstorms: null
-    }
+const summarizeWeatherPeriods = (periods) => {
+  const descriptions = periods.map(p => p.shortDescription)
+  const weather = {
+    clear: null,
+    clouds: null,
+    fog: null,
+    rain: null,
+    wind: null,
+    thunderstorms: null
   }
+  weather.clear = descriptions.some(d =>
+    d.includes('Clear') || d.includes('Sunny'))
+}
+
+const drawWeatherImage = (ctx, summary, top) => {
+
 }
 
 const drawForecastIcons = (ctx, periods) => {
   const numToAggregate = 6
-  const aggregatedPeriods = summarizeWeatherPeriods(periods, numToAggregate)
+  const top = 26
+  for (let i = 0; i < periods.length; i += numToAggregate) {
+    const summary = summarizeWeatherPeriods(periods.slice(i, numToAggregate))
+    drawWeatherImage(ctx, summary, top)
+  }
 }
 
 const drawForecast = (ctx, daily, hourly) => {

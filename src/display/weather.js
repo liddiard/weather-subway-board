@@ -93,7 +93,9 @@ const drawTime = (ctx, layout) =>
       // future, but for now using `hourCycle: 'h23'` as a workaround.
       // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
       hourCycle: 'h23'
-    }).replace(':', ''),
+    })
+    .replace(':', '')
+    .replace(/^0/, ''), // remove leading zero
     { x: layout.cursorPosition, y: layout.top }
   ) + layout.spacing
 
