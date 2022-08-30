@@ -175,7 +175,7 @@ const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
 }
 
 const summarizeWeatherPeriods = (periods) => {
-  const descriptions = periods.map(p => p.shortDescription)
+  const descriptions = periods.map(p => p.shortForecast)
   const weather = {
     clear: null,
     clouds: null,
