@@ -7,6 +7,7 @@ const constants  = require('../constants')
 const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT, MATRIX } = constants
 const { TOP, BOTTOM, WIDTH } = FORECAST_GRAPH
 
+// gets the color of a pixel at a given time for the forecast graph
 const getGraphPointColor = ({ startTime }) => {
   // Periods are 60 minutes long. Add 30 minutes to the start time to get the
   // midpoint of the forecast time, and use that time to derive the dot color.
