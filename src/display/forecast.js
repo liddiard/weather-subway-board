@@ -175,6 +175,37 @@ const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
   }
 }
 
+const getAverageCloudCover = (descriptions) => {
+  const descToScore = {
+    'Mostly Sunny': 1,
+    'Mostly Clear': 1,
+    'Partly Sunny': 2,
+    'Partly Clear': 2,
+    'Mostly Cloudy': 3,
+    'Overcast': 4
+  }
+  const cloudScore = descriptions.reduce((acc, cur) => 
+    acc += descToScore[cur] || 0, 0)
+  return cloudScore / (descriptions.length * descToScore.Overcast)
+}
+
+const getMaximumRain = (descriptions) => {
+  const descToScore = {
+    '.*Light Rain.*': 1,
+    '.*Showers.*': 2,
+    'Rain': 2,
+    '.*Heavy Rain.*': 3
+  }
+  return descriptions.reduce((acc, cur) => {
+    for (const [regex, value] of Object.entries(descToScore)) {
+      if (new RegExp(regex).test(cur) && value > acc) {
+        return value
+      }
+    }
+    return acc
+  }, 0)
+}
+
 const summarizeWeatherPeriods = (periods) => {
   const descriptions = periods.map(p => p.shortForecast)
   const weather = {
@@ -182,11 +213,18 @@ const summarizeWeatherPeriods = (periods) => {
     clouds: null,
     fog: null,
     rain: null,
-    wind: null,
-    thunderstorms: null
+    thunderstorms: null,
+    snow: null,
+    hail: null
   }
   weather.clear = descriptions.some(d =>
-    d.includes('Clear') || d.includes('Sunny'))
+    /Clear|Sunny|Mostly Cloudy/.test(d))
+  weather.clouds = getAverageCloudCover(descriptions)
+  weather.fog = descriptions.some(d =>
+    d.includes('Fog'))
+  weather.rain = getMaximumRain(descriptions)
+  weather.thunderstorms = descriptions.some(d =>
+    d.includes('Thunderstorms'))
 }
 
 const drawWeatherImage = (ctx, summary, top) => {
@@ -197,7 +235,7 @@ const drawForecastIcons = (ctx, periods) => {
   const numToAggregate = 6
   const top = 26
   for (let i = 0; i < periods.length; i += numToAggregate) {
-    const summary = summarizeWeatherPeriods(periods.slice(i, numToAggregate))
+    const summary = summarizeWeatherPeriods(periods.slice(i, i + numToAggregate))
     drawWeatherImage(ctx, summary, top)
   }
 }
