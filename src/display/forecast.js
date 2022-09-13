@@ -191,10 +191,10 @@ const getAverageCloudCover = (descriptions) => {
 
 const getMaximumRain = (descriptions) => {
   const descToScore = {
-    '.*Light Rain.*': 1,
-    '.*Showers.*': 2,
-    'Rain': 2,
-    '.*Heavy Rain.*': 3
+    'Light Rain': 1,
+    'Showers': 2,
+    '^Rain$': 2,
+    'Heavy Rain': 3
   }
   return descriptions.reduce((acc, cur) => {
     for (const [regex, value] of Object.entries(descToScore)) {
@@ -208,40 +208,66 @@ const getMaximumRain = (descriptions) => {
 
 const summarizeWeatherPeriods = (periods) => {
   const descriptions = periods.map(p => p.shortForecast)
-  const weather = {
-    clear: null,
-    clouds: null,
-    fog: null,
-    rain: null,
-    thunderstorms: null,
+  return {
+    startTime: periods[0].startTime,
+    endTime: periods[periods.length - 1].endTime,
+    // indicates if some part of the sky is visible during ANY period
+    clear: descriptions.some(d =>
+      /Clear|Sunny|Mostly Cloudy/.test(d)),
+    // average percent cloud cover during the periods, from 0 to 1
+    clouds: getAverageCloudCover(descriptions),
+    // whether or not fog is present during ANY period
+    fog: descriptions.some(d =>
+      d.includes('Fog')),
+    // most intense rain during the periods, scale from 1 to 3
+    rain: getMaximumRain(descriptions),
+    // whether thunderstorms are possible during ANY period
+    thunderstorms: descriptions.some(d =>
+      d.includes('Thunderstorms')),
+    // TODO: not implemented
     snow: null,
-    hail: null
+    // whether hail is possible during ANY period
+    hail: descriptions.some(d =>
+      d.includes('Hail')),
   }
-  weather.clear = descriptions.some(d =>
-    /Clear|Sunny|Mostly Cloudy/.test(d))
-  weather.clouds = getAverageCloudCover(descriptions)
-  weather.fog = descriptions.some(d =>
-    d.includes('Fog'))
-  weather.rain = getMaximumRain(descriptions)
-  weather.thunderstorms = descriptions.some(d =>
-    d.includes('Thunderstorms'))
 }
 
 const drawWeatherImage = (ctx, summary, top) => {
-
+  const {
+    clear,
+    clouds,
+    fog,
+    rain,
+    thunderstorms,
+    snow,
+    hail
+  } = summary
+  const drawSun = clear && !fog && clouds < 0.8 && !thunderstorms
+  // const drawCloud = 
+  
+  // sun (base)
+  // cloud (replace sun if overcast)
+  // fog (replace all below)
+  // rain & snow (replace cloud if overcast)
+  // lightning (replace sun, all cloud)
+  // hail
 }
 
 const drawForecastIcons = (ctx, periods) => {
   const numToAggregate = 6
   const top = 26
-  for (let i = 0; i < periods.length; i += numToAggregate) {
+  for (let i = 0; i < periods.length - numToAggregate; i += numToAggregate) {
     const summary = summarizeWeatherPeriods(periods.slice(i, i + numToAggregate))
     drawWeatherImage(ctx, summary, top)
   }
 }
 
 const drawForecast = (ctx, daily, hourly) => {
-  const periods = hourly.slice(0, WIDTH)
+  const periods = hourly
+  // remove any past periods (occasionally present in response)
+  .filter(p => p.endTime > new Date())
+  .slice(0, WIDTH)
+
   const temperatureGraph = drawGraphLines(ctx, periods)
   drawTemperatureChanges(ctx, periods, temperatureGraph)
   drawForecastIcons(ctx, periods)
