@@ -72,9 +72,11 @@ const constants = {
     'Fog/Mist': 'fog',
     'Light Rain': 'sprinkles',
     'Rain': 'heavy_rain',
+    'Heavy Rain': 'downpour',
     'Light Rain and Fog/Mist': 'fog_with_sprinkles',
     'Rain and Fog/Mist': 'fog_with_heavy_rain',
-    'Heavy Rain and Fog': 'fog_with_heavy_rain'
+    'Heavy Rain and Fog': 'fog_with_downpour',
+    'Heavy Rain and Fog/Mist': 'fog_with_downpour'
   }
 }
 
