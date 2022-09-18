@@ -66,7 +66,7 @@ const constants = {
   },
   WEATHER_DESCRIPTION_TO_IMAGE: {
     'Clear': 'sun',
-    'Mostly Clear': 'sun_with_scattered_clouds',
+    'Mostly Clear': 'sun_with_cloud',
     'Partly Cloudy': 'sun_with_two_clouds',
     'Mostly Cloudy': 'sun_behind_cloud',
     'Cloudy': 'cloud',
