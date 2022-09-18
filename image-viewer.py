@@ -51,7 +51,7 @@ async def main():
         # this condition because it's specific to my particular smarthome setup
         bulb_is_on = False
         try:
-            bulb_is_on = get_bulb_is_on()
+            bulb_is_on = await get_bulb_is_on()
         except exceptions.WizLightTimeOutError:
             log("Timed out trying to connect to bulb, defaulting to OFF.")
         
