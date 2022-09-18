@@ -28,14 +28,14 @@ const drawGraphLines = (ctx, periods) => {
     const degreesAboveMin = temperature - minTemperature
     const color = getGraphPointColor(period)
     const yCoord = BOTTOM - degreesAboveMin
-    drawDaySeparator(ctx, period, i)
+    drawDaySeparator(ctx, period, i, yCoord)
     drawPixel(ctx, color, { x: i, y: yCoord })
     filledPixels.push(yCoord)
   }
   return filledPixels
 }
 
-const drawDaySeparator = (ctx, period, i) => {
+const drawDaySeparator = (ctx, period, i, yCoord) => {
   const currentHour = period.startTime.getHours()
   const isNoon = currentHour === 12
   const isMidnight = currentHour === 0
@@ -48,7 +48,7 @@ const drawDaySeparator = (ctx, period, i) => {
   if (color) {
     const { r, g, b } = color
     ctx.fillStyle = `rgb(${r},${g},${b})`
-    ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 2)
+    ctx.fillRect(i, TOP, 1, (yCoord - TOP) + 2)
   }
 }
 

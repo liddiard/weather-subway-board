@@ -61,7 +61,7 @@ const constants = {
   // forecast graph size and position
   FORECAST_GRAPH: {
     WIDTH: 58,
-    TOP: 7,
+    TOP: 6,
     BOTTOM: 25
   },
   WEATHER_DESCRIPTION_TO_IMAGE: {
