@@ -126,7 +126,6 @@ const drawForecastIcons = (ctx, periods) => {
   const top = 27
   for (let i = 0; i < periods.length - numToAggregate; i += numToAggregate) {
     const summary = summarizeWeatherPeriods(periods.slice(i, i + numToAggregate))
-    console.log('summary:', i, summary)
     drawWeatherIcon(ctx, summary, i, top)
   }
 }
