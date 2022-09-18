@@ -7,6 +7,7 @@ const {
   getTimeSpecificWeatherIcon 
 } = require('./utils')
 
+
 const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
 
 // display color-coded temperature integer

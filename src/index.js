@@ -37,6 +37,8 @@ initImages()
 .then(async () => {
   console.log('✅ Image load complete. Starting main loop…')
   let lastUpdatedSec
+  // Update the board at certain seconds clock time. We do this so the current
+  // time will be as up to date as possible.
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const currentSec = new Date().getSeconds()
