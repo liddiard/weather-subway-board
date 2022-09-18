@@ -5,7 +5,7 @@ from datetime import datetime
 import PIL
 from PIL import Image
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from pywizlight import wizlight
+from pywizlight import wizlight, WizLightTimeOutError
 
 
 image_file = "board.png"
@@ -31,8 +31,11 @@ matrix = RGBMatrix(options=options)
 # initialize smart bulb
 bulb = wizlight(bulb_ip)
 
+def log(msg):
+    return f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] {msg}"
+
 # check if smart bulb is on
-async def bulb_is_on():
+async def get_bulb_is_on():
     try:
         state = await bulb.updateState()
     except asyncio.TimeoutError as ex:
@@ -40,12 +43,19 @@ async def bulb_is_on():
         return False
     return state.get_state()
 
+
 async def main():
     while True:
         # If smart bulb is off, then don't display anything on the matrix.
         # If you're not me (original code author), you should probably remove
         # this condition because it's specific to my particular smarthome setup
-        if not await bulb_is_on():
+        bulb_is_on = False
+        try:
+            bulb_is_on = get_bulb_is_on()
+        except WizLightTimeOutError:
+            log("Timed out trying to connect to bulb, defaulting to OFF.")
+        
+        if not bulb_is_on:
             matrix.Clear()
             time.sleep(10)
             continue
@@ -60,7 +70,7 @@ async def main():
         # happens so rarely that I'm not motivated to try another approach now.
         # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1204#issuecomment-733804488
         except PIL.UnidentifiedImageError:
-            print(f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] Failed to open {image_file} - bad file.")
+            log(f"Failed to open {image_file} - bad file.")
             continue
         image = image.convert('RGB')
 

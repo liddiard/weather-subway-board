@@ -151,7 +151,7 @@ const isWithinRightBound = (cursorPosition, text) =>
   cursorPosition + getTextWidth(text) <= WIDTH
 
 
-const drawTemperatureChanges = (ctx, periods, temperatureGraph) => {
+const drawTemperatureExtremes = (ctx, periods, temperatureGraph) => {
   const monotonicIntervals = getMonotonicIntervals(periods)
   let prevCursorPosition = -Infinity
   for (const interval of monotonicIntervals) {
@@ -269,7 +269,7 @@ const drawForecast = (ctx, daily, hourly) => {
   .slice(0, WIDTH)
 
   const temperatureGraph = drawGraphLines(ctx, periods)
-  drawTemperatureChanges(ctx, periods, temperatureGraph)
+  drawTemperatureExtremes(ctx, periods, temperatureGraph)
   drawForecastIcons(ctx, periods)
 }
 
