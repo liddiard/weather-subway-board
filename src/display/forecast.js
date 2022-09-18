@@ -181,6 +181,7 @@ const drawForecast = (ctx, daily, hourly) => {
   // remove any past periods (occasionally present in response)
   .filter(p => p.endTime > new Date())
   .slice(0, WIDTH)
+  .map((p, i) => ({ ...p, number: i+1 }))
 
   const temperatureGraph = drawGraphLines(ctx, periods)
   drawTemperatureExtremes(ctx, periods, temperatureGraph)
