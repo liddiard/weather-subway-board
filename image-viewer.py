@@ -5,7 +5,7 @@ from datetime import datetime
 import PIL
 from PIL import Image
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from pywizlight import wizlight, WizLightTimeOutError
+from pywizlight import wizlight, exceptions
 
 
 image_file = "board.png"
@@ -52,7 +52,7 @@ async def main():
         bulb_is_on = False
         try:
             bulb_is_on = get_bulb_is_on()
-        except WizLightTimeOutError:
+        except exceptions.WizLightTimeOutError:
             log("Timed out trying to connect to bulb, defaulting to OFF.")
         
         if not bulb_is_on:
