@@ -23,8 +23,9 @@ const constants = {
     NORTH: 'N',
     SOUTH: 'S'
   },
-  // how often to update the data on the display
-  DISPLAY_UPDATE_SEC: 30,
+  // update display at these seconds of every minute
+  // expects at least 2 values
+  UPDATE_AT_SECS: new Set([0, 30]),
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },
     BLACK: { r: 0, g: 0, b: 0 },

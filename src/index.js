@@ -9,12 +9,10 @@ const {
   WEATHER_STATION_ID,
   FORECAST_STATION_ID,
   FORECAST_GRIDPOINT,
-  DISPLAY_UPDATE_SEC,
+  UPDATE_AT_SECS,
   DIRECTIONS
 } = constants
 const { SOUTH } = DIRECTIONS
-
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const main = async () => {
   const [
@@ -33,14 +31,19 @@ const main = async () => {
   )
   
   drawBoard(departures, weather, dailyForecast, hourlyForecast)
-
-  await sleep(DISPLAY_UPDATE_SEC * 1000)
-  return await main()
 }
 
 console.log('🏞  Loading images into RAM…')
 initImages()
-.then(() => {
+.then(async () => {
   console.log('✅ Image load complete. Starting main loop…')
-  main()
+  let lastUpdatedSec
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const currentSec = new Date().getSeconds()
+    if (UPDATE_AT_SECS.has(currentSec) && currentSec !== lastUpdatedSec) {
+      await main()
+      lastUpdatedSec = currentSec
+    }
+  }
 })
