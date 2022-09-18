@@ -29,7 +29,7 @@ const main = async () => {
     ])
     drawBoard(departures, weather, dailyForecast, hourlyForecast)
   } catch (ex) {
-    console.error(`[${new Date()}] Loop failed with error: ${ex}`)
+    console.error(`[${new Date()}] Loop failed with error: ${ex.stack}`)
     return
   }
 }

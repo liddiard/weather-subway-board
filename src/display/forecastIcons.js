@@ -1,4 +1,5 @@
 const { images } = require('./image')
+const { getTimeSpecificWeatherIcon } = require('./utils')
 
 
 const getAverageCloudCover = (descriptions) => {
@@ -83,6 +84,8 @@ const getRainIcon = (rainAmount) => ({
 
 const drawWeatherIcon = (ctx, summary, i, top) => {
   const {
+    startTime,
+    endTime,
     clear,
     clouds,
     fog,
@@ -97,7 +100,9 @@ const drawWeatherIcon = (ctx, summary, i, top) => {
   const showCelestialBody = clear && !fog && cloudIcon !== 'overcast' && !thunderstorms
 
   if (showCelestialBody) {
-    ctx.drawImage(weather.sun, i, top)
+    const midpointTime = new Date((startTime.getTime() + endTime.getTime()) / 2)
+    const filename = getTimeSpecificWeatherIcon('sun', midpointTime)
+    ctx.drawImage(weather[filename], i, top)
   }
   if (cloudIcon && !fog && !rain && !thunderstorms) {
     ctx.drawImage(weather[cloudIcon], i, top)
@@ -112,7 +117,6 @@ const drawWeatherIcon = (ctx, summary, i, top) => {
     ctx.drawImage(weather.lightning, i, top)
   }
 
-  
   // sun (base)
   // cloud (replace sun if overcast)
   // fog (replace all below)

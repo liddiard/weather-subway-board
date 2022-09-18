@@ -1,6 +1,11 @@
 const { images } = require('./image')
-const { drawText, tintImage, getInterpolatedColor } = require('./utils')
 const constants  = require('../constants')
+const {
+  drawText,
+  tintImage,
+  getInterpolatedColor,
+  getTimeSpecificWeatherIcon 
+} = require('./utils')
 
 const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
 
@@ -40,7 +45,7 @@ const drawHumidity = (ctx, layout, humidity) => {
 
 const drawWeatherImage = (ctx, layout, textDescription) => {
   const { weather } = layout.images
-  let filename = WEATHER_DESCRIPTION_TO_IMAGE[textDescription]
+  let filename = getTimeSpecificWeatherIcon(WEATHER_DESCRIPTION_TO_IMAGE[textDescription])
   if (!filename) {
     console.warn(`No weather icon for: '${textDescription}'`)
     filename = 'not_available'

@@ -1,11 +1,12 @@
 const { createCanvas } = require('canvas')
 const interpolate = require('color-interpolate')
+const suncalc = require('suncalc')
 
 const constants = require('../constants')
 const { images } = require('./image')
 
 
-const { CHAR_WIDTH, LETTER_SPACING } = constants
+const { CHAR_WIDTH, LETTER_SPACING, LOCATION_COORDINATES } = constants
 
 // draw an integer (`number`), right-aligned, with the given offset
 // given the dimension constraints of the matrix, integers with a maximum of
@@ -92,10 +93,20 @@ const tintImage = (image, color) => {
   return buffer
 }
 
+const isDaytime = (date) => {
+  const { altitude } = suncalc.getPosition(date, ...LOCATION_COORDINATES)
+  return altitude > 0
+}
+
+const getTimeSpecificWeatherIcon = (filename, date = new Date()) => 
+  isDaytime(date) ? filename : filename.replace('sun', 'moon')
+
 module.exports = {
   drawText,
   tintImage,
   drawPixel,
   getInterpolatedColor,
-  getTextWidth
+  getTextWidth,
+  isDaytime,
+  getTimeSpecificWeatherIcon
 }
