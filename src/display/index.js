@@ -32,12 +32,12 @@ const setUpCanvas = () => {
 // }
 // a.k.a. `currentDepartures` shown in large green numbers, and full array of
 // `allDepartures` (second argument) shown as dots on a timeline
-const drawBoard = (departures, weather, dailyForecast, hourlyForecast) => {
+const drawBoard = (departures, weather, hourlyForecast) => {
   const { canvas, ctx } = setUpCanvas()
 
   drawTrains(ctx, departures)
   drawWeather(ctx, weather)
-  drawForecast(ctx, dailyForecast, hourlyForecast)
+  drawForecast(ctx, hourlyForecast)
   
   // save image to disk
   const buffer = canvas.toBuffer('image/png')

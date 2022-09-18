@@ -9,7 +9,7 @@ const {
 
 const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
 
-
+// display color-coded temperature integer
 const drawTemperature = (ctx, layout, temperature) => {
   const color = getInterpolatedColor(
     temperature,
@@ -24,6 +24,7 @@ const drawTemperature = (ctx, layout, temperature) => {
   ) + layout.spacing
 }
 
+// display color-coded humidity as integer with percent sign
 const drawHumidity = (ctx, layout, humidity) => {
   const color = getInterpolatedColor(
     humidity,
@@ -43,7 +44,11 @@ const drawHumidity = (ctx, layout, humidity) => {
   ) + layout.spacing
 }
 
-const drawWeatherImage = (ctx, layout, textDescription) => {
+// display the current weather image based on text description, or log a
+// warning and display a placeholder if current description doesn't have an
+// image mapping so we know to add it (could not find an exhaustive list of
+// possible weather descriptions)
+const drawWeatherIcon = (ctx, layout, textDescription) => {
   const { weather } = layout.images
   let filename = getTimeSpecificWeatherIcon(WEATHER_DESCRIPTION_TO_IMAGE[textDescription])
   if (!filename) {
@@ -59,6 +64,8 @@ const drawWeatherImage = (ctx, layout, textDescription) => {
   return layout.cursorPosition + layout.imageWidth + layout.spacing
 }
 
+// display wind speed and direction indicator, color-coded by gust (if gusting),
+// or by non-gust speed
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
   const { directions } = layout.images
   const color = getInterpolatedColor(
@@ -88,6 +95,8 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   ) + layout.spacing
 }
 
+// display the current 24-hour time without leading zero or colon separator
+// (not shown due to space constraints)
 const drawTime = (ctx, layout) =>
   drawText(
     ctx,
@@ -99,11 +108,12 @@ const drawTime = (ctx, layout) =>
       // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
       hourCycle: 'h23'
     })
-    .replace(':', '')
+    .replace(':', '') // remove the colon separator
     .replace(/^0/, ''), // remove leading zero
     { x: layout.cursorPosition, y: layout.top }
   ) + layout.spacing
 
+// draw current weather conditions along the top of the board
 const drawWeather = (ctx, weather) => {
   const {
     temperature,
@@ -115,23 +125,15 @@ const drawWeather = (ctx, weather) => {
   const layout = {
     cursorPosition: 0,
     top: 0,
-    spacing: 2,
+    spacing: 2, // space between different parts like time & temperature
     images,
     imageWidth: 5
   }
 
   layout.cursorPosition = drawTime(ctx, layout)
-
-  // temperature
   layout.cursorPosition = drawTemperature(ctx, layout, temperature)
-
-  // TODO: weather image
-  layout.cursorPosition = drawWeatherImage(ctx, layout, textDescription)
-
-  // humidity
+  layout.cursorPosition = drawWeatherIcon(ctx, layout, textDescription)
   layout.cursorPosition = drawHumidity(ctx, layout, relativeHumidity)
-
-  // wind
   layout.cursorPosition = drawWind(ctx, layout, wind)
 }
 

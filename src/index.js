@@ -19,15 +19,13 @@ const main = async () => {
     const [
       departures,
       weather,
-      dailyForecast,
       hourlyForecast
     ] = await Promise.all([
       getTrains(SUBWAY_STATION_ID, SOUTH),
       getWeather(WEATHER_STATION_ID),
-      getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT),
       getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT, { type: 'hourly' })
     ])
-    drawBoard(departures, weather, dailyForecast, hourlyForecast)
+    drawBoard(departures, weather, hourlyForecast)
   } catch (ex) {
     console.error(`[${new Date()}] Loop failed with error: ${ex.stack}`)
     return

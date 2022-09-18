@@ -47,6 +47,9 @@ const drawPixel = (ctx, color, offset) => {
   ctx.fillRect(x, y, 1, 1)
 }
 
+// given a value, a linear gradient array of color "stops", and a min/max
+// bounds, return an intermediary color if the value is within `bounds`,
+// otherwise return the first/last color of the gradient as appropriate
 const getInterpolatedColor = (value, gradient, bounds) => {
   const { min, max } = bounds
 
@@ -73,6 +76,7 @@ const getInterpolatedColor = (value, gradient, bounds) => {
   }
 }
 
+// color (tint) the whole passed `image` with the provided RGB `color`
 // adapted from https://stackoverflow.com/a/4231508
 const tintImage = (image, color) => {
   const { r, g, b } = color
@@ -93,11 +97,14 @@ const tintImage = (image, color) => {
   return buffer
 }
 
+// returns if the passed `date` is while the sun is up or not
 const isDaytime = (date) => {
   const { altitude } = suncalc.getPosition(date, ...LOCATION_COORDINATES)
   return altitude > 0
 }
 
+// return sun or moon weather icons depending on if the passed datetime is
+// while the sun is above the horizon
 const getTimeSpecificWeatherIcon = (filename, date = new Date()) => 
   isDaytime(date) ? filename : filename.replace('sun', 'moon')
 
