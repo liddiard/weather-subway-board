@@ -37,8 +37,6 @@ const cacheImage = (type, file) =>
     images[type][key] = image
   })
 
-// const getImages = () => images
-
 module.exports = {
   initImages,
   images

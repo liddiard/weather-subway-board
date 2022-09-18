@@ -1,9 +1,13 @@
+const { images } = require('./image')
+
+
 const getAverageCloudCover = (descriptions) => {
   const descToScore = {
     'Mostly Sunny': 1,
     'Mostly Clear': 1,
     'Partly Sunny': 2,
     'Partly Clear': 2,
+    'Partly Cloudy': 2,
     'Mostly Cloudy': 3,
     'Overcast': 4
   }
@@ -36,7 +40,7 @@ const summarizeWeatherPeriods = (periods) => {
     endTime: periods[periods.length - 1].endTime,
     // indicates if some part of the sky is visible during ANY period
     clear: descriptions.some(d =>
-      /Clear|Sunny|Mostly Cloudy/.test(d)),
+      /Clear|Sunny|Partly Sunny|Partly Clear|Partly Cloudy|Mostly Cloudy/.test(d)),
     // average percent cloud cover during the periods, from 0 to 1
     clouds: getAverageCloudCover(descriptions),
     // whether or not fog is present during ANY period
@@ -55,7 +59,29 @@ const summarizeWeatherPeriods = (periods) => {
   }
 }
 
-const drawWeatherIcon = (ctx, summary, top) => {
+const getCloudIcon = (cloudCover) => {
+  if (cloudCover < 0.2) {
+    return null
+  }
+  if (cloudCover >= 0.2 && cloudCover < 0.4) {
+    return 'cloud'
+  }
+  if (cloudCover >= 0.4 && cloudCover < 0.6) {
+    return 'two_clouds'
+  }
+  if (cloudCover >= 0.6 && cloudCover < 0.8) {
+    return 'broken_clouds'
+  }
+  return 'overcast'
+}
+
+const getRainIcon = (rainAmount) => ({
+    1: 'sprinkles',
+    2: 'heavy_rain',
+    3: 'downpour'
+  }[rainAmount])
+
+const drawWeatherIcon = (ctx, summary, i, top) => {
   const {
     clear,
     clouds,
@@ -65,8 +91,27 @@ const drawWeatherIcon = (ctx, summary, top) => {
     snow,
     hail
   } = summary
-  const celestialBody = clear && !fog && clouds < 0.8 && !thunderstorms
-  // const cloud = 
+  const { weather } = images
+  const cloudIcon = getCloudIcon(clouds)
+  const rainIcon = getRainIcon(rain)
+  const showCelestialBody = clear && !fog && cloudIcon !== 'overcast' && !thunderstorms
+
+  if (showCelestialBody) {
+    ctx.drawImage(weather.sun, i, top)
+  }
+  if (cloudIcon && !fog && !rain && !thunderstorms) {
+    ctx.drawImage(weather[cloudIcon], i, top)
+  }
+  if (fog) {
+    ctx.drawImage(weather.fog, i, top)
+  }
+  if (rainIcon) {
+    ctx.drawImage(weather[rainIcon], i, top)
+  }
+  if (thunderstorms) {
+    ctx.drawImage(weather.lightning, i, top)
+  }
+
   
   // sun (base)
   // cloud (replace sun if overcast)
@@ -78,10 +123,11 @@ const drawWeatherIcon = (ctx, summary, top) => {
 
 const drawForecastIcons = (ctx, periods) => {
   const numToAggregate = 6
-  const top = 26
+  const top = 27
   for (let i = 0; i < periods.length - numToAggregate; i += numToAggregate) {
     const summary = summarizeWeatherPeriods(periods.slice(i, i + numToAggregate))
-    drawWeatherIcon(ctx, summary, top)
+    console.log('summary:', i, summary)
+    drawWeatherIcon(ctx, summary, i, top)
   }
 }
 
