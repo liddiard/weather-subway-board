@@ -15,22 +15,23 @@ const {
 const { SOUTH } = DIRECTIONS
 
 const main = async () => {
-  const [
-    departures,
-    weather,
-    dailyForecast,
-    hourlyForecast
-  ] = await Promise.all([
-    getTrains(SUBWAY_STATION_ID, SOUTH),
-    getWeather(WEATHER_STATION_ID),
-    getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT),
-    getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT, { type: 'hourly' })
-  ])
-  .catch(ex =>
-    console.error(`Fetching API data failed with error: ${ex}`)
-  )
-  
-  drawBoard(departures, weather, dailyForecast, hourlyForecast)
+  try {
+    const [
+      departures,
+      weather,
+      dailyForecast,
+      hourlyForecast
+    ] = await Promise.all([
+      getTrains(SUBWAY_STATION_ID, SOUTH),
+      getWeather(WEATHER_STATION_ID),
+      getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT),
+      getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT, { type: 'hourly' })
+    ])
+    drawBoard(departures, weather, dailyForecast, hourlyForecast)
+  } catch (ex) {
+    console.error(`Loop failed with error: ${ex}`)
+    return
+  }
 }
 
 console.log('🏞  Loading images into RAM…')
