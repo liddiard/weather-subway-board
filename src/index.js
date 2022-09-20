@@ -27,7 +27,7 @@ const main = async () => {
     ])
     drawBoard(departures, weather, hourlyForecast)
   } catch (ex) {
-    console.error(`[${new Date()}] Loop failed with error: ${ex.stack}`)
+    console.error(`[${new Date()}] Loop failed with error:\n${ex.stack}`)
     return
   }
 }
@@ -37,8 +37,8 @@ initImages()
 .then(async () => {
   console.log('✅ Image load complete. Starting main loop…')
   let lastUpdatedSec
-  // Update the board at certain seconds clock time. We do this so the current
-  // time dipslayed on the board will be as current as possible.
+  // Update the board at certain seconds clock time. We do this so the time
+  // display on the board will be as current as possible.
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const currentSec = new Date().getSeconds()

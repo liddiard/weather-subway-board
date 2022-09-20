@@ -118,13 +118,18 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   // 1. celestial body (base)
   // 2. cloud (replace sun if overcast)
   // 3. fog (replace all previous)
-  // 4. rain & snow (replace cloud if overcast)
-  // 5. lightning (replace sun, all cloud)
+  // 4. lightning (replace sun, all cloud)
+  // 5. rain & snow (replace sun, cloud if overcast)
   // 6. hail
 
   const cloudIcon = getCloudIcon(clouds)
   const rainIcon = getRainIcon(rain)
-  const showCelestialBody = clear && !fog && cloudIcon !== 'overcast' && !thunderstorms
+  const showCelestialBody =
+    clear &&
+    !thunderstorms &&
+    !fog &&
+    !rainIcon &&
+    cloudIcon !== 'overcast'
 
   if (showCelestialBody) {
     // "average" (midpoint) datetime between start and end of summary
@@ -139,11 +144,11 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   if (fog) {
     ctx.drawImage(weather.fog, x, y)
   }
-  if (rainIcon) {
-    ctx.drawImage(weather[rainIcon], x, y)
-  }
   if (thunderstorms) {
     ctx.drawImage(weather.lightning, x, y)
+  }
+  if (rainIcon) {
+    ctx.drawImage(weather[rainIcon], x, y)
   }
 }
 
