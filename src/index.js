@@ -14,6 +14,11 @@ const {
 } = constants
 const { SOUTH } = DIRECTIONS
 
+const rejectAfter = (ms) =>
+  new Promise((_, reject) =>
+    setTimeout(() =>
+      reject(`rejectAfter: Timed out after ${ms}ms.`), ms))
+
 const main = async () => {
   try {
     const [
@@ -43,7 +48,12 @@ initImages()
   while (true) {
     const currentSec = new Date().getSeconds()
     if (UPDATE_AT_SECS.has(currentSec) && currentSec !== lastUpdatedSec) {
-      await main()
+      await Promise.race([
+        main(),
+        // reject and move on if main takes too long to run
+        rejectAfter(20 * 1000)
+      ])
+      .catch(ex => console.error(ex))
       lastUpdatedSec = currentSec
     }
   }
