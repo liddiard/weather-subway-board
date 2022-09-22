@@ -58,8 +58,13 @@ const drawDaySeparator = (ctx, period, i, yCoord) => {
   }
   if (color) {
     const { r, g, b } = color
-    ctx.fillStyle = `rgb(${r},${g},${b})`
-    ctx.fillRect(i, yCoord+1, 1, BOTTOM-yCoord)
+    const gradient = ctx.createLinearGradient(0, TOP, 0, (BOTTOM - TOP) + 1);
+    gradient.addColorStop(0, `rgba(${r},${g},${b}, 0)`);
+    gradient.addColorStop(1, `rgba(${r},${g},${b}, 1)`);
+    ctx.fillStyle = gradient
+    ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 1)
+    // Fill above line: ctx.fillRect(i, TOP, 1, yCoord-TOP)
+    // Fill below line: ctx.fillRect(i, yCoord+1, 1, BOTTOM-yCoord)
   }
 }
 
