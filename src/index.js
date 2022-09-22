@@ -14,10 +14,12 @@ const {
 } = constants
 const { SOUTH } = DIRECTIONS
 
-const rejectAfter = (ms) =>
+const sleep = (sec) => new Promise(resolve => setTimeout(resolve, sec * 1000))
+
+const rejectAfter = (sec) =>
   new Promise((_, reject) =>
     setTimeout(() =>
-      reject(`rejectAfter: Timed out after ${ms}ms.`), ms))
+      reject(`rejectAfter: Timed out after ${sec} sec.`), sec * 1000))
 
 const main = async () => {
   try {
@@ -51,10 +53,13 @@ initImages()
       await Promise.race([
         main(),
         // reject and move on if main takes too long to run
-        rejectAfter(20 * 1000)
+        rejectAfter(20)
       ])
       .catch(ex => console.error(ex))
       lastUpdatedSec = currentSec
+    } else {
+    // sleep to reduce CPU usage on low-powered Raspberry Pi
+    await sleep(1)
     }
   }
 })
