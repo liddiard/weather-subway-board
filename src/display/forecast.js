@@ -59,7 +59,7 @@ const drawDaySeparator = (ctx, period, i, yCoord) => {
   if (color) {
     const { r, g, b } = color
     ctx.fillStyle = `rgb(${r},${g},${b})`
-    ctx.fillRect(i, TOP, 1, yCoord-TOP)
+    ctx.fillRect(i, yCoord+1, 1, BOTTOM-yCoord)
   }
 }
 
