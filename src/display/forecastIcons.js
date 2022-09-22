@@ -162,6 +162,9 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   if (rainIcon) {
     ctx.drawImage(weather[rainIcon], x, y)
   }
+  if (hail) {
+    ctx.drawImage(weather.hail, x, y)
+  }
 }
 
 // draw forecast icons along the bottom of the forecast graph
