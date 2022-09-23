@@ -28,7 +28,7 @@ I did make the mod described in the [Adafruit RGB Matrix Bonnet documentation](h
 Tested running:
 
 - macOS on Apple Silicon (with web-based viewer for development)
-- Raspberry Pi Zero W on ARMv6 (with LED matrix connection)
+- Raspberry Pi OS Lite on ARMv6, running on a Raspberry Pi Zero W (with LED matrix connection)
 
 1. `npm install`
 2. (on Pi only) `./scripts/build_rpi-rgb-led-matrix.sh`
