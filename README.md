@@ -1,8 +1,8 @@
-# NYC subway train departures board
+# Current weather, forecast, and NYC subway train visualization board
 
-Display upcoming departures of New York City subway trains from a specific station on an LED matrix, powered by the MTA realtime data feeds.
+Display information you may want to know when leaving the house on a fancy fridge magnet, a.k.a. an LED matrix. Powered by [weather.gov](https://www.weather.gov/documentation/services-web-api) and [MTA realtime data](https://api.mta.info/#/landing) APIs.
 
-![LED matrix board mounted on a freezer door, displaying upcoming times to arrival in seconds](graphics/board_example_matrix.gif)
+![LED matrix board mounted on a refrigerator door](graphics/readme/board_photo.jpg)
 
 ## Hardware
 
@@ -57,43 +57,33 @@ npm run web-viewer
 
 View the board at http://localhost:8000/viewer.html
 
-## Explanation of board layout
+## Explanation of board layout (click to enlarge)
 
-(Images like this can be displayed with the web-based board viewer mentioned above):
+[![Explanation of LED matrix board layout](graphics/readme/board_explanation.png)](https://github.com/liddiard/nyc-subway-board/blob/main/graphics/readme/board_explanation.png?raw=true)
 
-![Explanation of LED matrix board](graphics/board_example_web_explanation.png)
-![LED matrix board pixellated web viewer](graphics/board_example_web.gif)
-
-**\*Timeline view:** Trains are shown approaching the station (at bottom, orange line).
-
-- Left column (red dots): local trains
-- Right column (white dots): express trains
-
-The vertical position of train dots is based on their number of minutes from the station, as shown by the tick marks and the "30", "20", "10, "0" labels. Each row of pixels represents one minute.
-
----
-
-You'll need to create your own train circle "sprite" images for your station's lines (unless they happen to be the 123 🙂), as well as update some references in code specific to 123 trains.
+Matrix images like this can be displayed with the web-based board viewer mentioned above.
  
-The board only shows trains going in one direction because most of the time I only go downtown from my stop. Not needing to display the train direction freed up some space on the matrix for the timeline view in my implementation.
+The board only shows trains going in one direction because most of the time I only go downtown from my stop. Not needing to show both directions freed up more space for the weather/forecast visualization.
 
-There's an earlier branch of this code, [`no-timeline`](https://github.com/liddiard/nyc-subway-board/tree/no-timeline), which displays both directions along with an arrow direction indicator but doesn't have a timeline view. The code is older and I'm not using it, so it's less finished/polished.
+There are earlier branches of this repo that only display subway departures without weather information:
+
+- [`subway-only`](https://github.com/liddiard/nyc-subway-board/tree/subway-only): Cycles through upcoming train departures in large green letters in one direction only, plus a departure timeline like the one on the right of this branch's board.
+- [`no-timeline`](https://github.com/liddiard/nyc-subway-board/tree/no-timeline): Similar to the above, but displays departures in both directions and includes an uptown/downtown arrow. The tradeoff with this branch, as the name implies, is that there was no room for the departure timeline.
 
 ## Project structure
 
 ### [`src/`](src/)
 
-- [`index.js`](index.js): Main entry point for Node.js app that calls the MTA API for train departures, generates a board image using the JavaScript `canvas` API, and writes it to disk. It runs in a loop, cycling the board image through upcoming departures shown in large text. It requests updated departure information at the end of each cycle.
-- [departures.js](src/departures.js): Fetches upcoming departure information from the MTA API and transforms the response to desired format
-- [board.js](src/board.js): HTML `canvas` board drawing happens here
-- [image.js](src/image.js): Utilities for caching the smaller "sprite" images that are combined to form the overall board `canvas` image
+- [`index.js`](index.js): Main entry point for Node.js app that calls the MTA and weather.gov APIs, generates a board image using the JavaScript `canvas` API, and writes it to disk. It runs in an infinite loop and updates every 30 seconds.
+- [`fetch/`](src/fetch/): Calling APIs and enriching/transforming responses to the desired formats
+- [`display/`](src/display/): All the display logic for what to draw where
 - [constants.js](src/constants.js): Constants. `STATION_ID` is the subway station from which the departures are shown.
 
 ---
 
 `board.png`: Image of the board to display. Generated the by Node.js app and not in version control. View it on the web viewer or the LED matrix as detailed above under [Running](#Running).
 
-[`image-viewer.py`](image-viewer.py): Script that recurringly reads the board image file from disk and displays it on the LED matrix using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be particularly fast since it only shows a new frame every 5 seconds.
+[`image-viewer.py`](image-viewer.py): Script that recurringly reads the board image file from disk and displays it on the LED matrix using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be fast since it only shows a new frame every 30 seconds.
 
 [`graphics/`](graphics/): Sprite images used on the board, positioned and composited by the Node.js app
 
