@@ -4,6 +4,8 @@ Display information you may want to know when leaving the house on a fancy fridg
 
 ![LED matrix board mounted on a refrigerator door](graphics/readme/board_photo.jpg)
 
+Wondering what this all means? [Jump down to the explanation](#explanation-of-board-layout)!
+
 ## Hardware
 
 ### Components used
@@ -60,7 +62,9 @@ npm run web-viewer
 
 View the board at http://localhost:8000/viewer.html
 
-## Explanation of board layout (click to enlarge)
+## Explanation of board layout
+
+Click image to enlarge.
 
 [![Explanation of LED matrix board layout](graphics/readme/board_explanation.png)](https://github.com/liddiard/nyc-subway-board/blob/main/graphics/readme/board_explanation.png?raw=true)
 
