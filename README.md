@@ -43,6 +43,9 @@ Tested running:
 ```shell
 API_KEY=<Your API key> npm start
 ```
+
+You can also `npm run dev` with your API key prepended for an auto-reloading server.
+
 ### Display board on LED matrix (Pi only)
 
 ```shell
