@@ -44,9 +44,8 @@ const drawGraphLines = (ctx, periods) => {
 }
 
 // if the given period begins at noon or midnight, draw a vertical line on the
-// graph from the top down to the point where the line intersects the
-// temperature graph line (`yCoord`)
-const drawDaySeparator = (ctx, period, i, yCoord) => {
+// graph at this position
+const drawDaySeparator = (ctx, period, i) => {
   const currentHour = period.startTime.getHours()
   const isNoon = currentHour === 12
   const isMidnight = currentHour === 0
@@ -62,9 +61,8 @@ const drawDaySeparator = (ctx, period, i, yCoord) => {
     gradient.addColorStop(0, `rgba(${r},${g},${b}, 0)`);
     gradient.addColorStop(1, `rgba(${r},${g},${b}, 1)`);
     ctx.fillStyle = gradient
+    // draw line spanning full height of forecast area
     ctx.fillRect(i, TOP, 1, (BOTTOM - TOP) + 1)
-    // Fill above line: ctx.fillRect(i, TOP, 1, yCoord-TOP)
-    // Fill below line: ctx.fillRect(i, yCoord+1, 1, BOTTOM-yCoord)
   }
 }
 
