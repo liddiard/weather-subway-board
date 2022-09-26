@@ -4,7 +4,7 @@ Display information you may want to know when leaving the house on a fancy fridg
 
 ![LED matrix board mounted on a refrigerator door](graphics/readme/board_photo.jpg)
 
-Wondering what this all means? [Jump down to the explanation](#explanation-of-board-layout)!
+Wondering what everything on this display means? [Jump down to the explanation](#explanation-of-board-layout)!
 
 ## Hardware
 
