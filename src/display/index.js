@@ -9,11 +9,12 @@ const constants = require('../constants')
 
 
 const { MATRIX, BOARD_IMAGE_FILE } = constants
+const { WIDTH, HEIGHT } = MATRIX
+const { DIM_DISPLAY_AMOUNT } = process.env
 
 
 // set create `canvas` and `ctx` objects, draw background
 const setUpCanvas = () => {
-  const { WIDTH, HEIGHT } = MATRIX
   const canvas = createCanvas(WIDTH, HEIGHT) // LED board dimensions
   const ctx = canvas.getContext('2d')
 
@@ -22,6 +23,13 @@ const setUpCanvas = () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   return { canvas, ctx }
+}
+
+// draw a partially transparent black rectangle over the entire image to "dim"
+// the display
+const drawOpacityMask = (ctx, opacity) => {
+  ctx.fillStyle = `rgba(0,0,0, ${opacity})`
+  ctx.fillRect(0, 0, WIDTH, HEIGHT)
 }
 
 // generates and writes a new board image file to disk
@@ -38,6 +46,11 @@ const drawBoard = (departures, weather, hourlyForecast) => {
   drawTrains(ctx, departures)
   drawWeather(ctx, weather)
   drawForecast(ctx, hourlyForecast)
+
+  // darken the entire display if environment variable set
+  if (DIM_DISPLAY_AMOUNT) {
+    drawOpacityMask(ctx, parseFloat(DIM_DISPLAY_AMOUNT))
+  }
   
   // save image to disk
   const buffer = canvas.toBuffer('image/png')
