@@ -135,8 +135,6 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   // 5. rain & snow (replace sun, cloud if overcast)
   // 6. hail
 
-  console.log(summary)
-
   const cloudIcon = getCloudIcon(clouds)
   const rainIcon = getRainIcon(rain)
   const showCelestialBody =
