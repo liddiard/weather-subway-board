@@ -41,6 +41,7 @@ const getAverageRain = (descriptions) => {
     'Light Rain': 1,
     'Showers': 2,
     '^Rain$': 2,
+    'Rain Likely': 2,
     'Heavy Rain': 3
   }
   return getAverageWeather(descriptions, descToScore)
@@ -133,6 +134,8 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   // 4. lightning (replace sun, all cloud)
   // 5. rain & snow (replace sun, cloud if overcast)
   // 6. hail
+
+  console.log(summary)
 
   const cloudIcon = getCloudIcon(clouds)
   const rainIcon = getRainIcon(rain)
