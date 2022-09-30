@@ -29,6 +29,7 @@ const getAverageCloudCover = (descriptions) => {
     'Partly Clear': 2,
     'Partly Cloudy': 2,
     'Mostly Cloudy': 3,
+    '^Cloudy$': 4,
     'Overcast': 4
   }
   return getAverageWeather(descriptions, descToScore)
