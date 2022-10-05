@@ -17,6 +17,16 @@ const getGraphPointColor = ({ startTime }) => {
   return getInterpolatedColor(altitude, GRADIENTS.SUN, { min: -0.4, max: 0.4 })
 }
 
+const getGraphBottom = (periods) => {
+  const temps = periods.map(f => f.temperature)
+  const minTemperature = Math.min(...temps)
+  const maxTemperature = Math.max(...temps)
+  const graphRange = (maxTemperature - minTemperature) + (CHAR_HEIGHT + 1)
+  const maxRange = BOTTOM - TOP
+  const bottomGap = Math.floor((maxRange - graphRange) / 2)
+  return BOTTOM - Math.max(bottomGap, 0)
+}
+
 // Draw a line of temparatures, tinted yellow/pink for day/night times, as well
 // as vertical separators for noon and midnight. On the Y axis, each pixel is a
 // degree Celcius. On the X axis, each pixel is 1 hour.
@@ -27,6 +37,7 @@ const drawGraphLines = (ctx, periods) => {
   const minTemperature = Math.min(
     ...periods.map(f => f.temperature)
   )
+  const bottom = getGraphBottom(periods)
   // Array of illuminated pixel positions on the forecast graph. Array index
   // is the X position, and value in the array is the Y position
   const filledPixels = []
@@ -35,7 +46,7 @@ const drawGraphLines = (ctx, periods) => {
     const { temperature } = period
     const degreesAboveMin = temperature - minTemperature
     const color = getGraphPointColor(period)
-    const yCoord = BOTTOM - degreesAboveMin
+    const yCoord = bottom - degreesAboveMin
     drawDaySeparator(ctx, period, i, yCoord)
     drawPixel(ctx, color, { x: i, y: yCoord })
     filledPixels.push(yCoord)
