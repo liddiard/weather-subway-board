@@ -17,6 +17,11 @@ const getGraphPointColor = ({ startTime }) => {
   return getInterpolatedColor(altitude, GRADIENTS.SUN, { min: -0.4, max: 0.4 })
 }
 
+// Returns the y-axis coordinate for the bottom of the temperature line graph,
+// based on the passed `periods` temperature range. This value is used to
+// vertically center the graph when the range of displayed temperatures is
+// sufficiently small. If the temperature range is too great to center,
+// returns the bottom-most coordinate of the graph area.
 const getGraphBottom = (periods) => {
   const temps = periods.map(f => f.temperature)
   const minTemperature = Math.min(...temps)
