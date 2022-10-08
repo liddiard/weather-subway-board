@@ -15,7 +15,7 @@ const {
   BOARD_IMAGE_FILE,
   LOCATION_COORDINATES,
   COLORS,
-  NIGHT_SHIFT_WARMNESS
+  NIGHT_SHIFT_WARMTH
 } = constants
 const { WIDTH, HEIGHT } = MATRIX
 const { DIM_DISPLAY_AMOUNT } = process.env
@@ -46,7 +46,7 @@ const drawNightShiftMask = (ctx) => {
   const { altitude } = suncalc.getPosition(new Date(), ...LOCATION_COORDINATES)
   const opacity = getInterpolatedColor(
     altitude,
-    [NIGHT_SHIFT_WARMNESS, 0],
+    [NIGHT_SHIFT_WARMTH, 0],
     { min: -0.2, max: 0.2 }
   )
   // retain the darkest pixels from each layer
