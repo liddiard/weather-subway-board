@@ -1,14 +1,22 @@
 const fs = require('fs')
 
 const { createCanvas } = require('canvas')
+const suncalc = require('suncalc')
 
 const { drawTrains } = require('./trains')
 const { drawWeather } = require('./weather')
 const { drawForecast } = require('./forecast')
+const { getInterpolatedColor } = require('./utils')
 const constants = require('../constants')
 
 
-const { MATRIX, BOARD_IMAGE_FILE } = constants
+const {
+  MATRIX,
+  BOARD_IMAGE_FILE,
+  LOCATION_COORDINATES,
+  COLORS,
+  NIGHT_SHIFT_WARMNESS
+} = constants
 const { WIDTH, HEIGHT } = MATRIX
 const { DIM_DISPLAY_AMOUNT } = process.env
 
@@ -32,6 +40,23 @@ const drawOpacityMask = (ctx, opacity) => {
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
 }
 
+// tint the display orange when the sun is down (simlar to Night Shift)
+const drawNightShiftMask = (ctx) => {
+  const { r, g, b } = COLORS.ORANGE
+  const { altitude } = suncalc.getPosition(new Date(), ...LOCATION_COORDINATES)
+  const opacity = getInterpolatedColor(
+    altitude,
+    [NIGHT_SHIFT_WARMNESS, 0],
+    { min: -0.2, max: 0.2 }
+  )
+  // retain the darkest pixels from each layer
+  ctx.globalCompositeOperation = 'darken'
+  ctx.fillStyle = `rgba(${r},${g},${b}, ${opacity})`
+  ctx.fillRect(0, 0, WIDTH, HEIGHT)
+  // reset to default value
+  ctx.globalCompositeOperation = 'source-over'
+}
+
 // generates and writes a new board image file to disk
 // first argument, array of two departure objects:
 // {
@@ -46,6 +71,8 @@ const drawBoard = (departures, weather, hourlyForecast) => {
   drawTrains(ctx, departures)
   drawWeather(ctx, weather)
   drawForecast(ctx, hourlyForecast)
+
+  drawNightShiftMask(ctx)
 
   // darken the entire display if environment variable set
   if (DIM_DISPLAY_AMOUNT) {
