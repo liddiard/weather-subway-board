@@ -47,6 +47,8 @@ async def get_bulb_is_on():
 
 
 async def main():
+    print("Starting image viewer main loop…")
+
     while True:
         # If smart bulb is off, then don't display anything on the matrix.
         # If you're not me (original code author), you should probably remove
@@ -79,7 +81,7 @@ async def main():
         except PIL.UnidentifiedImageError:
             log(f"Failed to open {image_file} - bad file.")
             continue
-        
+
         image = image.convert('RGB')
         canvas = matrix.CreateFrameCanvas()
         canvas.SetImage(image)
