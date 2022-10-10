@@ -1,3 +1,5 @@
+import pathlib
+import os
 import asyncio
 import time
 from datetime import datetime
@@ -60,9 +62,14 @@ async def main():
             time.sleep(10)
             continue
 
-        canvas = matrix.CreateFrameCanvas()
+        file_path = os.path.join(
+            # current directory
+            pathlib.Path(__file__).parent.resolve(),
+            # path to board file
+            "src", "display", image_file
+        )
         try:
-            image = Image.open(image_file)
+            image = Image.open(file_path)
         # Occasionally the image file will fail to display because it's being
         # written by the Node.js process at the same time we are trying to read it
         # here. A better approach would probably be to use `inotify` or OS
@@ -72,8 +79,9 @@ async def main():
         except PIL.UnidentifiedImageError:
             log(f"Failed to open {image_file} - bad file.")
             continue
+        
         image = image.convert('RGB')
-
+        canvas = matrix.CreateFrameCanvas()
         canvas.SetImage(image)
         image.close()
         # change the matrix image without a flash to black in between

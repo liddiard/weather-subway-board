@@ -84,11 +84,10 @@ There are earlier branches of this repo that only display subway departures with
 - [`index.js`](index.js): Main entry point for Node.js app that calls the MTA and weather.gov APIs, generates a board image using the JavaScript `canvas` API, and writes it to disk. It runs in an infinite loop and updates every 30 seconds.
 - [`fetch/`](src/fetch/): Calling APIs and enriching/transforming responses to the desired formats
 - [`display/`](src/display/): All the display logic for what to draw where
+  - `board.png`: Image of the board to display. Generated the by Node.js app and not in version control. View it on the web viewer or the LED matrix as detailed above under [Running](#Running).
 - [constants.js](src/constants.js): Constants. `STATION_ID` is the subway station from which the departures are shown.
 
 ---
-
-`board.png`: Image of the board to display. Generated the by Node.js app and not in version control. View it on the web viewer or the LED matrix as detailed above under [Running](#Running).
 
 [`image-viewer.py`](image-viewer.py): Script that recurringly reads the board image file from disk and displays it on the LED matrix using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be fast since it only shows a new frame every 30 seconds.
 

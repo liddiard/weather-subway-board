@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 
 const { createCanvas } = require('canvas')
 const suncalc = require('suncalc')
@@ -81,7 +82,10 @@ const drawBoard = (departures, weather, hourlyForecast) => {
   
   // save image to disk
   const buffer = canvas.toBuffer('image/png')
-  fs.writeFileSync(BOARD_IMAGE_FILE, buffer)
+  fs.writeFileSync(
+    path.resolve(__dirname, BOARD_IMAGE_FILE),
+    buffer
+  )
 }
 
 module.exports = {
