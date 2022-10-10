@@ -1,7 +1,10 @@
 const fs = require('fs')
+const path = require('path')
 
 const { loadImage } = require('canvas')
 
+// directory containing all images
+const baseDir = path.resolve(__dirname, '..', '..', 'graphics')
 
 // in-memory cache of images from disk
 const images = {
@@ -26,12 +29,12 @@ const initImages = async () => {
 // from disk
 const cacheImages = (type) =>
   Promise.all(
-    fs.readdirSync(`graphics/${type}`)
+    fs.readdirSync(path.resolve(baseDir, type))
     .map(file => cacheImage(type, file)))
 
 // load a single image into cache
 const cacheImage = (type, file) =>
-  loadImage(`graphics/${type}/${file}`)
+  loadImage(path.resolve(baseDir, type, file))
   .then(image => {
     const key = file.replace('.png', '')
     images[type][key] = image
