@@ -29,9 +29,11 @@ options.drop_privileges = False
 # show matrix refresh rate in console for debugging
 # options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
+canvas = matrix.CreateFrameCanvas()
 
 # initialize smart bulb
 bulb = wizlight(bulb_ip)
+
 
 def log(msg):
     return f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] {msg}"
@@ -83,7 +85,6 @@ async def main():
             continue
 
         image = image.convert('RGB')
-        canvas = matrix.CreateFrameCanvas()
         canvas.SetImage(image)
         image.close()
         # change the matrix image without a flash to black in between
