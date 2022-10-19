@@ -71,6 +71,7 @@ const constants = {
     'Mostly Cloudy': 'sun_behind_cloud',
     'Cloudy': 'overcast',
     'Fog/Mist': 'fog',
+    'Haze': 'haze',
     'Light Rain': 'sprinkles',
     'Rain': 'heavy_rain',
     'Heavy Rain': 'downpour',
