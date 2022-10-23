@@ -41,6 +41,7 @@ const getAverageRain = (descriptions) => {
   const descToScore = {
     'Light Rain': 1,
     'Chance Rain Showers': 1,
+    'Drizzle': 1,
     'Rain Showers Likely': 2,
     '^Rain$': 2,
     'Rain Likely': 2,
@@ -101,10 +102,10 @@ const getRainIcon = (rainAmount) => {
   if (rainAmount === 0) {
     return null
   }
-  if (rainAmount < 0.33) {
+  if (rainAmount <= 0.33) {
     return 'sprinkles'
   }
-  if (rainAmount < 0.67) {
+  if (rainAmount <= 0.67) {
     return 'heavy_rain'
   }
   return 'downpour'
