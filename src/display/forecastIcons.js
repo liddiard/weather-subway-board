@@ -102,10 +102,10 @@ const getRainIcon = (rainAmount) => {
   if (rainAmount === 0) {
     return null
   }
-  if (rainAmount <= 0.33) {
+  if (rainAmount <= (1/3)) {
     return 'sprinkles'
   }
-  if (rainAmount <= 0.67) {
+  if (rainAmount <= (2/3)) {
     return 'heavy_rain'
   }
   return 'downpour'
