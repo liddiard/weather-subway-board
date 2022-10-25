@@ -70,6 +70,7 @@ const constants = {
     'Partly Cloudy': 'sun_with_two_clouds',
     'Mostly Cloudy': 'sun_behind_cloud',
     'Cloudy': 'overcast',
+    'Fog': 'fog',
     'Fog/Mist': 'fog',
     'Haze': 'haze',
     'Light Rain': 'sprinkles',
