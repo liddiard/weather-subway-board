@@ -28,7 +28,7 @@ const setUpCanvas = () => {
   const ctx = canvas.getContext('2d')
 
   // black background
-  ctx.fillStyle = 'black'
+  ctx.fillStyle = COLORS.BLACK
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   return { canvas, ctx }
