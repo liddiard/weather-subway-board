@@ -65,12 +65,13 @@ const drawWeatherIcon = (ctx, layout, textDescription) => {
   return layout.cursorPosition + layout.imageWidth + layout.spacing
 }
 
-// display wind speed and direction indicator, color-coded by gust (if gusting),
-// or by non-gust speed
+// display color-coded wind gust or speed and a direction indicator
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
   const { directions } = layout.images
+  // show gust speed if wind is gusting
+  const displaySpeed = gust || speed
   const color = getInterpolatedColor(
-    gust || speed,
+    displaySpeed,
     GRADIENTS.WIND,
     { min: 5, max: 30 }
   )
@@ -90,7 +91,7 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   layout.cursorPosition += layout.imageWidth
   return drawText(
     ctx,
-    Math.round(speed).toString(),
+    Math.round(displaySpeed).toString(),
     { x: layout.cursorPosition + 1, y: layout.top },
     color
   ) + layout.spacing
