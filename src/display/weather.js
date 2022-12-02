@@ -2,6 +2,7 @@ const { images } = require('./image')
 const constants  = require('../constants')
 const {
   drawText,
+  getTextWidth,
   tintImage,
   getInterpolatedColor,
   getTimeSpecificWeatherIcon 
@@ -97,23 +98,51 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   ) + layout.spacing
 }
 
+const getTimeString = () =>
+  new Date().toLocaleTimeString([], {
+    timeStyle: 'short',
+    // Note: Due to a bug in ECMAScript, `hour12: false` displays the first
+    // hour of the day as "24" instaed of "0". This should be fixed in the
+    // future, but for now using `hourCycle: 'h23'` as a workaround.
+    // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
+    hourCycle: 'h23'
+  })
+  .replace(':', '') // remove the colon separator
+  .replace(/^0/, '') // remove leading zero
+
 // display the current 24-hour time without leading zero or colon separator
 // (not shown due to space constraints)
 const drawTime = (ctx, layout) =>
   drawText(
     ctx,
-    new Date().toLocaleTimeString([], {
-      timeStyle: 'short',
-      // Note: Due to a bug in ECMAScript, `hour12: false` displays the first
-      // hour of the day as "24" instaed of "0". This should be fixed in the
-      // future, but for now using `hourCycle: 'h23'` as a workaround.
-      // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
-      hourCycle: 'h23'
-    })
-    .replace(':', '') // remove the colon separator
-    .replace(/^0/, ''), // remove leading zero
+    getTimeString(),
     { x: layout.cursorPosition, y: layout.top }
   ) + layout.spacing
+
+// returns how many spaces to include between segments on the weather display,
+// based on total text width
+const getSpacing = (weather) => {
+  const {
+    temperature,
+    relativeHumidity,
+    wind
+  } = weather
+
+  // sum all the variable widths within the weather display
+  const totalWidth = [
+    getTimeString(),
+    temperature,
+    Math.round(relativeHumidity),
+    wind.gust || wind.speed
+  ]
+  .reduce((acc, cur) => 
+    acc + getTextWidth(cur.toString())
+  , 0)
+
+  // max "breakpoint" for 3 spaces: based on variable text width +
+  // fixed elements' width (icons, static text)
+  return totalWidth > 32 ? 2 : 3
+}
 
 // draw current weather conditions along the top of the board
 const drawWeather = (ctx, weather) => {
@@ -127,7 +156,8 @@ const drawWeather = (ctx, weather) => {
   const layout = {
     cursorPosition: 0,
     top: 0,
-    spacing: 2, // space between different parts like time & temperature
+    // space between different segments like time & temperature
+    spacing: getSpacing(weather),
     images,
     imageWidth: 5
   }
