@@ -141,7 +141,7 @@ const getSpacing = (weather) => {
 
   // max "breakpoint" for 3 spaces: based on variable text width +
   // fixed elements' width (icons, static text)
-  return totalWidth > 32 ? 2 : 3
+  return totalWidth > 28 ? 2 : 3
 }
 
 // draw current weather conditions along the top of the board
