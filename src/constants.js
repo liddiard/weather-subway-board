@@ -36,6 +36,7 @@ const constants = {
     MAGENTA: { r: 255, g: 0, b: 255 },
     YELLOW: { r: 255, g: 255, b: 0 },
     ORANGE: { r: 255, g: 128, b: 0 },
+    LIGHT_MAGENTA: { r: 255, g: 128, b: 255 },
     DARK_ORANGE: { r: 32, g: 16, b: 0 },
     DARK_PURPLE: { r: 16, g: 0, b: 32 }
   },
@@ -88,9 +89,18 @@ const constants = {
   NIGHT_SHIFT_WARMTH: 0.33
 }
 
-const { MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED } = constants.COLORS
+const {
+  MAGENTA,
+  BLUE,
+  CYAN,
+  GREEN,
+  YELLOW,
+  RED,
+  LIGHT_MAGENTA
+} = constants.COLORS
+
 constants.GRADIENTS = {
-  TEMPERATURE: [MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED],
+  TEMPERATURE: [LIGHT_MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED],
   HUMIDITY: [RED, YELLOW, GREEN, CYAN, BLUE],
   WIND: [GREEN, YELLOW, RED],
   SUN: [MAGENTA, YELLOW],
