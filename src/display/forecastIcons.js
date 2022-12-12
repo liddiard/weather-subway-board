@@ -49,6 +49,18 @@ const getAverageRain = (descriptions) => {
   return getAverageWeather(descriptions, descToScore)
 }
 
+// get the average snow mentioned in forecast descriptions from 0 (no snow) to
+// 3 (heavy snow)
+const getAverageSnow = (descriptions) => {
+  const descToScore = {
+    'Light Snow': 1,
+    'Snow Showers': 1,
+    '^Snow$': 2,
+    'Heavy Snow': 3
+  }
+  return getAverageWeather(descriptions, descToScore)
+}
+
 // given an array of forecast weather periods, summarize all periods based on
 // salient factors like cloud cover, precipitation, and thunderstorm activity
 // that we'd want to include in a forecast icon
@@ -71,7 +83,7 @@ const summarizeWeatherPeriods = (periods) => {
     thunderstorms: descriptions.some(d =>
       d.includes('Thunderstorms')),
     // TODO: not implemented
-    snow: null,
+    snow: getAverageSnow(descriptions),
     // whether hail is possible during ANY period
     hail: descriptions.some(d =>
       d.includes('Hail')),
@@ -110,6 +122,20 @@ const getRainIcon = (rainAmount) => {
   return 'downpour'
 }
 
+// return the snow icon matching a given snow "score" from 0 to 1
+const getSnowIcon = (snowAmount) => {
+  if (snowAmount === 0) {
+    return null
+  }
+  if (snowAmount <= 1/3) {
+    return 'flurries'
+  }
+  if (snowAmount <= 2/3) {
+    return 'heavy_snow'
+  }
+  return 'blizzard'
+}
+
 // given a forecast weather summary and an x/y offset, draw a composite weather
 // icon
 const drawWeatherIcon = (ctx, summary, offset) => {
@@ -139,11 +165,13 @@ const drawWeatherIcon = (ctx, summary, offset) => {
 
   const cloudIcon = getCloudIcon(clouds)
   const rainIcon = getRainIcon(rain)
+  const snowIcon = getSnowIcon(snow)
   const showCelestialBody =
     clear &&
     !thunderstorms &&
     !fog &&
     !rainIcon &&
+    !snowIcon &&
     cloudIcon !== 'overcast'
 
   if (showCelestialBody) {
@@ -153,7 +181,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     const filename = getTimeSpecificWeatherIcon('sun', midpointTime)
     ctx.drawImage(weather[filename], x, y)
   }
-  if (cloudIcon && !fog && !rain && !thunderstorms) {
+  if (cloudIcon && !fog && !rain && !snow && !thunderstorms) {
     ctx.drawImage(weather[cloudIcon], x, y)
   }
   if (fog) {
@@ -164,6 +192,9 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   }
   if (rainIcon) {
     ctx.drawImage(weather[rainIcon], x, y)
+  }
+  if (snowIcon) {
+    ctx.drawImage(weather[snowIcon], x, y)
   }
   if (hail) {
     ctx.drawImage(weather.hail, x, y)
