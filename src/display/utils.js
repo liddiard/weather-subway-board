@@ -105,7 +105,7 @@ const isDaytime = (date) => {
 
 // return sun or moon weather icons depending on if the passed datetime is
 // while the sun is above the horizon
-const getTimeSpecificWeatherIcon = (filename, date = new Date()) => 
+const getTimeSpecificWeatherIcon = (filename = '', date = new Date()) => 
   isDaytime(date) ? filename : filename.replace('sun', 'moon')
 
 module.exports = {
