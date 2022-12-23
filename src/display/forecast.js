@@ -170,14 +170,13 @@ const hasConflict = (temperatureGraph, { x, y }) => {
 
 // Checks if the given `boundingBox`, described by width/height, at a given x/y
 // `offset`, is adjacent to the `temperatureGraph` line with the given
-// `margin`. "Adjacent" in this case is defined as directly above or below +
+// `margin`. "Adjacent" in this case is defined as above or directly below +
 // margin, or to the left or right + margin, but NOT diagonally + margin.
-const isAbuttingBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
-  // check the pixels below and above the bounding box
+const isAboveBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
+  // check if the bottom of the bounding box is above the forecast graph line
   for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
     if (
-      hasConflict(temperatureGraph, { x: i, y: offset.y + boundingBox.height }) ||
-      hasConflict(temperatureGraph, { x: i, y: offset.y - margin  })
+      temperatureGraph[i] <= offset.y + boundingBox.height
     ) {
       return true
     }
@@ -219,7 +218,7 @@ const isWithinRightBound = (cursorPosition, text) =>
     y: TOP
   }
   const margin = 1
-  while (!isAbuttingBoundingBox(
+  while (!isAboveBoundingBox(
     temperatureGraph,
     boundingBox,
     { x: offset.x, y: offset.y + 1 },

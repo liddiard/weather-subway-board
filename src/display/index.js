@@ -70,8 +70,8 @@ const drawBoard = (departures, weather, hourlyForecast) => {
   const { canvas, ctx } = setUpCanvas()
 
   drawTrains(ctx, departures)
-  drawWeather(ctx, weather)
   drawForecast(ctx, hourlyForecast)
+  drawWeather(ctx, weather)
 
   drawNightShiftMask(ctx)
 
