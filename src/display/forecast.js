@@ -168,17 +168,20 @@ const hasConflict = (temperatureGraph, { x, y }) => {
   return temperatureGraph[x] === y
 }
 
-// Checks if the given `boundingBox`, described by width/height, at a given x/y
-// `offset`, is adjacent to the `temperatureGraph` line with the given
-// `margin`. "Adjacent" in this case is defined as above or directly below +
-// margin, or to the left or right + margin, but NOT diagonally + margin.
-const isAboveBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
+// Checks if the given temperature label, enclosed in `boundingBox` + `margin`,
+// can be moved down (vertically) from the `offset` position without
+// overlapping with any pixels from the `temperatureGraph`. `margin` is checked
+// directly above and to the sides of the `boundingBox`, not diagonally.
+// If the forecast line is already above or intersecting with the label at the
+// current position, returns false. (This can happen when there are large
+// temperature swings.)
+const canLowerTemperatureLabel = (temperatureGraph, boundingBox, offset, margin) => {
   // check if the bottom of the bounding box is above the forecast graph line
   for (let i = offset.x; i < offset.x + boundingBox.width; i++) {
     if (
-      temperatureGraph[i] <= offset.y + boundingBox.height
+      temperatureGraph[i] < offset.y + boundingBox.height + margin
     ) {
-      return true
+      return false
     }
   }
   // check the pixels to the right and left of the bounding box
@@ -187,10 +190,10 @@ const isAboveBoundingBox = (temperatureGraph, boundingBox, offset, margin) => {
       hasConflict(temperatureGraph, { x: offset.x + boundingBox.width, y: i }) ||
       hasConflict(temperatureGraph, { x: offset.x - margin, y: i })
     ) {
-      return true
+      return false
     }
   }
-  return false
+  return true
 }
 
 // given `text` that we want to center at `initialX`, return the position at
@@ -218,7 +221,7 @@ const isWithinRightBound = (cursorPosition, text) =>
     y: TOP
   }
   const margin = 1
-  while (!isAboveBoundingBox(
+  while (canLowerTemperatureLabel(
     temperatureGraph,
     boundingBox,
     { x: offset.x, y: offset.y + 1 },

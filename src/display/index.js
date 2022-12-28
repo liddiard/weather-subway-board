@@ -35,7 +35,7 @@ const setUpCanvas = () => {
 }
 
 // draw a partially transparent black rectangle over the entire image to "dim"
-// the display
+// the display, where opacity is between 0 and 1, 1 being fully dark (black)
 const drawOpacityMask = (ctx, opacity) => {
   ctx.fillStyle = `rgba(0,0,0, ${opacity})`
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
