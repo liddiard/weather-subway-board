@@ -30,6 +30,8 @@ const initImages = async () => {
 const cacheImages = (type) =>
   Promise.all(
     fs.readdirSync(path.resolve(baseDir, type))
+    // filter out hidden files like macOS's auto-generated ".DS_Store"
+    .filter(file => !file.startsWith('.'))
     .map(file => cacheImage(type, file)))
 
 // load a single image into cache
