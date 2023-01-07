@@ -74,16 +74,19 @@ const summarizeWeatherPeriods = (periods) => {
       /Clear|Sunny|Partly Sunny|Partly Clear|Partly Cloudy|Mostly Cloudy/.test(d)),
     // average percent cloud cover during the periods, from 0 to 1
     clouds: getAverageCloudCover(descriptions),
-    // whether or not fog is present during ANY period
+    // whether or not fog is possible during ANY period
     fog: descriptions.some(d =>
       d.includes('Fog')),
-    // most intense rain during the periods, scale from 1 to 3
+    // average rain during the periods, from 0 to 1
     rain: getAverageRain(descriptions),
     // whether thunderstorms are possible during ANY period
     thunderstorms: descriptions.some(d =>
       d.includes('Thunderstorms')),
-    // TODO: not implemented
+    // average snow during the periods, from 0 to 1
     snow: getAverageSnow(descriptions),
+    // whether mixed precipitation is possible during ANY period
+    mixed: descriptions.some(d => 
+      d.includes('Rain And Snow')),
     // whether hail is possible during ANY period
     hail: descriptions.some(d =>
       d.includes('Hail')),
@@ -148,6 +151,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     rain,
     thunderstorms,
     snow,
+    mixed,
     hail
   } = summary
   const { x, y } = offset
@@ -172,6 +176,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     !fog &&
     !rainIcon &&
     !snowIcon &&
+    !mixed &&
     cloudIcon !== 'overcast'
 
   if (showCelestialBody) {
@@ -181,7 +186,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     const filename = getTimeSpecificWeatherIcon('sun', midpointTime)
     ctx.drawImage(weather[filename], x, y)
   }
-  if (cloudIcon && !fog && !rain && !snow && !thunderstorms) {
+  if (cloudIcon && !fog && !rain && !snow && !thunderstorms && !mixed) {
     ctx.drawImage(weather[cloudIcon], x, y)
   }
   if (fog) {
@@ -190,11 +195,14 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   if (thunderstorms) {
     ctx.drawImage(weather.lightning, x, y)
   }
-  if (rainIcon) {
+  if (rainIcon && !mixed) {
     ctx.drawImage(weather[rainIcon], x, y)
   }
-  if (snowIcon) {
+  if (snowIcon && !mixed) {
     ctx.drawImage(weather[snowIcon], x, y)
+  }
+  if (mixed) {
+    ctx.drawImage(weather.mixed, x, y)
   }
   if (hail) {
     ctx.drawImage(weather.hail, x, y)
