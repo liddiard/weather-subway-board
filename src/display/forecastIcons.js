@@ -195,13 +195,13 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   if (thunderstorms) {
     ctx.drawImage(weather.lightning, x, y)
   }
-  if (rainIcon && !mixed) {
+  if (rainIcon && !snow && !mixed) {
     ctx.drawImage(weather[rainIcon], x, y)
   }
-  if (snowIcon && !mixed) {
+  if (snowIcon && !rain && !mixed) {
     ctx.drawImage(weather[snowIcon], x, y)
   }
-  if (mixed) {
+  if (mixed || (rain && snow)) {
     ctx.drawImage(weather.mixed, x, y)
   }
   if (hail) {
