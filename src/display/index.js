@@ -16,9 +16,10 @@ const {
   BOARD_IMAGE_FILE,
   LOCATION_COORDINATES,
   COLORS,
-  NIGHT_SHIFT_WARMTH
+  NIGHT_SHIFT_INTENSITY
 } = constants
 const { WIDTH, HEIGHT } = MATRIX
+const { WHITE, ORANGE } = COLORS
 const { DIM_DISPLAY_AMOUNT } = process.env
 
 
@@ -43,16 +44,19 @@ const drawOpacityMask = (ctx, opacity) => {
 
 // tint the display orange when the sun is down (simlar to Night Shift)
 const drawNightShiftMask = (ctx) => {
-  const { r, g, b } = COLORS.ORANGE
   const { altitude } = suncalc.getPosition(new Date(), ...LOCATION_COORDINATES)
-  const opacity = getInterpolatedColor(
+  // the color-shift mask is fully white (no effect on image) when the sun's
+  // altitude is above the max, and is fully orange (max effect) when the sun's
+  // altutide is below the minimum. between these altitudes, the image becomes
+  // slowly more/less tinted
+  const { r, g, b } = getInterpolatedColor(
     altitude,
-    [NIGHT_SHIFT_WARMTH, 0],
+    [ORANGE, WHITE],
     { min: -0.2, max: 0.2 }
   )
   // retain the darkest pixels from each layer
   ctx.globalCompositeOperation = 'darken'
-  ctx.fillStyle = `rgba(${r},${g},${b}, ${opacity})`
+  ctx.fillStyle = `rgba(${r},${g},${b}, ${NIGHT_SHIFT_INTENSITY}`
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
   // reset to default value
   ctx.globalCompositeOperation = 'source-over'
