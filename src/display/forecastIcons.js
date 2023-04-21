@@ -40,7 +40,7 @@ const getAverageCloudCover = (descriptions) => {
 const getAverageRain = (descriptions) => {
   const descToScore = {
     'Light Rain': 1,
-    'Rain Showers': 1,
+    'Showers': 1,
     'Drizzle': 1,
     '^Rain$': 2,
     'Rain Likely': 2,
