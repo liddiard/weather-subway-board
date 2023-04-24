@@ -36,7 +36,7 @@ bulb = wizlight(bulb_ip)
 
 
 def log(msg):
-    return f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] {msg}"
+    print(f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] {msg}")
 
 # check if smart bulb is on
 async def get_bulb_is_on():
