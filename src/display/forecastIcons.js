@@ -44,6 +44,7 @@ const getAverageRain = (descriptions) => {
     'Drizzle': 1,
     '^Rain$': 2,
     'Rain Likely': 2,
+    'Periods Of Rain': 2,
     'Heavy Rain': 3
   }
   return getAverageWeather(descriptions, descToScore)
