@@ -49,17 +49,17 @@ async def get_bulb_is_on():
 
 
 async def main():
-    print("Starting image viewer main loop…")
+    # If smart bulb is off, then don't display anything on the matrix.
+    # If you're not me (original code author), you should probably remove
+    # this condition because it's specific to my particular smarthome setup
+    bulb_is_on = False
 
+    print("Starting image viewer main loop…")
     while True:
-        # If smart bulb is off, then don't display anything on the matrix.
-        # If you're not me (original code author), you should probably remove
-        # this condition because it's specific to my particular smarthome setup
-        bulb_is_on = False
         try:
             bulb_is_on = await get_bulb_is_on()
         except exceptions.WizLightTimeOutError:
-            log("Timed out trying to connect to bulb, defaulting to OFF.")
+            log("Timed out connecting to bulb, remaining in current state.")
         
         if not bulb_is_on:
             matrix.Clear()
