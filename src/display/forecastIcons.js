@@ -193,7 +193,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     const filename = getTimeSpecificWeatherIcon('sun', midpointTime)
     ctx.drawImage(weather[filename], x, y)
   }
-  if (cloudIcon && !fog && !rain && !snow && !thunderstorms && !mixed) {
+  if (cloudIcon && !fog && !haze && !rain && !snow && !thunderstorms && !mixed) {
     ctx.drawImage(weather[cloudIcon], x, y)
   }
   if (haze) {
