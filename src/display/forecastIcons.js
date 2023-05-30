@@ -75,6 +75,9 @@ const summarizeWeatherPeriods = (periods) => {
       /Clear|Sunny|Partly Sunny|Partly Clear|Partly Cloudy|Mostly Cloudy/.test(d)),
     // average percent cloud cover during the periods, from 0 to 1
     clouds: getAverageCloudCover(descriptions),
+    // whether or not haze is possible during ANY period
+    haze: descriptions.some(d =>
+      d.includes('Haze')),
     // whether or not fog is possible during ANY period
     fog: descriptions.some(d =>
       d.includes('Fog')),
@@ -148,6 +151,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     endTime,
     clear,
     clouds,
+    haze,
     fog,
     rain,
     thunderstorms,
@@ -163,10 +167,11 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   // this way:
   // 1. celestial body (base)
   // 2. cloud (replace sun if overcast)
-  // 3. fog (replace all previous)
-  // 4. lightning (replace sun, all cloud)
-  // 5. rain & snow (replace sun, cloud if overcast)
-  // 6. hail
+  // 3. haze (replace all previous)
+  // 4. fog (replace all previous)
+  // 5. lightning (replace sun, all cloud)
+  // 6. rain & snow (replace sun, cloud if overcast)
+  // 7. hail
 
   const cloudIcon = getCloudIcon(clouds)
   const rainIcon = getRainIcon(rain)
@@ -175,6 +180,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
     clear &&
     !thunderstorms &&
     !fog &&
+    !haze &&
     !rainIcon &&
     !snowIcon &&
     !mixed &&
@@ -189,6 +195,9 @@ const drawWeatherIcon = (ctx, summary, offset) => {
   }
   if (cloudIcon && !fog && !rain && !snow && !thunderstorms && !mixed) {
     ctx.drawImage(weather[cloudIcon], x, y)
+  }
+  if (haze) {
+    ctx.drawImage(weather.haze, x, y)
   }
   if (fog) {
     ctx.drawImage(weather.fog, x, y)
