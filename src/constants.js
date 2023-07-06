@@ -26,17 +26,21 @@ const constants = {
   // update display at these seconds of every minute
   // expects at least 2 values
   UPDATE_AT_SECS: new Set([0, 30]),
+  // https://www.color-name.com/
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },
     BLACK: { r: 0, g: 0, b: 0 },
-    RED: { r: 255, g: 0, b: 0 },
-    GREEN: { r: 0, g: 255, b: 0 },
-    BLUE: { r: 0, g: 0, b: 255 },
-    CYAN: { r: 0, g: 255, b: 255 },
     MAGENTA: { r: 255, g: 0, b: 255 },
+    PURPLE: { r: 128, g: 0, b: 255 },
+    BLUE: { r: 0, g: 0, b: 255 },
+    AZURE: { r: 0, g: 128, b: 255 },
+    CYAN: { r: 0, g: 255, b: 255 },
+    GUPPIE_GREEN: { r: 0, g: 255, b: 128 },
+    GREEN: { r: 0, g: 255, b: 0 },
     YELLOW: { r: 255, g: 255, b: 0 },
     ORANGE: { r: 255, g: 128, b: 0 },
-    LIGHT_MAGENTA: { r: 255, g: 128, b: 255 },
+    RED: { r: 255, g: 0, b: 0 },
+    CONGO_PINK: { r: 255, g: 128, b: 128 },
     DARK_ORANGE: { r: 32, g: 16, b: 0 },
     DARK_PURPLE: { r: 16, g: 0, b: 32 }
   },
@@ -95,16 +99,32 @@ const constants = {
 
 const {
   MAGENTA,
+  PURPLE,
   BLUE,
+  AZURE,
   CYAN,
+  GUPPIE_GREEN,
   GREEN,
   YELLOW,
+  ORANGE,
   RED,
-  LIGHT_MAGENTA
+  CONGO_PINK
 } = constants.COLORS
 
 constants.GRADIENTS = {
-  TEMPERATURE: [LIGHT_MAGENTA, BLUE, CYAN, GREEN, YELLOW, RED],
+  TEMPERATURE: [
+    MAGENTA,
+    PURPLE,
+    BLUE,
+    AZURE,
+    CYAN,
+    GUPPIE_GREEN,
+    GREEN,
+    YELLOW,
+    ORANGE,
+    RED,
+    CONGO_PINK
+  ],
   HUMIDITY: [RED, YELLOW, GREEN, CYAN, BLUE],
   WIND: [GREEN, YELLOW, RED],
   SUN: [MAGENTA, YELLOW],
