@@ -87,7 +87,7 @@ const summarizeWeatherPeriods = (periods) => {
     rain: getAverageRain(descriptions),
     // whether thunderstorms are possible during ANY period
     thunderstorms: descriptions.some(d =>
-      d.includes('Thunderstorms')),
+      /Thunderstorms|T-storms/.test(d)),
     // average snow during the periods, from 0 to 1
     snow: getAverageSnow(descriptions),
     // whether mixed precipitation is possible during ANY period
