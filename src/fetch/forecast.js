@@ -9,7 +9,6 @@ const fetchForecast = async (stationId, coordinates, options = {}) => {
       } 
     } 
   } = await axios.get(`https://api.weather.gov/gridpoints/${stationId}/${coordinates.join()}/forecast/${type}?units=si`)
-  .catch(err => console.error(err))
   return periods
 }
 

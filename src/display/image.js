@@ -12,7 +12,8 @@ const images = {
   directions: {},
   font: {},
   rulers: {},
-  weather: {}
+  weather: {},
+  inop: {}
 }
 
 // fill the entire image cache with files from disk

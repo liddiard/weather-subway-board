@@ -35,12 +35,7 @@ const addRelativeTimes = (departures) =>
   }))
 
 const getTrains = async (stationId, direction) => {
-  let response
-  try {
-    response = await client.departures(stationId)
-  } catch (ex) {
-    throw Error(`Unable to retrieve departures for station ID ${stationId}. Network Error: ${ex.message}`)
-  }
+  const response = await client.departures(stationId)
   const departures = response.lines[0].departures[direction]
   return [
     convertResponseDates,

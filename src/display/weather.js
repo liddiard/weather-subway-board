@@ -5,7 +5,8 @@ const {
   getTextWidth,
   tintImage,
   getInterpolatedColor,
-  getTimeSpecificWeatherIcon 
+  getTimeSpecificWeatherIcon, 
+  handleInop
 } = require('./utils')
 
 
@@ -146,18 +147,22 @@ const getSpacing = (weather) => {
 
 // draw current weather conditions along the top of the board
 const drawWeather = (ctx, weather) => {
+  if (weather.status === 'rejected') {
+    return handleInop(ctx, 'weather', weather.reason, { x: 0, y: 0 })
+  }
+
   const {
     temperature,
     textDescription,
     relativeHumidity,
     wind
-  } = weather
+  } = weather.value
 
   const layout = {
     cursorPosition: 0,
     top: 0,
     // space between different segments like time & temperature
-    spacing: getSpacing(weather),
+    spacing: getSpacing(weather.value),
     images,
     imageWidth: 5
   }
