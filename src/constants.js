@@ -28,7 +28,6 @@ const constants = {
   UPDATE_AT_SECS: new Set([0, 30]),
   // how often to update each section of the board
   UPDATE_FREQUENCY_SECS: {
-    TRAINS: 30,
     WEATHER: 5 * 60,
     FORECAST: 15 * 60
   },
