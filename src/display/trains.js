@@ -1,6 +1,6 @@
 const constants = require('../constants')
 const { images } = require('./image')
-const { drawPixel, handleInop } = require('./utils')
+const { drawPixel } = require('./utils')
 
 
 const { MATRIX, TRAINS, COLORS } = constants
@@ -29,16 +29,12 @@ const drawTrainRow = (ctx, minute, trains) => {
 // timeline and two columns: local on the left in blue, and express on the
 // right in white
 const drawTrains = (ctx, departures) => {
-  if (departures.status === 'rejected') {
-    return handleInop(ctx, 'trains', departures.reason, coords)
-  }
-
   ctx.drawImage(images.rulers.vertical, coords.x, coords.y)
 
   // create an array of trains `Set`s expected to arrive in a given minute,
   // where the array index is the minute
   const binnedDepartures = Array.from({ length: MATRIX.HEIGHT }, () => new Set())
-  departures.value
+  departures
   .filter(departure => departure.minutesFromNow < MATRIX.HEIGHT)
   .forEach(departure => {
     binnedDepartures[departure.minutesFromNow].add(departure.routeId)

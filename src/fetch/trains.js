@@ -1,5 +1,6 @@
 const { createClient } = require('mta-realtime-subway-departures')
-
+const { cache } = require('./utils')
+const { UPDATE_FREQUENCY_SECS } = require('../constants')
 
 // https://api.mta.info/#/AccessKey
 const { API_KEY } = process.env
@@ -48,5 +49,5 @@ const getTrains = async (stationId, direction) => {
 }
 
 module.exports = {
-  getTrains
+  getTrains: cache(getTrains, UPDATE_FREQUENCY_SECS.TRAINS)
 }

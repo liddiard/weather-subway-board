@@ -58,8 +58,8 @@ initImages()
       .catch(ex => console.error(ex))
       lastUpdatedSec = currentSec
     } else {
-    // sleep to reduce CPU usage on slow Raspberry Pis
-    await sleep(1)
+      // sleep to reduce CPU usage on slow Raspberry Pis
+      await sleep(1)
     }
   }
 })

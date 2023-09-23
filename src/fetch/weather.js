@@ -1,7 +1,8 @@
 const axios = require('axios')
+const { cache } = require('./utils')
 const constants = require('../constants')
 
-const { VRB } = constants
+const { UPDATE_FREQUENCY_SECS, VRB } = constants
 
 const fetchWeather = async (stationId) => {
   const { 
@@ -104,5 +105,5 @@ const getWeather = async (stationId) => {
 }
 
 module.exports = {
-  getWeather
+  getWeather: cache(getWeather, UPDATE_FREQUENCY_SECS.WEATHER)
 }

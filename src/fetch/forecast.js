@@ -1,4 +1,6 @@
 const axios = require('axios')
+const { cache } = require('./utils')
+const { UPDATE_FREQUENCY_SECS } = require('../constants')
 
 const fetchForecast = async (stationId, coordinates, options = {}) => {
   const type = options.type || ''
@@ -11,7 +13,6 @@ const fetchForecast = async (stationId, coordinates, options = {}) => {
   } = await axios.get(`https://api.weather.gov/gridpoints/${stationId}/${coordinates.join()}/forecast/${type}?units=si`)
   return periods
 }
-
 
 const parseForecast = (periods) =>
   periods
@@ -28,5 +29,5 @@ const getForecast = async (stationId, coordinates, options) => {
 }
 
 module.exports = {
-  getForecast
+  getForecast: cache(getForecast, UPDATE_FREQUENCY_SECS.FORECAST)
 }

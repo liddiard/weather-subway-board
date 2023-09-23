@@ -108,12 +108,6 @@ const isDaytime = (date) => {
 const getTimeSpecificWeatherIcon = (filename = '', date = new Date()) => 
   isDaytime(date) ? filename : filename.replace('sun', 'moon')
 
-// draw an "INOP" message over a section of the board that failed to fetch
-const handleInop = (ctx, segment, reason, { x, y }) => {
-  console.error(`Error fetching ${segment}:`, reason)
-  ctx.drawImage(images.inop[segment], x, y)
-}
-
 module.exports = {
   drawText,
   tintImage,
@@ -121,6 +115,5 @@ module.exports = {
   getInterpolatedColor,
   getTextWidth,
   isDaytime,
-  getTimeSpecificWeatherIcon,
-  handleInop
+  getTimeSpecificWeatherIcon
 }

@@ -1,7 +1,7 @@
 const suncalc = require('suncalc')
 
 const { drawForecastIcons } = require('./forecastIcons')
-const { drawText, drawPixel, getInterpolatedColor, getTextWidth, handleInop } = require('./utils')
+const { drawText, drawPixel, getInterpolatedColor, getTextWidth } = require('./utils')
 const constants  = require('../constants')
 
 
@@ -271,11 +271,7 @@ const drawTemperatureExtremes = (ctx, periods, temperatureGraph) => {
 // draw a line graph with hourly temperature trends, labels of minimum and
 // maximum temperatures, and forecast icons
 const drawForecast = (ctx, hourlyForecast) => {
-  if (hourlyForecast.status === 'rejected') {
-    return handleInop(ctx, 'forecast', hourlyForecast.reason, { x: 0, y: TOP })
-  }
-
-  const periods = hourlyForecast.value
+  const periods = hourlyForecast
   // remove any past periods (occasionally present in response)
   .filter(p => p.endTime > new Date())
   .slice(0, WIDTH)

@@ -26,6 +26,12 @@ const constants = {
   // update display at these seconds of every minute
   // expects at least 2 values
   UPDATE_AT_SECS: new Set([0, 30]),
+  // how often to update each section of the board
+  UPDATE_FREQUENCY_SECS: {
+    TRAINS: 30,
+    WEATHER: 5 * 60,
+    FORECAST: 15 * 60
+  },
   // https://www.color-name.com/
   COLORS: {
     WHITE: { r: 255, g: 255, b: 255 },
