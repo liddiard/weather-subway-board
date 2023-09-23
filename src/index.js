@@ -27,7 +27,7 @@ const main = async () => {
       departures,
       weather,
       hourlyForecast
-    ] = await Promise.allSettled([
+    ] = await Promise.all([
       getTrains(SUBWAY_STATION_ID, SOUTH),
       getWeather(WEATHER_STATION_ID),
       getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT, { type: 'hourly' })

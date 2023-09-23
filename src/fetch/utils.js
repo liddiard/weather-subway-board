@@ -6,7 +6,7 @@ const cache = (fn, timeout) => {
       const now = Date.now()
       const secsElapsed = Math.ceil((now - lastCalled) / 1000)
 
-      if (lastCalled && 
+      if (lastCalled &&
           cache !== null &&
           secsElapsed < timeout) {
           return cache // Return cached value if within the timeout
@@ -16,7 +16,7 @@ const cache = (fn, timeout) => {
         cache = await fn(...args)
         lastCalled = now
       } catch (ex) {
-        console.warn('Function call failed with error:', ex)
+        console.warn(`[${new Date()}] Function call failed with error:`, ex)
         console.warn('Returning cached value:', cache)
       }
       return cache
