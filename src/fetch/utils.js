@@ -23,8 +23,7 @@ const cache = (fn, timeout) => {
         cache = await fn(...args)
         lastCalled = now
       } catch (ex) {
-        console.warn(`[${new Date()}] Function call failed with error:`, ex)
-        console.warn('Returning cached value:', cache)
+        console.warn(`[${new Date()}] Function call failed, returning cached value.`, ex)
       }
       return cache
   }
