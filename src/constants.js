@@ -95,7 +95,8 @@ const constants = {
     'Light Snow': 'flurries',
     'Light Snow and Fog/Mist': 'fog_with_flurries',
     'Snow and Fog/Mist': 'fog_with_heavy_snow',
-    'Heavy Snow and Fog/Mist': 'fog_with_blizzard'
+    'Heavy Snow and Fog/Mist': 'fog_with_blizzard',
+    'Light Freezing Rain and Fog/Mist': 'fog_with_mixed'
   },
   // how "warm" to make the display colors when the sun is down, from 0 (not at
   // all) to 1 (white text appears fully orange)
