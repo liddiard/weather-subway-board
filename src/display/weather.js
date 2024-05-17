@@ -52,6 +52,13 @@ const drawHumidity = (ctx, layout, humidity) => {
 // possible weather descriptions)
 const drawWeatherIcon = (ctx, layout, textDescription) => {
   const { weather } = layout.images
+
+  // sometimes the description is an empty string; skip this function if so
+  if (!textDescription) {
+    console.warn(`Empty weather description; skipping weather icon`)
+    return layout.cursorPosition
+  }
+  
   let filename = getTimeSpecificWeatherIcon(WEATHER_DESCRIPTION_TO_IMAGE[textDescription])
   if (!filename) {
     console.warn(`No weather icon for: '${textDescription}'`)
