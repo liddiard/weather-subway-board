@@ -6,19 +6,16 @@ const constants = {
   BOARD_IMAGE_FILE: 'board.png',
   // Station to display departures from
   // http://web.mta.info/developers/data/nyct/subway/Stations.csv
-  SUBWAY_STATION_ID: 313, // Upper West Side, 72 St & Broadway
+  // (Complex ID)
+  SUBWAY_STATION_ID: 636, // Downtown Brooklyn, Jay St-MetroTech
   // approximate coordinates of the station
-  LOCATION_COORDINATES: [40.77, -73.98],
+  LOCATION_COORDINATES: [40.69, -73.99],
   WEATHER_STATION_ID: 'KNYC', // Central Park
   FORECAST_STATION_ID: 'OKX', // New York area
   VRB: 'VRB', // light and variable winds
   // National Weather Service forecast gridpoints for the station above
   // https://www.weather.gov/documentation/services-web-api#/default/gridpoint
-  FORECAST_GRIDPOINT: [33, 37],
-  TRAINS: {
-    LOCAL: new Set(['1']),
-    EXPRESS: new Set(['2', '3', '5']),
-  },
+  FORECAST_GRIDPOINT: [34, 34],
   DIRECTIONS: {
     NORTH: 'N',
     SOUTH: 'S'
@@ -70,7 +67,7 @@ const constants = {
   LETTER_SPACING: 1,
   // forecast graph size and position
   FORECAST_GRAPH: {
-    WIDTH: 58,
+    WIDTH: 56,
     TOP: 6,
     BOTTOM: 25
   },
@@ -140,5 +137,23 @@ constants.GRADIENTS = {
   WIND: [GREEN, YELLOW, RED],
   SUN: [MAGENTA, YELLOW],
 }
+
+constants.TRAINS = [
+  {
+    color: YELLOW,
+    xCoord: 58,
+    lines: new Set(['N', 'R', 'W'])
+  },
+  {
+    color: ORANGE,
+    xCoord: 60,
+    lines: new Set(['F'])
+  },
+  {
+    color: BLUE,
+    xCoord: 62,
+    lines: new Set(['A', 'C'])
+  }
+]
 
 module.exports = constants

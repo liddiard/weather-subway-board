@@ -238,11 +238,13 @@ const drawWeatherIcon = (ctx, summary, offset) => {
 
 // draw forecast icons along the bottom of the forecast graph
 const drawForecastIcons = (ctx, periods) => {
-  const numToAggregate = 6
-  const top = 27
-  for (let i = 0; i < periods.length; i += numToAggregate) {
-    const summary = summarizeWeatherPeriods(periods.slice(i, i + numToAggregate))
-    drawWeatherIcon(ctx, summary, { x: i, y: top })
+  const numToAggregate = 6 // how many periods (hours) to summarize in one icon
+  const top = 27 // Y coordinate
+  const numIcons = Math.floor(periods.length / numToAggregate) // how many icons to show in total
+  for (let i = 0; i < numIcons; i++) {
+    const periodStart = i * numToAggregate
+    const summary = summarizeWeatherPeriods(periods.slice(periodStart, periodStart + numToAggregate))
+    drawWeatherIcon(ctx, summary, { x: periodStart, y: top })
   }
 }
 

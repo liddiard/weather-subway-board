@@ -3,23 +3,21 @@ const { images } = require('./image')
 const { drawPixel } = require('./utils')
 
 
-const { MATRIX, TRAINS, COLORS } = constants
+const { MATRIX, TRAINS } = constants
 const coords = {
-  x: 59,
+  x: 57,
   y: 0
 }
 
-const isLocal = (routeId) =>
-  TRAINS.LOCAL.has(routeId)
-
 // draw the trains on a given row of the departure timeline, if applicable
 const drawTrainRow = (ctx, minute, trains) => {
-  const { WHITE, RED } = COLORS
-  trains.forEach((train, i) => {
-    const _isLocal = isLocal(train)
-    const color = _isLocal ? RED : WHITE
-    drawPixel(ctx, color, { 
-      x: _isLocal ? 60 : 62,
+  trains.forEach((train) => {
+    const config = TRAINS.find(t => t.lines.has(train))
+    if (!config) {
+      return
+    }
+    drawPixel(ctx, config.color, { 
+      x: config.xCoord,
       y: (MATRIX.HEIGHT - 1) - minute
     })
   })

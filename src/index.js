@@ -12,7 +12,7 @@ const {
   UPDATE_AT_SECS,
   DIRECTIONS
 } = constants
-const { SOUTH } = DIRECTIONS
+const { NORTH } = DIRECTIONS
 
 const sleep = (sec) => new Promise(resolve => setTimeout(resolve, sec * 1000))
 
@@ -28,7 +28,7 @@ const main = async () => {
       weather,
       hourlyForecast
     ] = await Promise.all([
-      getTrains(SUBWAY_STATION_ID, SOUTH),
+      getTrains(SUBWAY_STATION_ID, NORTH),
       getWeather(WEATHER_STATION_ID),
       getForecast(FORECAST_STATION_ID, FORECAST_GRIDPOINT, { type: 'hourly' })
     ])

@@ -19,7 +19,7 @@ const {
   NIGHT_SHIFT_INTENSITY
 } = constants
 const { WIDTH, HEIGHT } = MATRIX
-const { WHITE, ORANGE } = COLORS
+const { WHITE, DARK_ORANGE } = COLORS
 const { DIM_DISPLAY_AMOUNT } = process.env
 
 
@@ -51,7 +51,7 @@ const drawNightShiftMask = (ctx) => {
   // slowly more/less tinted
   const { r, g, b } = getInterpolatedColor(
     altitude,
-    [ORANGE, WHITE],
+    [DARK_ORANGE, WHITE],
     { min: -0.2, max: 0.2 }
   )
   // retain the darkest pixels from each layer

@@ -35,7 +35,9 @@ const addRelativeTimes = (departures) =>
 
 const getTrains = async (stationId, direction) => {
   const response = await client.departures(stationId)
-  const departures = response.lines[0].departures[direction]
+  const departures = response.lines
+  .flatMap(line => line.departures[direction])
+  
   return [
     convertResponseDates,
     removePastDates,
