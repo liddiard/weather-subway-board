@@ -102,7 +102,7 @@ const constants = {
   },
   // how "warm" to make the display colors when the sun is down, from 0 (not at
   // all) to 1 (white text appears fully orange)
-  NIGHT_SHIFT_INTENSITY: 0.33
+  NIGHT_SHIFT_INTENSITY: 0.67
 }
 
 const {
