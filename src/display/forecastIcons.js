@@ -240,7 +240,7 @@ const drawWeatherIcon = (ctx, summary, offset) => {
 const drawForecastIcons = (ctx, periods) => {
   const numToAggregate = 6 // how many periods (hours) to summarize in one icon
   const top = 27 // Y coordinate
-  const numIcons = Math.floor(periods.length / numToAggregate) // how many icons to show in total
+  const numIcons = Math.ceil(periods.length / numToAggregate) // how many icons to show in total
   for (let i = 0; i < numIcons; i++) {
     const periodStart = i * numToAggregate
     const summary = summarizeWeatherPeriods(periods.slice(periodStart, periodStart + numToAggregate))
