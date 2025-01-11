@@ -42,7 +42,11 @@ def log(msg):
 async def get_bulb_is_on():
     try:
         state = await bulb.updateState()
-    except (OSError, asyncio.TimeoutError) as ex:
+    except (
+        OSError,
+        asyncio.TimeoutError,
+        exceptions.WizLightConnectionError
+    ) as ex:
         print(f"Unable to get bulb status; defaulting to OFF. {ex}")
         return False
     return state.get_state()
