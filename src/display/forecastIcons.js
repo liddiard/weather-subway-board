@@ -55,7 +55,9 @@ const getAverageRain = (descriptions) => {
 const getAverageSnow = (descriptions) => {
   const descToScore = {
     'Light Snow': 1,
+    'Slight Chance Light Snow': 1,
     'Snow Showers': 1,
+    'Snow Likley': 1,
     '^Snow$': 2,
     'Heavy Snow': 3
   }
@@ -75,7 +77,7 @@ const summarizeWeatherPeriods = (periods) => {
       /Clear|Sunny|Partly Sunny|Partly Clear|Partly Cloudy|Mostly Cloudy/.test(d)),
     // average percent cloud cover during the periods, from 0 to 1
     clouds: getAverageCloudCover(descriptions),
-    smoke: descriptions.some(d => 
+    smoke: descriptions.some(d =>
       d.includes('Smoke')),
     // whether or not haze is possible during ANY period
     haze: descriptions.some(d =>
@@ -91,7 +93,7 @@ const summarizeWeatherPeriods = (periods) => {
     // average snow during the periods, from 0 to 1
     snow: getAverageSnow(descriptions),
     // whether mixed precipitation is possible during ANY period
-    mixed: descriptions.some(d => 
+    mixed: descriptions.some(d =>
       d.includes('Rain And Snow')),
     // whether hail is possible during ANY period
     hail: descriptions.some(d =>
@@ -122,10 +124,10 @@ const getRainIcon = (rainAmount) => {
   if (rainAmount === 0) {
     return null
   }
-  if (rainAmount <= 1/3) {
+  if (rainAmount <= 1 / 3) {
     return 'sprinkles'
   }
-  if (rainAmount <= 2/3) {
+  if (rainAmount <= 2 / 3) {
     return 'heavy_rain'
   }
   return 'downpour'
@@ -136,10 +138,10 @@ const getSnowIcon = (snowAmount) => {
   if (snowAmount === 0) {
     return null
   }
-  if (snowAmount <= 1/3) {
+  if (snowAmount <= 1 / 3) {
     return 'flurries'
   }
-  if (snowAmount <= 2/3) {
+  if (snowAmount <= 2 / 3) {
     return 'heavy_snow'
   }
   return 'blizzard'
