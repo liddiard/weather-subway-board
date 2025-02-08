@@ -55,9 +55,8 @@ const getAverageRain = (descriptions) => {
 const getAverageSnow = (descriptions) => {
   const descToScore = {
     'Light Snow': 1,
-    'Slight Chance Light Snow': 1,
     'Snow Showers': 1,
-    'Snow Likley': 1,
+    'Snow Likely': 1,
     '^Snow$': 2,
     'Heavy Snow': 3
   }
@@ -94,7 +93,7 @@ const summarizeWeatherPeriods = (periods) => {
     snow: getAverageSnow(descriptions),
     // whether mixed precipitation is possible during ANY period
     mixed: descriptions.some(d =>
-      d.includes('Rain And Snow')),
+      /Rain And Snow|Sleet/.test(d)),
     // whether hail is possible during ANY period
     hail: descriptions.some(d =>
       d.includes('Hail')),
