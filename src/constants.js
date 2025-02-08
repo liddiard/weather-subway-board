@@ -104,6 +104,7 @@ const constants = {
     'Freezing Rain and Fog/Mist': 'fog_with_mixed',
     'Clear and Windy': 'wind',
     'Unknown Precipitation': 'unknown_precip',
+    'Unknown Precipitation and Fog/Mist': 'fog_with_unknown_precip',
   },
   // how "warm" to make the display colors when the sun is down, from 0 (not at
   // all) to 1 (white text appears fully orange)
