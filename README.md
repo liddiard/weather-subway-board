@@ -39,11 +39,8 @@ Tested running:
 
 ### Generate board image
 
-1. Create an account at https://api.mta.info/#/signup
-2. Get an API key from https://api.mta.info/#/AccessKey (link only goes to the right page once logged in)
-
 ```shell
-API_KEY=<Your API key> npm start
+npm start
 ```
 
 You can also `npm run dev` with your API key prepended for an auto-reloading server.
@@ -69,7 +66,7 @@ Click image to enlarge.
 [![Explanation of LED matrix board layout](graphics/readme/board_explanation.png)](https://github.com/liddiard/nyc-subway-board/blob/main/graphics/readme/board_explanation.png?raw=true)
 
 Matrix images like this can be displayed with the web-based board viewer mentioned above.
- 
+
 The board only shows trains going in one direction because most of the time I only go downtown from my stop. Not needing to show both directions freed up more space for the weather/forecast visualization.
 
 There are earlier branches of this repo that only display subway departures without weather information:
@@ -95,6 +92,5 @@ There are earlier branches of this repo that only display subway departures with
 
 [`scripts/`](scripts/) One-time bash scripts used for dependency installation:
 
-- `install_canvas_dependencies.sh` automatically runs before `npm install` to install the required `canvas` package dependencies. `npm install` will fail without doing this first. 
+- `install_canvas_dependencies.sh` automatically runs before `npm install` to install the required `canvas` package dependencies. `npm install` will fail without doing this first.
 - `build_rpi-rgb-led-matrix.sh` builds the binaries for `rpi-rgb-led-matrix` on Linux OSs with `apt-get` only. This library displays the board image file on the LED matrix.
-

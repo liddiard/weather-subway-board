@@ -1,13 +1,5 @@
 const { createClient } = require('mta-realtime-subway-departures')
 
-// https://api.mta.info/#/AccessKey
-// const { API_KEY } = process.env
-// const client = createClient(API_KEY)
-
-// if (!API_KEY) {
-//   throw Error('Missing required environment variable `API_KEY`. Get one here: https://api.mta.info/#/AccessKey ')
-// }
-
 const client = createClient()
 
 // convert times from seconds-based Unix timestamps to JS Date objects
