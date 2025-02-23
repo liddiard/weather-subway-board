@@ -18,14 +18,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.27.2",
-    "canvas": "^2.9.3",
+    "axios": "^1.7.9",
+    "canvas": "^3.1.0",
     "color-interpolate": "^1.0.5",
     "mta-realtime-subway-departures": "^1.2.1",
     "suncalc": "^1.9.0"
   },
   "devDependencies": {
-    "eslint": "^8.22.0",
-    "nodemon": "^2.0.19"
+    "eslint": "^9.21.0",
+    "nodemon": "^3.1.9"
   }
 }
