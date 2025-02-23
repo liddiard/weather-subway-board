@@ -1,5 +1,5 @@
 const { images } = require('./image')
-const constants  = require('../constants')
+const constants = require('../constants')
 const {
   drawText,
   getTextWidth,
@@ -58,13 +58,13 @@ const drawWeatherIcon = (ctx, layout, textDescription) => {
     console.warn(`Empty weather description; skipping weather icon`)
     return layout.cursorPosition
   }
-  
+
   let filename = getTimeSpecificWeatherIcon(WEATHER_DESCRIPTION_TO_IMAGE[textDescription])
   if (!filename) {
     console.warn(`No weather icon for: '${textDescription}'`)
     filename = 'not_available'
   }
-  
+
   ctx.drawImage(weather[filename],
     layout.cursorPosition,
     layout.top
@@ -114,8 +114,8 @@ const getTimeString = () =>
     // ref: https://github.com/moment/luxon/issues/726#issuecomment-675151145
     hourCycle: 'h23'
   })
-  .replace(':', '') // remove the colon separator
-  .replace(/^0/, '') // remove leading zero
+    .replace(':', '') // remove the colon separator
+    .replace(/^0/, '') // remove leading zero
 
 // display the current 24-hour time without leading zero or colon separator
 // (not shown due to space constraints)
@@ -140,11 +140,11 @@ const getSpacing = (weather) => {
     getTimeString(),
     temperature,
     Math.round(relativeHumidity),
-    wind.gust || wind.speed
+    Math.round(wind.gust || wind.speed)
   ]
-  .reduce((acc, cur) => 
-    acc + getTextWidth(cur.toString())
-  , 0)
+    .reduce((acc, cur) =>
+      acc + getTextWidth(cur.toString())
+      , 0)
 
   // max "breakpoint" for 3 spaces: based on variable text width +
   // fixed elements' width (icons, static text)

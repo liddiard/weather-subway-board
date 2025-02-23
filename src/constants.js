@@ -11,7 +11,6 @@ const constants = {
   LOCATION_COORDINATES: [40.77, -73.98],
   WEATHER_STATION_ID: 'KNYC', // Central Park
   FORECAST_STATION_ID: 'OKX', // New York area
-  VRB: 'VRB', // light and variable winds
   // National Weather Service forecast gridpoints for the station above
   // https://www.weather.gov/documentation/services-web-api#/default/gridpoint
   FORECAST_GRIDPOINT: [33, 37],

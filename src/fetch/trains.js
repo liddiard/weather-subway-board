@@ -1,17 +1,19 @@
 const { createClient } = require('mta-realtime-subway-departures')
 
 // https://api.mta.info/#/AccessKey
-const { API_KEY } = process.env
-const client = createClient(API_KEY)
+// const { API_KEY } = process.env
+// const client = createClient(API_KEY)
 
-if (!API_KEY) {
-  throw Error('Missing required environment variable `API_KEY`. Get one here: https://api.mta.info/#/AccessKey ')
-}
+// if (!API_KEY) {
+//   throw Error('Missing required environment variable `API_KEY`. Get one here: https://api.mta.info/#/AccessKey ')
+// }
+
+const client = createClient()
 
 // convert times from seconds-based Unix timestamps to JS Date objects
-const convertResponseDates = (departures) => 
+const convertResponseDates = (departures) =>
   departures.map(d => ({
-    ...d, 
+    ...d,
     time: new Date(d.time * 1000)
   }))
 
@@ -30,7 +32,7 @@ const sortResponseList = (departures) =>
 const addRelativeTimes = (departures) =>
   departures.map(d => ({
     ...d,
-    minutesFromNow: Math.floor((d.time - new Date())/1000/60)
+    minutesFromNow: Math.floor((d.time - new Date()) / 1000 / 60)
   }))
 
 const getTrains = async (stationId, direction) => {
@@ -42,8 +44,8 @@ const getTrains = async (stationId, direction) => {
     sortResponseList,
     addRelativeTimes
   ]
-  .reduce((acc, cur) => 
-    cur(acc), departures)
+    .reduce((acc, cur) =>
+      cur(acc), departures)
 }
 
 module.exports = {
