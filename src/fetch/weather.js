@@ -47,9 +47,9 @@ const getWeather = async (stationId) => {
   } = response
 
   const wind = {
-    direction: windDirection.value === null ?
-      'Ø' :
-      degreeToIntermediateDirection(windDirection.value),
+    direction: windDirection.value ?
+      degreeToIntermediateDirection(windDirection.value) :
+      'Ø',
     speed: windSpeed.value === null ? 0 : windSpeed.value,
     gust: windGust.value
   }
