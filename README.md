@@ -35,6 +35,8 @@ Tested running:
 1. `npm install`
 2. (on Pi only) `./scripts/build_rpi-rgb-led-matrix.sh`
 
+Note: Package `node-canvas` is kept at version 2.x because version 3.x fails to build on ARMv6.
+
 ## Running
 
 ### Generate board image
