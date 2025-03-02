@@ -13,6 +13,9 @@ const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
 
 // display color-coded temperature integer
 const drawTemperature = (ctx, layout, temperature) => {
+  if (temperature === null) {
+    return layout.spacing
+  }
   const color = getInterpolatedColor(
     temperature,
     GRADIENTS.TEMPERATURE,
@@ -28,6 +31,9 @@ const drawTemperature = (ctx, layout, temperature) => {
 
 // display color-coded humidity as integer with percent sign
 const drawHumidity = (ctx, layout, humidity) => {
+  if (humidity === null) {
+    return layout.spacing
+  }
   const color = getInterpolatedColor(
     humidity,
     GRADIENTS.HUMIDITY,
@@ -142,6 +148,7 @@ const getSpacing = (weather) => {
     Math.round(relativeHumidity),
     Math.round(wind.gust || wind.speed)
   ]
+    .filter(x => x !== null)
     .reduce((acc, cur) =>
       acc + getTextWidth(cur.toString())
       , 0)
