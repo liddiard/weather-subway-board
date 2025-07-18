@@ -12,7 +12,7 @@ if (!PIRATE_API_KEY) {
 const fetchWeather = async (stationId) => {
   const url = new URL(`https://api.pirateweather.net/forecast/${PIRATE_API_KEY}/${WEATHER_COORDINATES.join()}`)
   url.search = new URLSearchParams({
-    units: 'si',
+    units: 'ca', // SI, with Wind Speed and Wind Gust in kilometres per hour.
     exclude: ['minutely', 'hourly', 'daily'].join(),
     icon: 'pirate'
   }).toString()
