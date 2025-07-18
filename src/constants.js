@@ -7,10 +7,11 @@ const constants = {
   // Station to display departures from
   // http://web.mta.info/developers/data/nyct/subway/Stations.csv
   SUBWAY_STATION_ID: 313, // Upper West Side, 72 St & Broadway
-  // approximate coordinates of the station
-  LOCATION_COORDINATES: [40.77, -73.98],
-  WEATHER_STATION_ID: 'KNYC', // Central Park
-  FORECAST_STATION_ID: 'OKX', // New York area
+  // approximate coordinates of home in lat, lon
+  // using 2 decimal places which provides a precision of 1.11 km to avoid
+  // being overly specific
+  WEATHER_COORDINATES: [40.77, -73.98],
+  FORECAST_STATION_ID: 'OKX', // New York City area
   // National Weather Service forecast gridpoints for the station above
   // https://www.weather.gov/documentation/services-web-api#/default/gridpoint
   FORECAST_GRIDPOINT: [33, 37],
@@ -73,37 +74,37 @@ const constants = {
     TOP: 6,
     BOTTOM: 25
   },
-  WEATHER_DESCRIPTION_TO_IMAGE: {
-    'Clear': 'sun',
-    'Mostly Clear': 'sun_with_cloud',
-    'Partly Cloudy': 'sun_with_two_clouds',
-    'Mostly Cloudy': 'sun_behind_cloud',
-    'Cloudy': 'overcast',
-    'Fog': 'fog',
-    'Fog/Mist': 'fog',
-    'Haze': 'haze',
-    'Light Rain': 'sprinkles',
-    'Rain': 'heavy_rain',
-    'Heavy Rain': 'downpour',
-    'Light Rain and Fog': 'fog_with_sprinkles',
-    'Light Rain and Fog/Mist': 'fog_with_sprinkles',
-    'Rain and Fog': 'fog_with_heavy_rain',
-    'Rain and Fog/Mist': 'fog_with_heavy_rain',
-    'Heavy Rain and Fog': 'fog_with_downpour',
-    'Heavy Rain and Fog/Mist': 'fog_with_downpour',
-    'Light Snow': 'flurries',
-    'Light Snow and Fog': 'fog_with_flurries',
-    'Light Snow and Fog/Mist': 'fog_with_flurries',
-    'Snow': 'heavy_snow',
-    'Snow and Fog': 'fog_with_heavy_snow',
-    'Snow and Fog/Mist': 'fog_with_heavy_snow',
-    'Heavy Snow and Fog': 'fog_with_blizzard',
-    'Heavy Snow and Fog/Mist': 'fog_with_blizzard',
-    'Light Freezing Rain and Fog/Mist': 'fog_with_mixed',
-    'Freezing Rain and Fog/Mist': 'fog_with_mixed',
-    'Clear and Windy': 'wind',
-    'Unknown Precipitation': 'unknown_precip',
-    'Unknown Precipitation and Fog/Mist': 'fog_with_unknown_precip',
+  // https://docs.pirateweather.net/en/latest/API/#icon_1
+  WEATHER_ICON_MAP: {
+    clear: 'sun',
+    rain: 'heavy_rain',
+    snow: 'heavy_snow',
+    sleet: 'mixed',
+    wind: 'wind',
+    fog: 'fog',
+    cloudy: 'overcast',
+    'partly-cloudy': 'sun_with_two_clouds',
+    thunderstorm: 'lightning',
+    hail: 'hail',
+    mixed: 'mixed',
+    'mostly-clear': 'sun_with_cloud',
+    'mostly-cloudy': 'sun_behind_cloud',
+    'possible-rain': 'sprinkles',
+    'possible-snow': 'flurries',
+    'possible-sleet': 'mixed',
+    'possible-precipitation': 'unknown_precip',
+    precipitation: 'unknown_precip',
+    drizzle: 'sprinkles',
+    'light-rain': 'sprinkles',
+    'heavy-rain': 'downpour',
+    flurries: 'flurries',
+    'light-snow': 'flurries',
+    'heavy-snow': 'blizzard',
+    'very-light-sleet': 'mixed',
+    'light-sleet': 'mixed',
+    'heavy-sleet': 'mixed',
+    breezy: 'wind',
+    'dangerous-wind': 'wind',
   },
   // how "warm" to make the display colors when the sun is down, from 0 (not at
   // all) to 1 (white text appears fully orange)

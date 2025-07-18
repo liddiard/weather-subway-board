@@ -2,18 +2,18 @@ const suncalc = require('suncalc')
 
 const { drawForecastIcons } = require('./forecastIcons')
 const { drawText, drawPixel, getInterpolatedColor, getTextWidth } = require('./utils')
-const constants  = require('../constants')
+const constants = require('../constants')
 
 
-const { COLORS, GRADIENTS, LOCATION_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT, MATRIX } = constants
+const { COLORS, GRADIENTS, WEATHER_COORDINATES, FORECAST_GRAPH, CHAR_HEIGHT, MATRIX } = constants
 const { TOP, BOTTOM, WIDTH } = FORECAST_GRAPH
 
 // gets the color of a pixel at a given time for the forecast graph
 const getGraphPointColor = ({ startTime }) => {
   // Periods are 60 minutes long. Add 30 minutes to the start time to get the
   // midpoint of the forecast time, and use that time to derive the dot color.
-  const middleTime = new Date(startTime.getTime() + 30*60*1000);
-  const { altitude } = suncalc.getPosition(middleTime, ...LOCATION_COORDINATES)
+  const middleTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+  const { altitude } = suncalc.getPosition(middleTime, ...WEATHER_COORDINATES)
   return getInterpolatedColor(altitude, GRADIENTS.SUN, { min: -0.4, max: 0.4 })
 }
 
@@ -149,7 +149,7 @@ const getMidpointOfTemperatureSwing = (interval) => {
   let flatLength = 1
   for (const period of interval.reverse().slice(1)) {
     if (period.temperature !== extreme.temperature) {
-      break 
+      break
     }
     flatLength++
   }
@@ -211,7 +211,7 @@ const isWithinRightBound = (cursorPosition, text) =>
 // get the vertical position of a temperature label by starting it at the top
 // of the graph area, and moving it down one pixel at a time until it abuts the
 // temperature graph line
- const getVerticalPosition = (temperatureGraph, x, text) => {
+const getVerticalPosition = (temperatureGraph, x, text) => {
   const boundingBox = {
     width: getTextWidth(text),
     height: CHAR_HEIGHT
@@ -253,13 +253,13 @@ const drawTemperatureExtremes = (ctx, periods, temperatureGraph) => {
     // forecast graph area, or if it's too horizontally close to the previously
     // drawn label
     if (!isWithinRightBound(cursorPosition, temperatureString) ||
-        cursorPosition - prevCursorPosition < 1) {
+      cursorPosition - prevCursorPosition < 1) {
       continue
     }
     prevCursorPosition = drawText(
       ctx,
       temperatureString,
-      { 
+      {
         x: cursorPosition,
         y: getVerticalPosition(temperatureGraph, cursorPosition, temperatureString)
       },
@@ -272,13 +272,13 @@ const drawTemperatureExtremes = (ctx, periods, temperatureGraph) => {
 // maximum temperatures, and forecast icons
 const drawForecast = (ctx, hourlyForecast) => {
   const periods = hourlyForecast
-  // remove any past periods (occasionally present in response)
-  .filter(p => p.endTime > new Date())
-  .slice(0, WIDTH)
-  // period `number` is present in response, but re-number it to start from 0
-  // index instead of 1, and also in case the filter above chopped off
-  // period(s) from the start
-  .map((p, i) => ({ ...p, number: i }))
+    // remove any past periods (occasionally present in response)
+    .filter(p => p.endTime > new Date())
+    .slice(0, WIDTH)
+    // period `number` is present in response, but re-number it to start from 0
+    // index instead of 1, and also in case the filter above chopped off
+    // period(s) from the start
+    .map((p, i) => ({ ...p, number: i }))
 
   // draw yellow/pink line graph of temps and vertical graph lines ("ticks")
   const temperatureGraph = drawGraphLines(ctx, periods)

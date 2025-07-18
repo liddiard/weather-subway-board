@@ -34,6 +34,7 @@ Tested running:
 
 1. `npm install`
 2. (on Pi only) `./scripts/build_rpi-rgb-led-matrix.sh`
+3. Get a free personal API key from Pirate Weather: https://pirateweather.net/
 
 Note: Package `node-canvas` is kept at version 2.x because version 3.x fails to build on ARMv6.
 
@@ -42,7 +43,7 @@ Note: Package `node-canvas` is kept at version 2.x because version 3.x fails to 
 ### Generate board image
 
 ```shell
-npm start
+PIRATE_API_KEY=your_api_key npm start
 ```
 
 You can also `npm run dev` with your API key prepended for an auto-reloading server.

@@ -6,7 +6,7 @@ const constants = require('../constants')
 const { images } = require('./image')
 
 
-const { CHAR_WIDTH, LETTER_SPACING, LOCATION_COORDINATES } = constants
+const { CHAR_WIDTH, LETTER_SPACING, WEATHER_COORDINATES } = constants
 
 // draw an integer (`number`), right-aligned, with the given offset
 // given the dimension constraints of the matrix, integers with a maximum of
@@ -34,8 +34,8 @@ const drawText = (ctx, text, offset, color) => {
 
 const getTextWidth = (text) => {
   const charsWidth = text
-  .split('')
-  .reduce((acc, char) => acc + CHAR_WIDTH[char], 0)
+    .split('')
+    .reduce((acc, char) => acc + CHAR_WIDTH[char], 0)
   return charsWidth + (LETTER_SPACING * (text.length - 1))
 }
 
@@ -65,9 +65,9 @@ const getInterpolatedColor = (value, gradient, bounds) => {
   const color = colormap(percent)
 
   // https://stackoverflow.com/a/10971090
-  const colorArr = color.substring(4, color.length-1)
-  .replace(/ /g, '')
-  .split(',')
+  const colorArr = color.substring(4, color.length - 1)
+    .replace(/ /g, '')
+    .split(',')
 
   return {
     r: colorArr[0],
@@ -99,13 +99,13 @@ const tintImage = (image, color) => {
 
 // returns if the passed `date` is while the sun is up or not
 const isDaytime = (date) => {
-  const { altitude } = suncalc.getPosition(date, ...LOCATION_COORDINATES)
+  const { altitude } = suncalc.getPosition(date, ...WEATHER_COORDINATES)
   return altitude > 0
 }
 
 // return sun or moon weather icons depending on if the passed datetime is
 // while the sun is above the horizon
-const getTimeSpecificWeatherIcon = (filename = '', date = new Date()) => 
+const getTimeSpecificWeatherIcon = (filename = '', date = new Date()) =>
   isDaytime(date) ? filename : filename.replace('sun', 'moon')
 
 module.exports = {

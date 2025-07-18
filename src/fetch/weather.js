@@ -2,15 +2,26 @@ const axios = require('axios')
 const { cache } = require('./utils')
 const constants = require('../constants')
 
-const { UPDATE_FREQUENCY_SECS } = constants
+const { UPDATE_FREQUENCY_SECS, WEATHER_COORDINATES } = constants
+const { PIRATE_API_KEY } = process.env
+
+if (!PIRATE_API_KEY) {
+  throw Error(`Pirate weather API key (PIRATE_API_KEY) is not set.`)
+}
 
 const fetchWeather = async (stationId) => {
+  const url = new URL(`https://api.pirateweather.net/forecast/${PIRATE_API_KEY}/${WEATHER_COORDINATES.join()}`)
+  url.search = new URLSearchParams({
+    units: 'si',
+    exclude: ['minutely', 'hourly', 'daily'].join(),
+    icon: 'pirate'
+  }).toString()
   const {
     data: {
-      properties
+      currently
     }
-  } = await axios.get(`https://api.weather.gov/stations/${stationId}/observations/latest`)
-  return properties
+  } = await axios.get(url)
+  return currently
 }
 
 // https://study.com/learn/lesson/cardinal-intermediate-directions-map-compass.html
@@ -38,27 +49,27 @@ const degreeToIntermediateDirection = (degree) => {
 const getWeather = async (stationId) => {
   const response = await fetchWeather(stationId)
   const {
-    textDescription,
-    windDirection,
+    icon,
+    windBearing,
     windSpeed,
     windGust,
     temperature,
-    relativeHumidity
+    humidity
   } = response
 
   const wind = {
-    direction: windDirection.value ?
-      degreeToIntermediateDirection(windDirection.value) :
+    direction: windBearing.value ?
+      degreeToIntermediateDirection(windBearing.value) :
       'Ø',
-    speed: windSpeed.value === null ? 0 : windSpeed.value,
-    gust: windGust.value
+    speed: windSpeed,
+    gust: windGust
   }
 
   return {
-    textDescription,
+    icon,
     wind,
-    temperature: temperature.value,
-    relativeHumidity: relativeHumidity.value
+    temperature,
+    humidity
   }
 }
 

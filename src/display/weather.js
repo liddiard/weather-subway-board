@@ -9,7 +9,7 @@ const {
 } = require('./utils')
 
 
-const { COLORS, GRADIENTS, WEATHER_DESCRIPTION_TO_IMAGE } = constants
+const { COLORS, GRADIENTS, WEATHER_ICON_MAP } = constants
 
 // display color-coded temperature integer
 const drawTemperature = (ctx, layout, temperature) => {
@@ -37,11 +37,11 @@ const drawHumidity = (ctx, layout, humidity) => {
   const color = getInterpolatedColor(
     humidity,
     GRADIENTS.HUMIDITY,
-    { min: 0, max: 100 }
+    { min: 0, max: 1 }
   )
   layout.cursorPosition = drawText(
     ctx,
-    Math.round(humidity).toString(),
+    Math.round(humidity * 100).toString(),
     { x: layout.cursorPosition, y: layout.top },
     color
   )
@@ -56,18 +56,21 @@ const drawHumidity = (ctx, layout, humidity) => {
 // warning and display a placeholder if current description doesn't have an
 // image mapping so we know to add it (could not find an exhaustive list of
 // possible weather descriptions)
-const drawWeatherIcon = (ctx, layout, textDescription) => {
+const drawWeatherIcon = (ctx, layout, icon) => {
   const { weather } = layout.images
 
   // sometimes the description is an empty string; skip this function if so
-  if (!textDescription) {
-    console.warn(`Empty weather description; skipping weather icon`)
+  if (!icon) {
+    console.warn('Empty weather icon; skipping draw.')
     return layout.cursorPosition
   }
 
-  let filename = getTimeSpecificWeatherIcon(WEATHER_DESCRIPTION_TO_IMAGE[textDescription])
+  // we'll calculate whether to use the day or night variant of an icon based
+  // on sum position rather than letting the API do it for us
+  const timeAgnosticIcon = icon.replace(/-day|-night/, '')
+  let filename = getTimeSpecificWeatherIcon(WEATHER_ICON_MAP[timeAgnosticIcon])
   if (!filename) {
-    console.warn(`No weather icon for: '${textDescription}'`)
+    console.warn(`No weather icon for: '${icon}'`)
     filename = 'not_available'
   }
 
@@ -82,8 +85,9 @@ const drawWeatherIcon = (ctx, layout, textDescription) => {
 // display color-coded wind gust or speed and a direction indicator
 const drawWind = (ctx, layout, { speed, direction, gust }) => {
   const { directions } = layout.images
-  // show gust speed if wind is gusting
-  const displaySpeed = gust || speed
+  const gustFactor = gust - speed
+  const showGust = gustFactor > 5
+  const displaySpeed = showGust ? gust : speed
   const color = getInterpolatedColor(
     displaySpeed,
     GRADIENTS.WIND,
@@ -97,7 +101,7 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   ctx.drawImage(
     tintImage(
       directions[direction],
-      gust ? COLORS.ORANGE : COLORS.GREEN
+      showGust ? COLORS.ORANGE : COLORS.GREEN
     ),
     layout.cursorPosition,
     layout.top
@@ -137,7 +141,7 @@ const drawTime = (ctx, layout) =>
 const getSpacing = (weather) => {
   const {
     temperature,
-    relativeHumidity,
+    humidity,
     wind
   } = weather
 
@@ -145,7 +149,7 @@ const getSpacing = (weather) => {
   const totalWidth = [
     getTimeString(),
     temperature,
-    Math.round(relativeHumidity),
+    Math.round(humidity),
     Math.round(wind.gust || wind.speed)
   ]
     .filter(x => x !== null)
@@ -162,8 +166,8 @@ const getSpacing = (weather) => {
 const drawWeather = (ctx, weather) => {
   const {
     temperature,
-    textDescription,
-    relativeHumidity,
+    icon,
+    humidity,
     wind
   } = weather
 
@@ -178,8 +182,8 @@ const drawWeather = (ctx, weather) => {
 
   layout.cursorPosition = drawTime(ctx, layout)
   layout.cursorPosition = drawTemperature(ctx, layout, temperature)
-  layout.cursorPosition = drawWeatherIcon(ctx, layout, textDescription)
-  layout.cursorPosition = drawHumidity(ctx, layout, relativeHumidity)
+  layout.cursorPosition = drawWeatherIcon(ctx, layout, icon)
+  layout.cursorPosition = drawHumidity(ctx, layout, humidity)
   layout.cursorPosition = drawWind(ctx, layout, wind)
 }
 

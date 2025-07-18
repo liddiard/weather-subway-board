@@ -14,7 +14,7 @@ const constants = require('../constants')
 const {
   MATRIX,
   BOARD_IMAGE_FILE,
-  LOCATION_COORDINATES,
+  WEATHER_COORDINATES,
   COLORS,
   NIGHT_SHIFT_INTENSITY
 } = constants
@@ -44,7 +44,7 @@ const drawOpacityMask = (ctx, opacity) => {
 
 // tint the display orange when the sun is down (simlar to Night Shift)
 const drawNightShiftMask = (ctx) => {
-  const { altitude } = suncalc.getPosition(new Date(), ...LOCATION_COORDINATES)
+  const { altitude } = suncalc.getPosition(new Date(), ...WEATHER_COORDINATES)
   // the color-shift mask is fully white (no effect on image) when the sun's
   // altitude is above the max, and is fully orange (max effect) when the sun's
   // altutide is below the minimum. between these altitudes, the image becomes
@@ -83,7 +83,7 @@ const drawBoard = (departures, weather, hourlyForecast) => {
   if (DIM_DISPLAY_AMOUNT) {
     drawOpacityMask(ctx, parseFloat(DIM_DISPLAY_AMOUNT))
   }
-  
+
   // save image to disk
   const buffer = canvas.toBuffer('image/png')
   fs.writeFileSync(
