@@ -58,8 +58,8 @@ const getWeather = async (stationId) => {
   } = response
 
   const wind = {
-    direction: windBearing.value ?
-      degreeToIntermediateDirection(windBearing.value) :
+    direction: windBearing ?
+      degreeToIntermediateDirection(windBearing) :
       'Ø',
     speed: windSpeed,
     gust: windGust
