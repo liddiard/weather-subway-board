@@ -82,12 +82,21 @@ const drawWeatherIcon = (ctx, layout, icon) => {
   return layout.cursorPosition + layout.imageWidth + layout.spacing
 }
 
-// display color-coded wind gust or speed and a direction indicator
-const drawWind = (ctx, layout, { speed, direction, gust }) => {
-  const { directions } = layout.images
+const getWindDisplaySpeed = ({ gust, speed }) => {
   const gustFactor = gust - speed
   const showGust = gustFactor > 5
   const displaySpeed = showGust ? gust : speed
+  return {
+    displaySpeed,
+    showGust
+  }
+}
+
+
+// display color-coded wind gust or speed and a direction indicator
+const drawWind = (ctx, layout, wind) => {
+  const { directions } = layout.images
+  const { displaySpeed, showGust } = getWindDisplaySpeed(wind)
   const color = getInterpolatedColor(
     displaySpeed,
     GRADIENTS.WIND,
@@ -100,7 +109,7 @@ const drawWind = (ctx, layout, { speed, direction, gust }) => {
   )
   ctx.drawImage(
     tintImage(
-      directions[direction],
+      directions[wind.direction],
       showGust ? COLORS.ORANGE : COLORS.GREEN
     ),
     layout.cursorPosition,
@@ -148,9 +157,9 @@ const getSpacing = (weather) => {
   // sum all the variable widths within the weather display
   const totalWidth = [
     getTimeString(),
-    temperature,
-    Math.round(humidity),
-    Math.round(wind.gust || wind.speed)
+    Math.round(temperature),
+    Math.round(humidity * 100),
+    Math.round(getWindDisplaySpeed(wind).displaySpeed)
   ]
     .filter(x => x !== null)
     .reduce((acc, cur) =>
