@@ -1,1 +1,2 @@
-pywizlight
+asyncio
+python-kasa

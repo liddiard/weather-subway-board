@@ -7,11 +7,11 @@ from datetime import datetime
 import PIL
 from PIL import Image
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from pywizlight import wizlight, exceptions
+from kasa import Device
 
 
 image_file = "board.png"
-bulb_ip = "192.168.0.10" # stove light bulb
+switch_ip = "192.168.0.143" # "Sink" TP-Link Kasa smart switch
 
 # configure matrix
 options = RGBMatrixOptions()
@@ -31,43 +31,38 @@ options.drop_privileges = False
 matrix = RGBMatrix(options=options)
 canvas = matrix.CreateFrameCanvas()
 
-# initialize smart bulb
-bulb = wizlight(bulb_ip)
-
 
 def log(msg):
     print(f"[{datetime.now():%Y-%m-%d %H:%M:%S%z}] {msg}")
 
-# check if smart bulb is on
-async def get_bulb_is_on():
-    try:
-        state = await bulb.updateState()
-    except (
-        OSError,
-        asyncio.TimeoutError,
-        exceptions.WizLightConnectionError
-    ) as ex:
-        print(f"Unable to get bulb status; defaulting to OFF. {ex}")
-        return False
-    return state.get_state()
+# check if smart switch is on
+async def get_switch_is_on(switch):
+    await switch.update()
+    return switch.is_on
 
 
 async def main():
-    # If smart bulb is off, then don't display anything on the matrix.
+    # Connect to the smart switch
+    switch = await Device.connect(host=switch_ip)
+
+    # If smart switch is off, then don't display anything on the matrix.
     # If you're not me (original code author), you should probably remove
     # this condition because it's specific to my particular smarthome setup
-    bulb_is_on = False
+    switch_is_on = False
 
     print("Starting image viewer main loop…")
     while True:
         try:
-            bulb_is_on = await get_bulb_is_on()
-        except exceptions.WizLightTimeOutError:
-            log("Timed out connecting to bulb, remaining in current state.")
-        
-        if not bulb_is_on:
+            switch_is_on = await get_switch_is_on(switch)
+        except (
+            OSError,
+            asyncio.TimeoutError,
+        ) as ex:
+            log(f"Timed out connecting to switch, remaining in current state. {ex}")
+
+        if not switch_is_on:
             matrix.Clear()
-            time.sleep(10)
+            time.sleep(5)
             continue
 
         file_path = os.path.join(
