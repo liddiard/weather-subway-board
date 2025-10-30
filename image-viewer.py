@@ -27,7 +27,7 @@ options.hardware_mapping = 'adafruit-hat-pwm'
 # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1170#issuecomment-706715753
 options.drop_privileges = False
 # cap the refresh rate to avoid unnecessarily high CPU usage
-options.limit_refresh_rate_hz = 10
+options.limit_refresh_rate_hz = 1
 # show matrix refresh rate in console for debugging
 # options.show_refresh_rate = True
 matrix = RGBMatrix(options=options)
