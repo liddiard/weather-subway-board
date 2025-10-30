@@ -34,5 +34,6 @@ const kphToKnots = (kph) => kph * 0.539957
 
 
 module.exports = {
-  cache
+  cache,
+  kphToKnots
 }
