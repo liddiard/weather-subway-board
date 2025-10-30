@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { cache } = require('./utils')
+const { cache, kphToKnots } = require('./utils')
 const constants = require('../constants')
 
 const { UPDATE_FREQUENCY_SECS, WEATHER_COORDINATES } = constants
@@ -61,8 +61,8 @@ const getWeather = async (stationId) => {
     direction: windBearing ?
       degreeToIntermediateDirection(windBearing) :
       'Ø',
-    speed: windSpeed,
-    gust: windGust
+    speed: kphToKnots(windSpeed),
+    gust: kphToKnots(windGust)
   }
 
   return {

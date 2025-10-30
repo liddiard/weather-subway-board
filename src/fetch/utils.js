@@ -6,28 +6,32 @@ const cache = (fn, timeout) => {
   let lastCalled = null
 
   return async (...args) => {
-      const now = Date.now()
-      // There is some inexactitude in seconds since last call due to the
-      // implementation of the main loop. By rounding to the next largest
-      // integer for seconds elapsed, we err on the side of calling `fn`
-      // rather than returning the cached value.
-      const secsElapsed = Math.ceil((now - lastCalled) / 1000)
+    const now = Date.now()
+    // There is some inexactitude in seconds since last call due to the
+    // implementation of the main loop. By rounding to the next largest
+    // integer for seconds elapsed, we err on the side of calling `fn`
+    // rather than returning the cached value.
+    const secsElapsed = Math.ceil((now - lastCalled) / 1000)
 
-      if (lastCalled &&
-          cache !== null &&
-          secsElapsed < timeout) {
-          return cache // Return cached value if within the timeout
-      }
+    if (lastCalled &&
+      cache !== null &&
+      secsElapsed < timeout) {
+      return cache // Return cached value if within the timeout
+    }
 
-      try {
-        cache = await fn(...args)
-        lastCalled = now
-      } catch (ex) {
-        console.warn(`[${new Date()}] Function call failed, returning cached value.`, ex)
-      }
-      return cache
+    try {
+      cache = await fn(...args)
+      lastCalled = now
+    } catch (ex) {
+      console.warn(`[${new Date()}] Function call failed, returning cached value.`, ex)
+    }
+    return cache
   }
 }
+
+// convert km/h to knots
+const kphToKnots = (kph) => kph * 0.539957
+
 
 module.exports = {
   cache
