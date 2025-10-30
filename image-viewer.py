@@ -15,7 +15,9 @@ switch_ip = "192.168.0.143" # "Sink" TP-Link Kasa smart switch
 
 # configure matrix
 options = RGBMatrixOptions()
+
 options.cols = 64
+
 # "*-pwm" requires connecting bonnet pins GPIO4 and GPIO18 as described under 
 # step 6 of docs:
 # https://cdn-learn.adafruit.com/downloads/pdf/adafruit-rgb-matrix-bonnet-for-raspberry-pi.pdf
@@ -23,13 +25,17 @@ options.cols = 64
 # https://github.com/hzeller/rpi-rgb-led-matrix#bad-interaction-with-sound
 # beneficial because it eliminates matrix flicker
 options.hardware_mapping = 'adafruit-hat-pwm'
+
 # fix error "Can't set realtime thread priority=99: Operation not permitted."
 # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1170#issuecomment-706715753
 options.drop_privileges = False
+
 # cap the refresh rate to mitigate flicker
 options.limit_refresh_rate_hz = 120
+
 # show matrix refresh rate in console for debugging
 # options.show_refresh_rate = True
+
 matrix = RGBMatrix(options=options)
 canvas = matrix.CreateFrameCanvas()
 
