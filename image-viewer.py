@@ -7,7 +7,7 @@ from datetime import datetime
 import PIL
 from PIL import Image
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from kasa import Device
+from kasa import Device, exceptions
 
 
 image_file = "board.png"
@@ -65,6 +65,7 @@ async def main():
         except (
             OSError,
             asyncio.TimeoutError,
+            exceptions.KasaException,
         ) as ex:
             log(f"Timed out connecting to switch, remaining in current state. {ex}")
 
