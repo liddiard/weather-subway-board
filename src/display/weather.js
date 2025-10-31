@@ -100,7 +100,7 @@ const drawWind = (ctx, layout, wind) => {
   const color = getInterpolatedColor(
     displaySpeed,
     GRADIENTS.WIND,
-    { min: 10, max: 40 }
+    { min: 5, max: 40 }
   )
   ctx.drawImage(
     directions.bg,
