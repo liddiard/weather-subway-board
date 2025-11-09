@@ -82,6 +82,7 @@ const constants = {
     sleet: 'mixed',
     wind: 'wind',
     fog: 'fog',
+    mist: 'fog',
     cloudy: 'overcast',
     'partly-cloudy': 'sun_with_two_clouds',
     thunderstorm: 'lightning',
