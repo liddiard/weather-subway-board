@@ -58,6 +58,7 @@ const getAverageSnow = (descriptions) => {
     'Snow Showers': 1,
     'Snow Likely': 1,
     '^Snow$': 2,
+    'Blowing Snow': 2,
     'Heavy Snow': 3
   }
   return getAverageWeather(descriptions, descToScore)
