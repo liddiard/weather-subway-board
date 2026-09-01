@@ -94,7 +94,7 @@ const constants = {
     'possible-snow': 'flurries',
     'possible-sleet': 'mixed',
     'possible-precipitation': 'unknown_precip',
-    'possible-thunderstorm-day': 'lightning',
+    'possible-thunderstorm': 'lightning',
     precipitation: 'unknown_precip',
     drizzle: 'sprinkles',
     'light-rain': 'sprinkles',
