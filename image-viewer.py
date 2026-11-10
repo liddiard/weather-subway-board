@@ -8,10 +8,16 @@ import PIL
 from PIL import Image
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from kasa import Device, exceptions
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 
 image_file = "board.png"
 switch_ip = "192.168.0.143" # "Sink" TP-Link Kasa smart switch
+switch_poll_interval = 5 # seconds between smart switch checks
+
+image_path = pathlib.Path(__file__).parent.resolve() / "src" / "display" / image_file
+image_dir = image_path.parent
 
 # configure matrix
 options = RGBMatrixOptions()
@@ -49,19 +55,59 @@ async def get_switch_is_on(switch):
     return switch.is_on
 
 
-async def main():
-    # Connect to the smart switch
-    switch = await Device.connect(host=switch_ip)
+class BoardImageChangeHandler(FileSystemEventHandler):
+    def __init__(self, loop, image_changed):
+        self.loop = loop
+        self.image_changed = image_changed
 
-    # If smart switch is off, then don't display anything on the matrix.
-    # If you're not me (original code author), you should probably remove
-    # this condition because it's specific to my particular smarthome setup
-    switch_is_on = False
+    def on_any_event(self, event):
+        if event.is_directory:
+            return
+        # Only react to events that mean the file may have new contents. This
+        # ignores watchdog's open events (and any close events that didn't write).
+        if event.event_type not in ("created", "modified", "moved", "closed"):
+            return
 
-    print("Starting image viewer main loop…")
-    while True:
+        paths = [event.src_path]
+        dest_path = getattr(event, "dest_path", None)
+        if dest_path:
+            paths.append(dest_path)
+
+        if any(os.path.basename(path) == image_file for path in paths):
+            # This runs in the watchdog observer thread, so hand the signal
+            # back to the asyncio event loop safely.
+            self.loop.call_soon_threadsafe(self.image_changed.set)
+
+
+def display_image():
+    # Occasionally the image file will fail to display because it's being
+    # written by the Node.js process at the same time we are trying to read it
+    # here. Retry briefly to let the write finish.
+    # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1204#issuecomment-733804488
+    for attempt in range(5):
         try:
-            switch_is_on = await get_switch_is_on(switch)
+            with Image.open(image_path) as source:
+                image = source.convert('RGB')
+            canvas.SetImage(image)
+            image.close()
+            # change the matrix image without a flash to black in between
+            # https://github.com/hzeller/rpi-rgb-led-matrix/blob/master/bindings/python/README.md#performance
+            matrix.SwapOnVSync(canvas)
+            return True
+        except (PIL.UnidentifiedImageError, OSError) as ex:
+            if attempt == 4:
+                log(f"Failed to open {image_file} - bad file. {ex}")
+                return False
+            time.sleep(0.1)
+    return False
+
+
+# poll the smart switch so the display turns off when the switch is off
+async def poll_switch(switch, switch_state, image_changed):
+    while True:
+        was_on = switch_state["is_on"]
+        try:
+            switch_state["is_on"] = await get_switch_is_on(switch)
         except (
             OSError,
             asyncio.TimeoutError,
@@ -69,39 +115,65 @@ async def main():
         ) as ex:
             log(f"Timed out connecting to switch, remaining in current state. {ex}")
 
-        if not switch_is_on:
+        # Clear the matrix when switching off, or redraw the latest board image
+        # when switching back on.
+        if switch_state["is_on"] != was_on:
+            image_changed.set()
+
+        await asyncio.sleep(switch_poll_interval)
+
+
+# draw the board image whenever it changes on disk
+async def display_images(switch_state, image_changed):
+    while True:
+        await image_changed.wait()
+        image_changed.clear()
+
+        # If smart switch is off, then don't display anything on the matrix.
+        # If you're not me (original code author), you should probably remove
+        # this condition because it's specific to my particular smarthome setup
+        if switch_state["is_on"]:
+            display_image()
+        else:
             matrix.Clear()
-            time.sleep(5)
-            continue
 
-        file_path = os.path.join(
-            # current directory
-            pathlib.Path(__file__).parent.resolve(),
-            # path to board file
-            "src", "display", image_file
+
+async def main():
+    # Connect to the smart switch
+    switch = await Device.connect(host=switch_ip)
+
+    loop = asyncio.get_running_loop()
+    image_changed = asyncio.Event()
+
+    # Watch the directory instead of the file itself so that replacing the file
+    # (instead of writing it in place) still gets picked up.
+    observer = Observer()
+    observer.schedule(
+        BoardImageChangeHandler(loop, image_changed),
+        str(image_dir),
+        recursive=False,
+    )
+    observer.start()
+    log(f"Watching {image_path} for changes…")
+
+    switch_state = {"is_on": False}
+
+    print("Starting image viewer main loop…")
+    try:
+        # Draw the current image (or clear the display) at startup. The switch
+        # poller will trigger another redraw if the switch is already on.
+        image_changed.set()
+        await asyncio.gather(
+            poll_switch(switch, switch_state, image_changed),
+            display_images(switch_state, image_changed),
         )
-        try:
-            image = Image.open(file_path)
-        # Occasionally the image file will fail to display because it's being
-        # written by the Node.js process at the same time we are trying to read it
-        # here. A better approach would probably be to use `inotify` or OS
-        # equivalent to run this code when the file is updated, but the error
-        # happens so rarely that I'm not motivated to try another approach now.
-        # https://github.com/hzeller/rpi-rgb-led-matrix/issues/1204#issuecomment-733804488
-        except PIL.UnidentifiedImageError:
-            log(f"Failed to open {image_file} - bad file.")
-            continue
-
-        image = image.convert('RGB')
-        canvas.SetImage(image)
-        image.close()
-        # change the matrix image without a flash to black in between
-        # https://github.com/hzeller/rpi-rgb-led-matrix/blob/master/bindings/python/README.md#performance
-        matrix.SwapOnVSync(canvas)
-
-        time.sleep(5)
+    finally:
+        observer.stop()
+        observer.join()
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass

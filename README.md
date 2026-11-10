@@ -89,7 +89,7 @@ There are earlier branches of this repo that only display subway departures with
 
 ---
 
-[`image-viewer.py`](image-viewer.py): Script that recurringly reads the board image file from disk and displays it on the LED matrix using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be fast since it only shows a new frame every 30 seconds.
+[`image-viewer.py`](image-viewer.py): Script that watches the board image file on disk and displays it on the LED matrix whenever it changes, using the [Python bindings](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/bindings/python) of [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix). Used Python rather than the faster C++ library because it was more developer friendly (to me) and because the display refresh rate doesn't need to be fast since it only shows a new frame every 30 seconds.
 
 [`graphics/`](graphics/): Sprite images used on the board, positioned and composited by the Node.js app
 
